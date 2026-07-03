@@ -1,0 +1,3 @@
+<resources>
+    <style name="Theme.SmartReader" parent="Theme.AppCompat.DayNight.NoActionBar" />
+</resources>
