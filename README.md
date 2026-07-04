@@ -39,6 +39,9 @@ podtržítka a emoji.
 
 ## Nové v této verzi
 
+- **Tlačítka +/- vedle jezdce rychlosti** - rychlost jde měnit i bez tažení prstem, po krocích 0.1x
+- **Nativní ovládání na zamykací obrazovce** přes MediaSession - stejný widget, jaký znáš ze
+  Spotify/YouTube Music, včetně reakce na sluchátková tlačítka (play/pause)
 - Nová ikona aplikace (vlastní, vektorová)
 - Přejmenováno na "Chytrá čtečka textu"
 - Hezčí grafika – Material Design tlačítka s ikonami, zaoblené textové pole

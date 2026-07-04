@@ -99,6 +99,8 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         binding.btnClear.setOnClickListener { clearText() }
         binding.btnPlayPause.setOnClickListener { togglePlayPause() }
         binding.btnStop.setOnClickListener { stopReading() }
+        binding.btnSpeedMinus.setOnClickListener { changeSpeedStep(-1) }
+        binding.btnSpeedPlus.setOnClickListener { changeSpeedStep(1) }
     }
 
     private fun setupSpeedSlider() {
@@ -115,20 +117,32 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                val rate = 0.5f + (seekBar?.progress ?: 5) / 10f
-                currentSpeedRate = rate
-                val svc = service ?: return
-                svc.setSpeed(rate)
-                // Oprava chyby konkurenčních appek: nerestartujeme celý text od začátku,
-                // jen pokračujeme přesně od místa, kde čtení právě je, novou rychlostí.
-                if (svc.isSpeaking()) {
-                    val pos = svc.currentAbsolutePosition()
-                    svc.pause()
-                    placeCursorAt(pos)
-                    startReadingFromCursor()
-                }
+                applySpeedChange(0.5f + (seekBar?.progress ?: 5) / 10f)
             }
         })
+    }
+
+    /** Tlačítka +/- posunou jezdec o jeden krok (0.1x) a rovnou aplikují novou rychlost. */
+    private fun changeSpeedStep(deltaSteps: Int) {
+        val newProgress = (binding.seekSpeed.progress + deltaSteps).coerceIn(0, binding.seekSpeed.max)
+        binding.seekSpeed.progress = newProgress
+        applySpeedChange(0.5f + newProgress / 10f)
+    }
+
+    /**
+     * Skutečně aplikuje novou rychlost čtení. Pokud appka právě čte, pokračuje
+     * přesně od aktuální pozice novou rychlostí (nerestartuje celý text).
+     */
+    private fun applySpeedChange(rate: Float) {
+        currentSpeedRate = rate
+        val svc = service ?: return
+        svc.setSpeed(rate)
+        if (svc.isSpeaking()) {
+            val pos = svc.currentAbsolutePosition()
+            svc.pause()
+            placeCursorAt(pos)
+            startReadingFromCursor()
+        }
     }
 
     private fun updateSpeedLabel(rate: Float) {

@@ -13,16 +13,22 @@ import android.media.AudioManager
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
+import android.support.v4.media.MediaMetadataCompat
+import android.support.v4.media.session.MediaSessionCompat
+import android.support.v4.media.session.PlaybackStateCompat
 import androidx.core.app.NotificationCompat
+import androidx.media.app.NotificationCompat as MediaNotificationCompat
 
 /**
  * Foreground služba, která drží TTS engine mimo Activity - díky tomu čtení
  * pokračuje i se zhasnutou obrazovkou nebo když appku přepneš na pozadí.
- * Zobrazuje trvalou notifikaci s tlačítky Přehrát/Pauza a Stop.
+ * Zobrazuje trvalou notifikaci s tlačítky Přehrát/Pauza a Stop a přes
+ * MediaSession nabízí i NATIVNÍ ovládání na zamykací obrazovce (stejný
+ * widget, jaký znáš ze Spotify/YouTube Music), včetně reakce na sluchátková
+ * tlačítka.
  *
  * Zároveň při čtení požádá o "audio focus" typu MAY_DUCK, díky čemuž
- * ostatní přehrávače (Spotify, YouTube Music...) automaticky ztiší hlasitost
- * po dobu čtení, místo aby se úplně zastavily.
+ * ostatní přehrávače automaticky ztiší hlasitost po dobu čtení.
  */
 class ReadingService : Service() {
 
@@ -42,6 +48,7 @@ class ReadingService : Service() {
     private val binder = LocalBinder()
     private var listener: Listener? = null
     private lateinit var ttsManager: TtsManager
+    private lateinit var mediaSession: MediaSessionCompat
     private var audioManager: AudioManager? = null
     private var focusRequest: AudioFocusRequest? = null
 
@@ -57,6 +64,7 @@ class ReadingService : Service() {
             onWordRange = { s, e -> listener?.onWordRange(s, e) },
             onDone = {
                 abandonAudioFocus()
+                updatePlaybackState(PlaybackStateCompat.STATE_STOPPED)
                 listener?.onStateChanged(false, false)
                 stopForegroundAndSelf()
             },
@@ -64,6 +72,7 @@ class ReadingService : Service() {
             onReady = {}
         )
         createNotificationChannel()
+        setupMediaSession()
     }
 
     override fun onBind(intent: Intent?): IBinder = binder
@@ -89,6 +98,9 @@ class ReadingService : Service() {
     fun speak(text: String, baseOffset: Int) {
         if (text.isBlank()) return
         requestAudioFocus()
+        updateMetadata(text)
+        mediaSession.isActive = true
+        updatePlaybackState(PlaybackStateCompat.STATE_PLAYING)
         startForeground(NOTIFICATION_ID, buildNotification(isPlaying = true))
         ttsManager.speak(text, baseOffset)
         listener?.onStateChanged(true, false)
@@ -97,6 +109,7 @@ class ReadingService : Service() {
     fun pause() {
         ttsManager.pause()
         abandonAudioFocus()
+        updatePlaybackState(PlaybackStateCompat.STATE_PAUSED)
         listener?.onStateChanged(false, true)
         updateNotification()
     }
@@ -104,6 +117,8 @@ class ReadingService : Service() {
     fun stopReading() {
         ttsManager.stop()
         abandonAudioFocus()
+        updatePlaybackState(PlaybackStateCompat.STATE_STOPPED)
+        mediaSession.isActive = false
         listener?.onStateChanged(false, false)
         stopForegroundAndSelf()
     }
@@ -112,18 +127,75 @@ class ReadingService : Service() {
         if (ttsManager.isSpeaking) {
             pause()
         } else if (ttsManager.isPaused) {
-            requestAudioFocus()
-            ttsManager.resume()
-            startForeground(NOTIFICATION_ID, buildNotification(isPlaying = true))
-            listener?.onStateChanged(true, false)
+            resumeFromPause()
         }
     }
+
+    private fun resumeFromPause() {
+        requestAudioFocus()
+        ttsManager.resume()
+        updatePlaybackState(PlaybackStateCompat.STATE_PLAYING)
+        startForeground(NOTIFICATION_ID, buildNotification(isPlaying = true))
+        listener?.onStateChanged(true, false)
+    }
+
+    // --- MediaSession (nativní ovládání na zamykací obrazovce + sluchátka) ---
+
+    private fun setupMediaSession() {
+        mediaSession = MediaSessionCompat(this, "ChytraCteckaSession").apply {
+            setCallback(object : MediaSessionCompat.Callback() {
+                override fun onPlay() {
+                    if (ttsManager.isPaused) resumeFromPause()
+                }
+                override fun onPause() {
+                    if (ttsManager.isSpeaking) pause()
+                }
+                override fun onStop() {
+                    stopReading()
+                }
+            })
+            setFlags(
+                MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or
+                    MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS
+            )
+            packageManager.getLaunchIntentForPackage(packageName)?.let { openIntent ->
+                setSessionActivity(
+                    PendingIntent.getActivity(
+                        this@ReadingService, 3, openIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                    )
+                )
+            }
+        }
+        updatePlaybackState(PlaybackStateCompat.STATE_NONE)
+    }
+
+    private fun updatePlaybackState(state: Int) {
+        val actions = PlaybackStateCompat.ACTION_PLAY or
+            PlaybackStateCompat.ACTION_PAUSE or
+            PlaybackStateCompat.ACTION_PLAY_PAUSE or
+            PlaybackStateCompat.ACTION_STOP
+        val playbackState = PlaybackStateCompat.Builder()
+            .setActions(actions)
+            .setState(state, PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN, 1f)
+            .build()
+        mediaSession.setPlaybackState(playbackState)
+    }
+
+    private fun updateMetadata(text: String) {
+        val snippet = text.trim().take(60).let { if (text.length > 60) "$it…" else it }
+        val metadata = MediaMetadataCompat.Builder()
+            .putString(MediaMetadataCompat.METADATA_KEY_TITLE, snippet.ifBlank { getString(R.string.app_name) })
+            .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, getString(R.string.app_name))
+            .build()
+        mediaSession.setMetadata(metadata)
+    }
+
+    // --- Audio focus / ducking ---
 
     private fun requestAudioFocus() {
         val am = audioManager ?: return
         val attrs = AudioAttributes.Builder()
-            // Tento typ Android speciálně chápe jako "krátké mluvené oznámení" a
-            // ostatní hudební appky na něj obvykle reagují ztišením (duckingem).
             .setUsage(AudioAttributes.USAGE_ASSISTANCE_NAVIGATION_GUIDANCE)
             .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
             .build()
@@ -133,7 +205,6 @@ class ReadingService : Service() {
                 if (focusChange == AudioManager.AUDIOFOCUS_LOSS ||
                     focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT
                 ) {
-                    // Např. telefonát nebo appka, co nechce duckovat - raději pauza než přeřvávání.
                     pause()
                 }
             }
@@ -146,6 +217,8 @@ class ReadingService : Service() {
         val am = audioManager ?: return
         focusRequest?.let { am.abandonAudioFocusRequest(it) }
     }
+
+    // --- Notifikace ---
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -186,6 +259,11 @@ class ReadingService : Service() {
             .setOngoing(isPlaying)
             .setOnlyAlertOnce(true)
             .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setStyle(
+                MediaNotificationCompat.MediaStyle()
+                    .setMediaSession(mediaSession.sessionToken)
+                    .setShowActionsInCompactView(0, 1)
+            )
 
         contentPending?.let { builder.setContentIntent(it) }
         return builder.build()
@@ -209,6 +287,7 @@ class ReadingService : Service() {
     override fun onDestroy() {
         ttsManager.shutdown()
         abandonAudioFocus()
+        mediaSession.release()
         super.onDestroy()
     }
 }

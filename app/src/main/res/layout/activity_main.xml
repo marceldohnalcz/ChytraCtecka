@@ -91,6 +91,17 @@
             android:textColor="@color/text_secondary"
             android:layout_marginEnd="8dp" />
 
+        <ImageButton
+            android:id="@+id/btnSpeedMinus"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/ic_minus"
+            android:contentDescription="Zpomalit"
+            android:padding="8dp"
+            android:scaleType="fitCenter" />
+
         <SeekBar
             android:id="@+id/seekSpeed"
             android:layout_width="0dp"
@@ -98,6 +109,18 @@
             android:layout_weight="1"
             android:progressTint="@color/brand_primary"
             android:thumbTint="@color/brand_primary" />
+
+        <ImageButton
+            android:id="@+id/btnSpeedPlus"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/ic_plus"
+            android:contentDescription="Zrychlit"
+            android:padding="8dp"
+            android:scaleType="fitCenter" />
 
         <TextView
             android:id="@+id/tvSpeedValue"
