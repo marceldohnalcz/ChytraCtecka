@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Stránka s ohnutým rohem -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M32,24 L62,24 L76,38 L76,84 L32,84 Z" />
+
+    <!-- Stín ohnutého rohu -->
+    <path
+        android:fillColor="#CBD5E1"
+        android:pathData="M62,24 L76,38 L62,38 Z" />
+
+    <!-- Řádky textu -->
+    <path
+        android:fillColor="#0E7490"
+        android:pathData="M40,44 L68,44 L68,49 L40,49 Z" />
+    <path
+        android:fillColor="#0E7490"
+        android:pathData="M40,54 L68,54 L68,59 L40,59 Z" />
+    <path
+        android:fillColor="#0E7490"
+        android:pathData="M40,64 L58,64 L58,69 L40,69 Z" />
+
+    <!-- Odznak Play -->
+    <path
+        android:fillColor="#FF7A59"
+        android:pathData="M62,78 a16,16 0 1,0 32,0 a16,16 0 1,0 -32,0 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M73,70 L73,86 L86,78 Z" />
+</vector>

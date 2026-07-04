@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="#FFFFFF">
+    android:background="@color/surface"
+    android:padding="16dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Chytrá čtečka"
+        android:text="@string/app_name"
         android:textSize="22sp"
         android:textStyle="bold"
+        android:textColor="@color/text_primary"
         android:layout_marginBottom="12dp" />
 
     <ProgressBar
@@ -30,33 +32,47 @@
         android:layout_weight="1"
         android:gravity="top|start"
         android:inputType="textMultiLine"
-        android:background="#F5F5F5"
-        android:padding="12dp"
+        android:background="@drawable/bg_edittext_rounded"
+        android:padding="14dp"
         android:textSize="17sp"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_secondary"
         android:hint="Sem vlož nebo napiš text ke čtení…"
-        android:layout_marginBottom="12dp" />
+        android:layout_marginBottom="14dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="12dp">
+        android:layout_marginBottom="14dp">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnPaste"
+            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginEnd="6dp"
-            android:text="Vložit ze schránky" />
+            android:text="Vložit"
+            android:textAllCaps="false"
+            app:icon="@drawable/ic_paste"
+            app:iconGravity="textStart"
+            app:cornerRadius="14dp"
+            app:backgroundTint="@color/text_secondary" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnClear"
+            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="6dp"
-            android:text="Vymazat" />
+            android:text="Vymazat"
+            android:textAllCaps="false"
+            app:icon="@drawable/ic_clear"
+            app:iconGravity="textStart"
+            app:cornerRadius="14dp"
+            app:backgroundTint="@color/brand_danger" />
     </LinearLayout>
 
     <LinearLayout
@@ -64,25 +80,32 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_marginBottom="12dp">
+        android:background="@drawable/bg_edittext_rounded"
+        android:padding="10dp"
+        android:layout_marginBottom="14dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Rychlost:"
+            android:text="Rychlost"
+            android:textColor="@color/text_secondary"
             android:layout_marginEnd="8dp" />
 
         <SeekBar
             android:id="@+id/seekSpeed"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:progressTint="@color/brand_primary"
+            android:thumbTint="@color/brand_primary" />
 
         <TextView
             android:id="@+id/tvSpeedValue"
             android:layout_width="52dp"
             android:layout_height="wrap_content"
             android:gravity="end"
+            android:textStyle="bold"
+            android:textColor="@color/brand_primary"
             android:text="1.0x" />
     </LinearLayout>
 
@@ -91,21 +114,35 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnPlayPause"
+            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_height="56dp"
+            android:layout_weight="2"
             android:layout_marginEnd="6dp"
-            android:text="▶ Přehrát" />
+            android:text="Přehrát"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            app:icon="@drawable/ic_play"
+            app:iconGravity="textStart"
+            app:cornerRadius="16dp"
+            app:backgroundTint="@color/brand_primary" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnStop"
+            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:layout_weight="1"
             android:layout_marginStart="6dp"
-            android:text="⏹ Stop" />
+            android:text="Stop"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            app:icon="@drawable/ic_stop"
+            app:iconGravity="textStart"
+            app:cornerRadius="16dp"
+            app:backgroundTint="@color/brand_accent" />
     </LinearLayout>
 
 </LinearLayout>

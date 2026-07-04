@@ -11,13 +11,28 @@ android {
         applicationId = "com.example.smartreader"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "2.0"
+    }
+
+    signingConfigs {
+        getByName("debug") {
+            // Pevný, do repozitáře uložený debug klíč - zajišťuje, že se každé nové
+            // sestavené APK dá nainstalovat jako aktualizace té předchozí verze.
+            storeFile = file("../debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
     }
 
     buildTypes {
+        debug {
+            signingConfig = signingConfigs.getByName("debug")
+        }
         release {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
 
@@ -39,6 +54,8 @@ dependencies {
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.3")
+    implementation("androidx.activity:activity-ktx:1.9.0")
+    implementation("com.google.android.material:material:1.12.0")
     // Jsoup - parsování HTML pro vytažení čitelného textu z odkazů (např. novinové články)
     implementation("org.jsoup:jsoup:1.17.2")
 }

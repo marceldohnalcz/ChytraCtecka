@@ -4,8 +4,16 @@
     <!-- Potřeba pro stažení textu, když uživatel sdílí odkaz (např. novinový článek) -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- Čtení na pozadí přes foreground službu -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <!-- Notifikace s ovládáním čtení (Android 13+) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application
         android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
         android:theme="@style/Theme.SmartReader"
         android:supportsRtl="true">
@@ -28,7 +36,7 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
 
-            <!-- Označení textu v libovolné appce -> v nabídce se objeví "Chytrá čtečka" -->
+            <!-- Označení textu v libovolné appce -> v nabídce se objeví "Chytrá čtečka textu" -->
             <intent-filter>
                 <action android:name="android.intent.action.PROCESS_TEXT" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -36,5 +44,11 @@
             </intent-filter>
 
         </activity>
+
+        <service
+            android:name=".ReadingService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback" />
+
     </application>
 </manifest>

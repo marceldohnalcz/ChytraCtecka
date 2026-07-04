@@ -1,15 +1,23 @@
 package com.example.smartreader
 
+import android.Manifest
 import android.content.ClipboardManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
 import android.text.Spannable
 import android.text.style.BackgroundColorSpan
 import android.view.View
 import android.widget.SeekBar
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.smartreader.databinding.ActivityMainBinding
 import kotlinx.coroutines.Dispatchers
@@ -17,18 +25,37 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Locale
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ReadingService.Listener {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var ttsManager: TtsManager
+    private var service: ReadingService? = null
+    private var isServiceBound = false
     private var highlightSpan: BackgroundColorSpan? = null
+    private var currentSpeedRate = 1.0f
+
+    private val notificationPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { /* není kritické, appka funguje i bez notifikace */ }
+
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, binder: IBinder?) {
+            val localBinder = binder as ReadingService.LocalBinder
+            service = localBinder.getService()
+            service?.setListener(this@MainActivity)
+            service?.setSpeed(currentSpeedRate)
+            syncButtonWithServiceState()
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            service = null
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupTts()
+        requestNotificationPermissionIfNeeded()
         setupButtons()
         setupSpeedSlider()
         handleIncomingIntent(intent)
@@ -40,14 +67,31 @@ class MainActivity : AppCompatActivity() {
         handleIncomingIntent(intent)
     }
 
-    private fun setupTts() {
-        ttsManager = TtsManager(
-            context = this,
-            onWordRange = { start, end -> runOnUiThread { highlightRange(start, end) } },
-            onDone = { runOnUiThread { onPlaybackFinished() } },
-            onError = { msg -> runOnUiThread { Toast.makeText(this, msg, Toast.LENGTH_LONG).show() } },
-            onReady = {}
-        )
+    override fun onStart() {
+        super.onStart()
+        Intent(this, ReadingService::class.java).also {
+            bindService(it, serviceConnection, Context.BIND_AUTO_CREATE)
+            isServiceBound = true
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        service?.setListener(null)
+        if (isServiceBound) {
+            unbindService(serviceConnection)
+            isServiceBound = false
+        }
+    }
+
+    private fun requestNotificationPermissionIfNeeded() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
     }
 
     private fun setupButtons() {
@@ -72,11 +116,16 @@ class MainActivity : AppCompatActivity() {
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 val rate = 0.5f + (seekBar?.progress ?: 5) / 10f
-                ttsManager.setSpeed(rate)
-                // Pokud právě čte, restartujeme od aktuální pozice s novou rychlostí
-                if (ttsManager.isSpeaking) {
-                    ttsManager.pause()
-                    ttsManager.resume()
+                currentSpeedRate = rate
+                val svc = service ?: return
+                svc.setSpeed(rate)
+                // Oprava chyby konkurenčních appek: nerestartujeme celý text od začátku,
+                // jen pokračujeme přesně od místa, kde čtení právě je, novou rychlostí.
+                if (svc.isSpeaking()) {
+                    val pos = svc.currentAbsolutePosition()
+                    svc.pause()
+                    placeCursorAt(pos)
+                    startReadingFromCursor()
                 }
             }
         })
@@ -89,15 +138,15 @@ class MainActivity : AppCompatActivity() {
     private fun pasteFromClipboard() {
         val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = clipboard.primaryClip
-        if (clip != null && clip.itemCount > 0) {
-            val text = clip.getItemAt(0).coerceToText(this).toString()
-            if (text.isNotBlank()) {
-                binding.etContent.setText(text)
-            } else {
-                Toast.makeText(this, "Schránka je prázdná", Toast.LENGTH_SHORT).show()
-            }
-        } else {
+        val text = if (clip != null && clip.itemCount > 0) {
+            clip.getItemAt(0).coerceToText(this).toString()
+        } else null
+
+        if (text.isNullOrBlank()) {
             Toast.makeText(this, "Schránka je prázdná", Toast.LENGTH_SHORT).show()
+        } else {
+            binding.etContent.setText(text)
+            binding.etContent.setSelection(0)
         }
     }
 
@@ -107,44 +156,98 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun togglePlayPause() {
-        when {
-            ttsManager.isSpeaking -> {
-                ttsManager.pause()
-                binding.btnPlayPause.text = "▶ Přehrát"
-            }
-            ttsManager.isPaused -> {
-                ttsManager.resume()
-                binding.btnPlayPause.text = "⏸ Pauza"
-            }
-            else -> startReading()
+        val svc = service ?: return
+        if (svc.isSpeaking()) {
+            svc.pause()
+        } else {
+            startReadingFromCursor()
         }
     }
 
-    private fun startReading() {
-        val raw = binding.etContent.text?.toString().orEmpty()
-        if (raw.isBlank()) {
+    /**
+     * Vždy čte aktuální (živý) obsah textového pole od místa, kde je kurzor.
+     * Díky tomu funguje správně jak "Přehrát" na začátku, tak pokračování po pauze,
+     * tak i případ, kdy uživatel text během pauzy upravil (smazal/přepsal) -
+     * čte se přesně to, co v poli skutečně je, od aktuální pozice kurzoru.
+     */
+    private fun startReadingFromCursor() {
+        val liveText = binding.etContent.text?.toString().orEmpty()
+        if (liveText.isBlank()) {
             Toast.makeText(this, "Nejprve vlož nebo napiš text", Toast.LENGTH_SHORT).show()
             return
         }
-        val cleaned = TextPreprocessor.clean(raw)
-        // Uložíme vyčištěný text zpátky do pole, ať zvýrazňování odpovídá tomu, co se skutečně čte
-        if (cleaned != raw) {
-            binding.etContent.setText(cleaned)
+        val cursor = binding.etContent.selectionStart.coerceIn(0, liveText.length)
+        val remaining = liveText.substring(cursor)
+        val cleaned = TextPreprocessor.clean(remaining)
+
+        if (cleaned.isBlank()) {
+            Toast.makeText(this, "Od pozice kurzoru už není co číst", Toast.LENGTH_SHORT).show()
+            return
         }
-        ttsManager.speak(cleaned)
-        binding.btnPlayPause.text = "⏸ Pauza"
+
+        // Nahradíme jen "ocas" textu (od kurzoru dál) vyčištěnou verzí, ať zvýrazňování
+        // odpovídá tomu, co se skutečně čte, a zbytek textu (před kurzorem) zůstane netknutý.
+        if (cleaned != remaining) {
+            binding.etContent.text?.replace(cursor, liveText.length, cleaned)
+        }
+        placeCursorAt(cursor)
+
+        ensureServiceStarted()
+        service?.setSpeed(currentSpeedRate)
+        service?.speak(cleaned, cursor)
+    }
+
+    private fun ensureServiceStarted() {
+        val intent = Intent(this, ReadingService::class.java)
+        ContextCompat.startForegroundService(this, intent)
     }
 
     private fun stopReading() {
-        ttsManager.stop()
-        binding.btnPlayPause.text = "▶ Přehrát"
+        service?.stopReading()
         clearHighlight()
+        placeCursorAt(0)
     }
 
-    private fun onPlaybackFinished() {
-        binding.btnPlayPause.text = "▶ Přehrát"
-        clearHighlight()
+    private fun placeCursorAt(position: Int) {
+        val len = binding.etContent.text?.length ?: 0
+        binding.etContent.setSelection(position.coerceIn(0, len))
     }
+
+    private fun syncButtonWithServiceState() {
+        val svc = service ?: return
+        onStateChanged(svc.isSpeaking(), svc.isPaused())
+    }
+
+    // --- ReadingService.Listener ---
+
+    override fun onWordRange(start: Int, end: Int) {
+        runOnUiThread { highlightRange(start, end) }
+    }
+
+    override fun onStateChanged(isSpeaking: Boolean, isPaused: Boolean) {
+        runOnUiThread {
+            if (isSpeaking) {
+                binding.btnPlayPause.text = "Pauza"
+                binding.btnPlayPause.setIconResource(R.drawable.ic_pause)
+            } else {
+                binding.btnPlayPause.text = "Přehrát"
+                binding.btnPlayPause.setIconResource(R.drawable.ic_play)
+            }
+            if (isPaused) {
+                val pos = service?.currentAbsolutePosition() ?: 0
+                placeCursorAt(pos)
+            }
+            if (!isSpeaking && !isPaused) {
+                clearHighlight()
+            }
+        }
+    }
+
+    override fun onError(message: String) {
+        runOnUiThread { Toast.makeText(this, message, Toast.LENGTH_LONG).show() }
+    }
+
+    // --- Zvýrazňování čteného textu ---
 
     private fun highlightRange(start: Int, end: Int) {
         val text = binding.etContent.text ?: return
@@ -161,6 +264,8 @@ class MainActivity : AppCompatActivity() {
         highlightSpan = null
     }
 
+    // --- Sdílení textu / odkazů z jiných aplikací ---
+
     private fun handleIncomingIntent(intent: Intent) {
         val sharedText: String? = when (intent.action) {
             Intent.ACTION_SEND ->
@@ -173,10 +278,10 @@ class MainActivity : AppCompatActivity() {
 
         val url = TextPreprocessor.extractFirstUrl(sharedText)
         if (url != null && sharedText.trim() == url.trim()) {
-            // Sdílený obsah je jen odkaz -> zkusíme z něj stáhnout text článku
             loadFromUrl(url)
         } else {
             binding.etContent.setText(sharedText)
+            binding.etContent.setSelection(0)
         }
     }
 
@@ -190,17 +295,13 @@ class MainActivity : AppCompatActivity() {
                 binding.etContent.setText("")
                 Toast.makeText(
                     this@MainActivity,
-                    "Nepodařilo se z odkazu vytáhnout text (u Facebooku/Instagramu to kvůli JavaScriptu často nejde). Zkus text v dané appce označit a použít \"Chytrá čtečka\" z nabídky, nebo ho zkopíruj a vlož ručně.",
+                    "Nepodařilo se z odkazu vytáhnout text (u Facebooku/Instagramu to kvůli JavaScriptu často nejde). Zkus text v dané appce označit a použít \"Chytrá čtečka textu\" z nabídky, nebo ho zkopíruj a vlož ručně.",
                     Toast.LENGTH_LONG
                 ).show()
             } else {
                 binding.etContent.setText(extracted)
+                binding.etContent.setSelection(0)
             }
         }
-    }
-
-    override fun onDestroy() {
-        ttsManager.shutdown()
-        super.onDestroy()
     }
 }

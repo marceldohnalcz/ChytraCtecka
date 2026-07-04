@@ -8,14 +8,20 @@ import java.util.Locale
 
 /**
  * Obaluje Android TextToSpeech a řeší věci, které TTS nativně neumí:
- *  - text delší než limit enginu (rozseká na kousky, "chunks")
+ *  - text delší než limit enginu (rozseká na kousky - "chunks", cca po větách)
  *  - "pauzu" (Android TTS nemá skutečnou pauzu, takže si pamatujeme
  *    poslední pozici a po Play znovu spustíme čtení od ní)
  *  - hlášení, které slovo/úsek se právě čte (pro zvýraznění v textu)
+ *
+ * DŮLEŽITÉ: text se seká po VĚTÁCH (ne po tisících znaků najednou), protože
+ * spoustu telefonních hlasových enginů nespolehlivě hlásí přesnou pozici
+ * uvnitř dlouhé promluvy (onRangeStart). Díky sekání po větách víme vždy
+ * aspoň to, u které věty jsme skončili - i na enginech, které slovo přesně
+ * nehlásí - takže pauza/změna rychlosti nikdy neskočí na úplný začátek textu.
  */
 class TtsManager(
     context: Context,
-    private val onWordRange: (globalStart: Int, globalEnd: Int) -> Unit,
+    private val onWordRange: (absoluteStart: Int, absoluteEnd: Int) -> Unit,
     private val onDone: () -> Unit,
     private val onError: (String) -> Unit,
     private val onReady: () -> Unit
@@ -24,6 +30,7 @@ class TtsManager(
     private var isReady = false
 
     private var fullText: String = ""
+    private var baseOffset: Int = 0
     private var chunks: List<Chunk> = emptyList()
     private var currentChunkIndex = 0
     private var lastKnownOffsetInChunk = 0
@@ -33,7 +40,7 @@ class TtsManager(
     var isPaused = false
         private set
 
-    private data class Chunk(val text: String, val globalOffset: Int)
+    private data class Chunk(val text: String, val localOffset: Int)
 
     init {
         tts = TextToSpeech(context) { status ->
@@ -43,7 +50,13 @@ class TtsManager(
                     result != TextToSpeech.LANG_NOT_SUPPORTED
 
                 tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
-                    override fun onStart(utteranceId: String?) {}
+                    override fun onStart(utteranceId: String?) {
+                        // Garantovaně voláno pro každou promluvu na VŠECH enginech -
+                        // díky tomu máme jistou pozici na úrovni věty i bez onRangeStart.
+                        val idx = utteranceId?.removePrefix("chunk_")?.toIntOrNull() ?: return
+                        currentChunkIndex = idx
+                        lastKnownOffsetInChunk = 0
+                    }
 
                     override fun onDone(utteranceId: String?) {
                         val idx = utteranceId?.removePrefix("chunk_")?.toIntOrNull() ?: return
@@ -59,11 +72,15 @@ class TtsManager(
                     }
 
                     override fun onRangeStart(utteranceId: String?, start: Int, end: Int, frame: Int) {
+                        // Volitelné zpřesnění na úroveň slova - pokud to engine podporuje.
                         val chunkIndex = utteranceId?.removePrefix("chunk_")?.toIntOrNull() ?: return
                         val chunk = chunks.getOrNull(chunkIndex) ?: return
                         currentChunkIndex = chunkIndex
                         lastKnownOffsetInChunk = start
-                        onWordRange(chunk.globalOffset + start, chunk.globalOffset + end)
+                        onWordRange(
+                            baseOffset + chunk.localOffset + start,
+                            baseOffset + chunk.localOffset + end
+                        )
                     }
                 })
 
@@ -82,27 +99,18 @@ class TtsManager(
         tts?.setSpeechRate(rate)
     }
 
-    /** Spustí čtení textu. startFromChar umožňuje pokračovat od konkrétní pozice. */
-    fun speak(text: String, startFromChar: Int = 0) {
-        if (!isReady) return
-        fullText = text
-        chunks = splitIntoChunks(text)
+    /** Spustí čtení textu od nuly. baseOffset = pozice tohoto textu v celém dokumentu (pro zvýrazňování a kurzor). */
+    fun speak(text: String, baseOffset: Int = 0) {
+        if (!isReady || text.isEmpty()) return
+        this.fullText = text
+        this.baseOffset = baseOffset
+        this.chunks = splitIntoChunks(text)
         tts?.stop()
-
-        var startChunk = 0
-        for ((i, c) in chunks.withIndex()) {
-            if (c.globalOffset + c.text.length > startFromChar) {
-                startChunk = i
-                break
-            }
-        }
-        currentChunkIndex = startChunk
+        currentChunkIndex = 0
+        lastKnownOffsetInChunk = 0
         isSpeaking = true
         isPaused = false
-
-        val offsetInChunk = (startFromChar - (chunks.getOrNull(startChunk)?.globalOffset ?: 0))
-            .coerceAtLeast(0)
-        speakFromChunk(startChunk, offsetInChunk)
+        speakFromChunk(0, 0)
     }
 
     private fun speakFromChunk(index: Int, offsetWithinChunk: Int) {
@@ -114,24 +122,31 @@ class TtsManager(
         val params = Bundle()
         val textToSpeak = chunk.text.substring(offsetWithinChunk.coerceIn(0, chunk.text.length))
         tts?.speak(textToSpeak, TextToSpeech.QUEUE_FLUSH, params, "chunk_$index")
-
         for (next in (index + 1) until chunks.size) {
             tts?.speak(chunks[next].text, TextToSpeech.QUEUE_ADD, params, "chunk_$next")
         }
     }
 
-    /** Android TTS nemá nativní pauzu - zastavíme a zapamatujeme si, kde jsme skončili. */
+    /** Android TTS nemá nativní pauzu - zastavíme a zapamatujeme si přesně, kde jsme skončili. */
     fun pause() {
         tts?.stop()
         isPaused = true
         isSpeaking = false
     }
 
+    /** Pokračuje přesně tam, kde se naposledy přestalo číst (stejný text jako před pauzou). */
     fun resume() {
         if (!isPaused) return
         val chunk = chunks.getOrNull(currentChunkIndex) ?: return
-        val resumeOffset = chunk.globalOffset + lastKnownOffsetInChunk
-        speak(fullText, resumeOffset)
+        isSpeaking = true
+        isPaused = false
+        speakFromChunk(currentChunkIndex, lastKnownOffsetInChunk.coerceIn(0, chunk.text.length))
+    }
+
+    /** Absolutní pozice v dokumentu, kde čtení naposledy skončilo/je (pro umístění kurzoru). */
+    fun currentAbsolutePosition(): Int {
+        val chunk = chunks.getOrNull(currentChunkIndex) ?: return baseOffset
+        return baseOffset + chunk.localOffset + lastKnownOffsetInChunk
     }
 
     fun stop() {
@@ -140,6 +155,8 @@ class TtsManager(
         isPaused = false
         currentChunkIndex = 0
         lastKnownOffsetInChunk = 0
+        chunks = emptyList()
+        fullText = ""
     }
 
     fun shutdown() {
@@ -147,17 +164,35 @@ class TtsManager(
         tts?.shutdown()
     }
 
-    /** Rozseká text na kousky pod limitem enginu, pokud možno na hranici věty/mezery. */
-    private fun splitIntoChunks(text: String, maxLen: Int = 3500): List<Chunk> {
+    /**
+     * Rozseká text na kousky po cca [targetLen] znacích, ale vždy na hranici věty
+     * (tečka/vykřičník/otazník/nový řádek). [hardMax] je pojistka pro text bez
+     * jakékoli interpunkce, ať jeden "chunk" nenaroste do nekonečna.
+     */
+    private fun splitIntoChunks(text: String, targetLen: Int = 220, hardMax: Int = 450): List<Chunk> {
         if (text.isEmpty()) return emptyList()
         val result = mutableListOf<Chunk>()
         var start = 0
-        while (start < text.length) {
-            var end = (start + maxLen).coerceAtMost(text.length)
-            if (end < text.length) {
-                val lastBreak = text.lastIndexOfAny(charArrayOf('.', '!', '?', '\n', ' '), end - 1)
-                if (lastBreak > start) end = lastBreak + 1
+        val n = text.length
+        while (start < n) {
+            var scan = start
+            var end = -1
+            while (scan < n) {
+                val c = text[scan]
+                val isBoundary = c == '.' || c == '!' || c == '?' || c == '\n'
+                val lenSoFar = scan - start + 1
+                if (isBoundary && lenSoFar >= targetLen) {
+                    end = scan + 1
+                    break
+                }
+                if (lenSoFar >= hardMax) {
+                    val lastSpace = text.lastIndexOf(' ', scan)
+                    end = if (lastSpace > start) lastSpace + 1 else scan + 1
+                    break
+                }
+                scan++
             }
+            if (end == -1) end = n
             result.add(Chunk(text.substring(start, end), start))
             start = end
         }
