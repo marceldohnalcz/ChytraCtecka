@@ -44,7 +44,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="14dp">
+        android:gravity="center_vertical"
+        android:layout_marginBottom="10dp">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnPaste"
@@ -67,12 +68,59 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="6dp"
+            android:layout_marginEnd="6dp"
             android:text="Vymazat"
             android:textAllCaps="false"
             app:icon="@drawable/ic_clear"
             app:iconGravity="textStart"
             app:cornerRadius="14dp"
             app:backgroundTint="@color/brand_danger" />
+
+        <ImageButton
+            android:id="@+id/btnSettings"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="6dp"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/ic_settings"
+            android:contentDescription="Nastavení čtení"
+            android:padding="9dp"
+            android:scaleType="fitCenter" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="14dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSave"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="6dp"
+            android:text="Uložit"
+            android:textAllCaps="false"
+            app:icon="@drawable/ic_save"
+            app:iconGravity="textStart"
+            app:cornerRadius="14dp"
+            app:backgroundTint="@color/brand_primary_dark" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLibrary"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="6dp"
+            android:text="Knihovna"
+            android:textAllCaps="false"
+            app:icon="@drawable/ic_library"
+            app:iconGravity="textStart"
+            app:cornerRadius="14dp"
+            app:backgroundTint="@color/brand_primary_dark" />
     </LinearLayout>
 
     <LinearLayout

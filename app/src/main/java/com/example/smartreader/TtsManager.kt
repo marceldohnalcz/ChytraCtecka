@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
+import android.speech.tts.Voice
 import java.util.Locale
 
 /**
@@ -34,6 +35,7 @@ class TtsManager(
     private var chunks: List<Chunk> = emptyList()
     private var currentChunkIndex = 0
     private var lastKnownOffsetInChunk = 0
+    private var volume = 1.0f
 
     var isSpeaking = false
         private set
@@ -99,6 +101,21 @@ class TtsManager(
         tts?.setSpeechRate(rate)
     }
 
+    /** Hlasitost čtení nezávislá na systémové hlasitosti (0.0 - 1.0, násobí ji). */
+    fun setVolume(v: Float) {
+        volume = v.coerceIn(0f, 1f)
+    }
+
+    /** Vrátí dostupné české hlasy nainstalované v systému. */
+    fun getAvailableCzechVoices(): List<Voice> =
+        tts?.voices?.filter { it.locale.language == "cs" }?.sortedBy { it.name } ?: emptyList()
+
+    fun setVoice(voice: Voice) {
+        tts?.voice = voice
+    }
+
+    fun getCurrentVoiceName(): String? = tts?.voice?.name
+
     /** Spustí čtení textu od nuly. baseOffset = pozice tohoto textu v celém dokumentu (pro zvýrazňování a kurzor). */
     fun speak(text: String, baseOffset: Int = 0) {
         if (!isReady || text.isEmpty()) return
@@ -120,6 +137,7 @@ class TtsManager(
             return
         }
         val params = Bundle()
+        params.putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, volume)
         val textToSpeak = chunk.text.substring(offsetWithinChunk.coerceIn(0, chunk.text.length))
         tts?.speak(textToSpeak, TextToSpeech.QUEUE_FLUSH, params, "chunk_$index")
         for (next in (index + 1) until chunks.size) {

@@ -93,6 +93,10 @@ class ReadingService : Service() {
     fun isPaused() = ttsManager.isPaused
     fun currentAbsolutePosition() = ttsManager.currentAbsolutePosition()
     fun setSpeed(rate: Float) = ttsManager.setSpeed(rate)
+    fun setVolume(v: Float) = ttsManager.setVolume(v)
+    fun getAvailableCzechVoices() = ttsManager.getAvailableCzechVoices()
+    fun getCurrentVoiceName(): String? = ttsManager.getCurrentVoiceName()
+    fun setVoice(voice: android.speech.tts.Voice) = ttsManager.setVoice(voice)
 
     /** Spustí čtení daného textu. Vždy volá "čerstvě" - MainActivity si sama hlídá, odkud má číst. */
     fun speak(text: String, baseOffset: Int) {

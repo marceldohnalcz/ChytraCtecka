@@ -39,15 +39,25 @@ podtržítka a emoji.
 
 ## Nové v této verzi
 
-- **Tlačítka +/- vedle jezdce rychlosti** - rychlost jde měnit i bez tažení prstem, po krocích 0.1x
-- **Nativní ovládání na zamykací obrazovce** přes MediaSession - stejný widget, jaký znáš ze
-  Spotify/YouTube Music, včetně reakce na sluchátková tlačítka (play/pause)
-- Nová ikona aplikace (vlastní, vektorová)
-- Přejmenováno na "Chytrá čtečka textu"
+- **Uložení rozečteného textu** – appka si při zavření zapamatuje text i pozici,
+  kde jsi skončil, a po dalším spuštění je nabídne zpátky
+- **Knihovna textů** – tlačítko "Uložit" uloží aktuální text do knihovny,
+  tlačítko "Knihovna" zobrazí seznam uložených textů (např. různé afirmace) a
+  umožní mezi nimi přepínat nebo je smazat; appka si pamatuje, kde jsi u
+  každého uloženého textu naposledy skončil
+- **Auto-scroll** – textové pole se samo posouvá tak, aby byla právě čtená
+  věta vždy vidět
+- **Výběr hlasu** – v Nastavení (ikona ozubených koleček) jde vybrat mezi
+  všemi českými hlasy nainstalovanými v telefonu
+- **Nezávislá hlasitost čtení** – posuvník v Nastavení mění hlasitost čtení
+  jako násobič nad systémovou hlasitostí médií (netýká se hlasitosti ostatních
+  appek)
+- Tlačítka +/- vedle jezdce rychlosti
+- Nativní ovládání na zamykací obrazovce přes MediaSession
+- Nová ikona aplikace, přejmenováno na "Chytrá čtečka textu"
 - Hezčí grafika – Material Design tlačítka s ikonami, zaoblené textové pole
 - Pevný debug podpisový klíč (`debug.keystore` v repozitáři) – každá nová
-  verze appky se dá nainstalovat jako update předchozí, bez nutnosti
-  odinstalace
+  verze appky se dá nainstalovat jako update předchozí
 
 ## Jak spustit
 
