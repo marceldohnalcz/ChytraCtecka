@@ -26,6 +26,10 @@ object TextPreprocessor {
     // Dlouhé čistě číselné sekvence (7+ číslic) - telefony, variabilní symboly apod.
     private val LONG_DIGIT_PATTERN: Pattern = Pattern.compile("\\b\\d{7,}\\b")
 
+    // Český zápis velkých čísel s tečkou jako oddělovačem tisíců, např. "220.000" nebo "1.234.567".
+    // Bez tohoto by TTS četlo číslice jednu po druhé místo "dvěstědvacet tisíc".
+    private val CZECH_THOUSANDS_PATTERN: Pattern = Pattern.compile("\\b\\d{1,3}(?:\\.\\d{3})+\\b")
+
     // Nejběžnější emoji bloky
     private val EMOJI_PATTERN: Pattern = Pattern.compile(
         "[\\uD83C\\uDF00-\\uD83D\\uDDFF]|[\\uD83D\\uDE00-\\uD83D\\uDE4F]|" +
@@ -40,6 +44,7 @@ object TextPreprocessor {
         val skipUrls: Boolean = true,
         val skipBankAccounts: Boolean = true,
         val skipLongNumbers: Boolean = true,
+        val normalizeThousands: Boolean = true,
         val stripUnderscores: Boolean = true,
         val stripEmoji: Boolean = true,
         val stripHashSymbol: Boolean = true,
@@ -54,7 +59,11 @@ object TextPreprocessor {
             text = IBAN_PATTERN.matcher(text).replaceAll(" ")
             text = BANK_ACCOUNT_PATTERN.matcher(text).replaceAll(" ")
         }
+        // Nejdřív odfiltrovat telefony/variabilní symboly (dokud jsou to "čisté" dlouhé
+        // sekvence číslic), teprve pak sloučit tečkované tisíce - jinak by se velké
+        // částky jako "1.234.567" po sloučení mylně chytily do stejného filtru.
         if (options.skipLongNumbers) text = LONG_DIGIT_PATTERN.matcher(text).replaceAll(" ")
+        if (options.normalizeThousands) text = normalizeThousandsSeparators(text)
         if (options.stripEmoji) text = EMOJI_PATTERN.matcher(text).replaceAll("")
         if (options.stripUnderscores) text = text.replace('_', ' ')
         if (options.stripHashSymbol) text = HASHTAG_SYMBOL.matcher(text).replaceAll("")
@@ -72,5 +81,17 @@ object TextPreprocessor {
     fun extractFirstUrl(text: String): String? {
         val m = URL_PATTERN.matcher(text)
         return if (m.find()) m.group() else null
+    }
+
+    /** Sloučí "220.000" na "220000", ať to TTS přečte jako číslo, ne po číslicích. */
+    private fun normalizeThousandsSeparators(text: String): String {
+        val matcher = CZECH_THOUSANDS_PATTERN.matcher(text)
+        val sb = StringBuffer()
+        while (matcher.find()) {
+            val replacement = matcher.group().replace(".", "")
+            matcher.appendReplacement(sb, java.util.regex.Matcher.quoteReplacement(replacement))
+        }
+        matcher.appendTail(sb)
+        return sb.toString()
     }
 }

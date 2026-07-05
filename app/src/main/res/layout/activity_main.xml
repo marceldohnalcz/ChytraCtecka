@@ -4,216 +4,253 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/surface"
-    android:padding="16dp">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:textColor="@color/text_primary"
-        android:layout_marginBottom="12dp" />
-
-    <ProgressBar
-        android:id="@+id/progress"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:indeterminate="true"
-        android:visibility="gone"
-        android:layout_marginBottom="8dp" />
-
-    <EditText
-        android:id="@+id/etContent"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="top|start"
-        android:inputType="textMultiLine"
-        android:background="@drawable/bg_edittext_rounded"
-        android:padding="14dp"
-        android:textSize="17sp"
-        android:textColor="@color/text_primary"
-        android:textColorHint="@color/text_secondary"
-        android:hint="Sem vlož nebo napiš text ke čtení…"
-        android:layout_marginBottom="14dp" />
+    android:background="@color/surface">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_marginBottom="10dp">
+        android:background="@drawable/bg_header"
+        android:paddingStart="18dp"
+        android:paddingEnd="18dp"
+        android:paddingTop="18dp"
+        android:paddingBottom="16dp">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnPaste"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginEnd="6dp"
-            android:text="Vložit"
-            android:textAllCaps="false"
-            app:icon="@drawable/ic_paste"
-            app:iconGravity="textStart"
-            app:cornerRadius="14dp"
-            app:backgroundTint="@color/text_secondary" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnClear"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="6dp"
-            android:layout_marginEnd="6dp"
-            android:text="Vymazat"
-            android:textAllCaps="false"
-            app:icon="@drawable/ic_clear"
-            app:iconGravity="textStart"
-            app:cornerRadius="14dp"
-            app:backgroundTint="@color/brand_danger" />
-
-        <ImageButton
-            android:id="@+id/btnSettings"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="6dp"
-            android:background="@drawable/bg_circle_button"
-            android:src="@drawable/ic_settings"
-            android:contentDescription="Nastavení čtení"
-            android:padding="9dp"
-            android:scaleType="fitCenter" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="14dp">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSave"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginEnd="6dp"
-            android:text="Uložit"
-            android:textAllCaps="false"
-            app:icon="@drawable/ic_save"
-            app:iconGravity="textStart"
-            app:cornerRadius="14dp"
-            app:backgroundTint="@color/brand_primary_dark" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnLibrary"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="6dp"
-            android:text="Knihovna"
-            android:textAllCaps="false"
-            app:icon="@drawable/ic_library"
-            app:iconGravity="textStart"
-            app:cornerRadius="14dp"
-            app:backgroundTint="@color/brand_primary_dark" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:background="@drawable/bg_edittext_rounded"
-        android:padding="10dp"
-        android:layout_marginBottom="14dp">
+        <ImageView
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:src="@drawable/ic_app_logo"
+            android:contentDescription="Logo" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Rychlost"
-            android:textColor="@color/text_secondary"
-            android:layout_marginEnd="8dp" />
-
-        <ImageButton
-            android:id="@+id/btnSpeedMinus"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/bg_circle_button"
-            android:src="@drawable/ic_minus"
-            android:contentDescription="Zpomalit"
-            android:padding="8dp"
-            android:scaleType="fitCenter" />
-
-        <SeekBar
-            android:id="@+id/seekSpeed"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:progressTint="@color/brand_primary"
-            android:thumbTint="@color/brand_primary" />
-
-        <ImageButton
-            android:id="@+id/btnSpeedPlus"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/bg_circle_button"
-            android:src="@drawable/ic_plus"
-            android:contentDescription="Zrychlit"
-            android:padding="8dp"
-            android:scaleType="fitCenter" />
-
-        <TextView
-            android:id="@+id/tvSpeedValue"
-            android:layout_width="52dp"
-            android:layout_height="wrap_content"
-            android:gravity="end"
+            android:layout_marginStart="12dp"
+            android:text="@string/app_name"
+            android:textSize="21sp"
             android:textStyle="bold"
-            android:textColor="@color/brand_primary"
-            android:text="1.0x" />
+            android:textColor="#FFFFFF"
+            android:letterSpacing="0.01" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnPlayPause"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
-            android:layout_weight="2"
-            android:layout_marginEnd="6dp"
-            android:text="Přehrát"
-            android:textAllCaps="false"
-            android:textSize="16sp"
-            app:icon="@drawable/ic_play"
-            app:iconGravity="textStart"
-            app:cornerRadius="16dp"
-            app:backgroundTint="@color/brand_primary" />
+        <ProgressBar
+            android:id="@+id/progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"
+            android:layout_marginBottom="8dp" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnStop"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
+        <EditText
+            android:id="@+id/etContent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_marginStart="6dp"
-            android:text="Stop"
-            android:textAllCaps="false"
-            android:textSize="16sp"
-            app:icon="@drawable/ic_stop"
-            app:iconGravity="textStart"
-            app:cornerRadius="16dp"
-            app:backgroundTint="@color/brand_accent" />
+            android:gravity="top|start"
+            android:inputType="textMultiLine"
+            android:background="@drawable/bg_edittext_rounded"
+            android:padding="14dp"
+            android:textSize="17sp"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_secondary"
+            android:hint="Sem vlož nebo napiš text ke čtení…"
+            android:layout_marginBottom="14dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="10dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPaste"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                android:text="Vložit"
+                android:textAllCaps="false"
+                app:icon="@drawable/ic_paste"
+                app:iconGravity="textStart"
+                app:cornerRadius="14dp"
+                app:backgroundTint="@color/text_secondary" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnClear"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:text="Vymazat"
+                android:textAllCaps="false"
+                app:icon="@drawable/ic_clear"
+                app:iconGravity="textStart"
+                app:cornerRadius="14dp"
+                app:backgroundTint="@color/brand_danger" />
+
+            <ImageButton
+                android:id="@+id/btnLink"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/bg_circle_button"
+                android:src="@drawable/ic_link"
+                android:contentDescription="Načíst text z odkazu"
+                android:padding="9dp"
+                android:scaleType="fitCenter" />
+
+            <ImageButton
+                android:id="@+id/btnSettings"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/bg_circle_button"
+                android:src="@drawable/ic_settings"
+                android:contentDescription="Nastavení čtení"
+                android:padding="9dp"
+                android:scaleType="fitCenter" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="14dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSave"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                android:text="Uložit"
+                android:textAllCaps="false"
+                app:icon="@drawable/ic_save"
+                app:iconGravity="textStart"
+                app:cornerRadius="14dp"
+                app:backgroundTint="@color/brand_primary_dark" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnLibrary"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:text="Knihovna"
+                android:textAllCaps="false"
+                app:icon="@drawable/ic_library"
+                app:iconGravity="textStart"
+                app:cornerRadius="14dp"
+                app:backgroundTint="@color/brand_primary_dark" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/bg_edittext_rounded"
+            android:padding="10dp"
+            android:layout_marginBottom="14dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rychlost"
+                android:textColor="@color/text_secondary"
+                android:layout_marginEnd="8dp" />
+
+            <ImageButton
+                android:id="@+id/btnSpeedMinus"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_circle_button"
+                android:src="@drawable/ic_minus"
+                android:contentDescription="Zpomalit"
+                android:padding="8dp"
+                android:scaleType="fitCenter" />
+
+            <SeekBar
+                android:id="@+id/seekSpeed"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:progressTint="@color/brand_primary"
+                android:thumbTint="@color/brand_primary" />
+
+            <ImageButton
+                android:id="@+id/btnSpeedPlus"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_circle_button"
+                android:src="@drawable/ic_plus"
+                android:contentDescription="Zrychlit"
+                android:padding="8dp"
+                android:scaleType="fitCenter" />
+
+            <TextView
+                android:id="@+id/tvSpeedValue"
+                android:layout_width="52dp"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:textStyle="bold"
+                android:textColor="@color/brand_primary"
+                android:text="1.0x" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPlayPause"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="2"
+                android:layout_marginEnd="6dp"
+                android:text="Přehrát"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                app:icon="@drawable/ic_play"
+                app:iconGravity="textStart"
+                app:cornerRadius="16dp"
+                app:backgroundTint="@color/brand_play" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnStop"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:text="Stop"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                app:icon="@drawable/ic_stop"
+                app:iconGravity="textStart"
+                app:cornerRadius="16dp"
+                app:backgroundTint="@color/brand_accent" />
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

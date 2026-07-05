@@ -123,6 +123,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         binding.btnSettings.setOnClickListener { showSettingsDialog() }
         binding.btnSave.setOnClickListener { saveCurrentTextToLibrary() }
         binding.btnLibrary.setOnClickListener { showLibraryDialog() }
+        binding.btnLink.setOnClickListener { showLinkInputDialog() }
     }
 
     private fun setupSpeedSlider() {
@@ -184,8 +185,13 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             Toast.makeText(this, "Schránka je prázdná", Toast.LENGTH_SHORT).show()
         } else {
             currentLibraryItemId = null
-            binding.etContent.setText(text)
-            binding.etContent.setSelection(0)
+            val url = TextPreprocessor.extractFirstUrl(text)
+            if (url != null && text.trim() == url.trim()) {
+                loadFromUrl(url)
+            } else {
+                binding.etContent.setText(text)
+                binding.etContent.setSelection(0)
+            }
         }
     }
 
@@ -386,8 +392,8 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                 radio.id = View.generateViewId()
                 radio.isChecked = voice.name == currentVoiceName
                 radio.setOnClickListener {
-                    service?.setVoice(voice)
                     AppSettings.saveVoiceName(this, voice.name)
+                    applyVoiceChange(voice)
                 }
                 radioGroup.addView(radio)
             }
@@ -412,6 +418,23 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         return "Hlas ${index + 1} ($quality$network)"
     }
 
+    /**
+     * Aplikuje nový hlas. Pokud appka právě čte, pokračuje přesně od aktuální
+     * pozice novým hlasem (nerestartuje celý text od začátku).
+     */
+    private fun applyVoiceChange(voice: Voice) {
+        val svc = service ?: return
+        if (svc.isSpeaking()) {
+            val pos = svc.currentAbsolutePosition()
+            svc.pause()
+            svc.setVoice(voice)
+            placeCursorAt(pos)
+            startReadingFromCursor()
+        } else {
+            svc.setVoice(voice)
+        }
+    }
+
     // --- ReadingService.Listener ---
 
     override fun onWordRange(start: Int, end: Int) {
@@ -423,9 +446,17 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             if (isSpeaking) {
                 binding.btnPlayPause.text = "Pauza"
                 binding.btnPlayPause.setIconResource(R.drawable.ic_pause)
+                binding.btnPlayPause.backgroundTintList =
+                    android.content.res.ColorStateList.valueOf(
+                        ContextCompat.getColor(this, R.color.brand_pause)
+                    )
             } else {
                 binding.btnPlayPause.text = "Přehrát"
                 binding.btnPlayPause.setIconResource(R.drawable.ic_play)
+                binding.btnPlayPause.backgroundTintList =
+                    android.content.res.ColorStateList.valueOf(
+                        ContextCompat.getColor(this, R.color.brand_play)
+                    )
             }
             if (isPaused) {
                 val pos = service?.currentAbsolutePosition() ?: 0
@@ -453,23 +484,40 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         autoScrollToPosition(start)
     }
 
-    /** Posune textové pole tak, aby byl právě čtený úsek vždy vidět. */
+    /**
+     * Posune textové pole tak, aby byl začátek právě čteného ODSTAVCE vždy
+     * v horní třetině viditelné oblasti - ne jen poslední řádek na spodním okraji.
+     * Posouvá se jen tehdy, když aktuální pozice čtení už není pohodlně vidět,
+     * ať text neposkakuje při každé větě uvnitř stejného odstavce.
+     */
     private fun autoScrollToPosition(position: Int) {
         val editText = binding.etContent
         val layout = editText.layout ?: return
-        val len = editText.text?.length ?: return
-        val line = layout.getLineForOffset(position.coerceIn(0, len))
-        val lineTop = layout.getLineTop(line)
-        val lineBottom = layout.getLineBottom(line)
+        val fullText = editText.text?.toString() ?: return
+        val len = fullText.length
+        if (len == 0) return
+        val pos = position.coerceIn(0, len)
 
-        val scrollY = editText.scrollY
         val visibleHeight = editText.height - editText.paddingTop - editText.paddingBottom
         if (visibleHeight <= 0) return
 
-        when {
-            lineTop < scrollY -> editText.scrollTo(0, lineTop)
-            lineBottom > scrollY + visibleHeight -> editText.scrollTo(0, lineBottom - visibleHeight)
-        }
+        val posLine = layout.getLineForOffset(pos)
+        val posTop = layout.getLineTop(posLine)
+        val posBottom = layout.getLineBottom(posLine)
+        val scrollY = editText.scrollY
+
+        val isComfortablyVisible = posTop >= scrollY && posBottom <= scrollY + visibleHeight
+        if (isComfortablyVisible) return
+
+        // Najdi začátek aktuálního odstavce (poslední prázdný řádek před pozicí, nebo začátek textu)
+        val paragraphStartIndex = fullText.lastIndexOf("\n\n", (pos - 1).coerceAtLeast(0))
+            .let { if (it == -1) 0 else it + 2 }
+        val paragraphLine = layout.getLineForOffset(paragraphStartIndex.coerceIn(0, len))
+        val paragraphTop = layout.getLineTop(paragraphLine)
+
+        val maxScroll = (layout.height - visibleHeight).coerceAtLeast(0)
+        val targetScrollY = (paragraphTop - visibleHeight / 3).coerceIn(0, maxScroll)
+        editText.scrollTo(0, targetScrollY)
     }
 
     private fun clearHighlight() {
@@ -498,6 +546,32 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             binding.etContent.setText(sharedText)
             binding.etContent.setSelection(0)
         }
+    }
+
+    /** Otevře dialog pro ruční zadání odkazu na článek, který se má stáhnout a přečíst. */
+    private fun showLinkInputDialog() {
+        val input = android.widget.EditText(this).apply {
+            hint = "https://…"
+            inputType = android.text.InputType.TYPE_TEXT_VARIATION_URI or android.text.InputType.TYPE_CLASS_TEXT
+            setSingleLine(true)
+            val pad = (16 * resources.displayMetrics.density).toInt()
+            setPadding(pad, pad, pad, pad)
+        }
+        AlertDialog.Builder(this)
+            .setTitle("Načíst text z odkazu")
+            .setView(input)
+            .setPositiveButton("Stáhnout") { _, _ ->
+                var url = input.text.toString().trim()
+                if (url.isNotBlank()) {
+                    if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                        url = "https://$url"
+                    }
+                    currentLibraryItemId = null
+                    loadFromUrl(url)
+                }
+            }
+            .setNegativeButton("Zrušit", null)
+            .show()
     }
 
     private fun loadFromUrl(url: String) {

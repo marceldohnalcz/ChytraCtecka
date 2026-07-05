@@ -39,25 +39,41 @@ podtržítka a emoji.
 
 ## Nové v této verzi
 
-- **Uložení rozečteného textu** – appka si při zavření zapamatuje text i pozici,
-  kde jsi skončil, a po dalším spuštění je nabídne zpátky
-- **Knihovna textů** – tlačítko "Uložit" uloží aktuální text do knihovny,
-  tlačítko "Knihovna" zobrazí seznam uložených textů (např. různé afirmace) a
-  umožní mezi nimi přepínat nebo je smazat; appka si pamatuje, kde jsi u
-  každého uloženého textu naposledy skončil
-- **Auto-scroll** – textové pole se samo posouvá tak, aby byla právě čtená
-  věta vždy vidět
-- **Výběr hlasu** – v Nastavení (ikona ozubených koleček) jde vybrat mezi
-  všemi českými hlasy nainstalovanými v telefonu
-- **Nezávislá hlasitost čtení** – posuvník v Nastavení mění hlasitost čtení
-  jako násobič nad systémovou hlasitostí médií (netýká se hlasitosti ostatních
-  appek)
-- Tlačítka +/- vedle jezdce rychlosti
-- Nativní ovládání na zamykací obrazovce přes MediaSession
-- Nová ikona aplikace, přejmenováno na "Chytrá čtečka textu"
-- Hezčí grafika – Material Design tlačítka s ikonami, zaoblené textové pole
-- Pevný debug podpisový klíč (`debug.keystore` v repozitáři) – každá nová
-  verze appky se dá nainstalovat jako update předchozí
+- **Změna hlasu za chodu** – dřív bylo potřeba dát Stop a spustit znova,
+  teď pokračuje čtení stejným principem jako u rychlosti (od aktuální pozice)
+- **Nová ikona ve stavové liště** – výrazný glyf reproduktoru se zvukovými
+  vlnami místo nevýrazného obdélníku
+- **Přebarvené tlačítko Přehrát/Pauza** – zelená = Přehrát, oranžová = Pauza,
+  na první pohled jasné, co tlačítko dělá
+- **Čtení čísel v kontextu** – "220.000" se teď sloučí na "220000" a TTS ho
+  přečte jako "dvě stě dvacet tisíc", ne po jednotlivých číslicích (viz
+  poznámka níže)
+- **Auto-scroll po odstavcích** – text se posouvá tak, aby byl začátek
+  právě čteného odstavce v horní třetině obrazovky, ne až na posledním řádku
+- **Redesign hlavičky** – barevný gradientový pruh s vlastním logem místo
+  obyčejného textu
+- **Načtení textu z odkazu ručně** – nové tlačítko s ikonou odkazu otevře
+  dialog, kam vložíš URL, a appka stáhne a vyčistí text článku; totéž se
+  stane automaticky i při vložení URL ze schránky
+- Vylepšené heuristiky stahování článků (blíž k "reader mode" prohlížečů)
+
+### Poznámka ke čtení čísel
+
+Oprava řeší konkrétní problém: český zápis velkých čísel s tečkou jako
+oddělovačem tisíců (220.000) se sloučí na čisté číslo (220000), které pak
+Android TTS engine přečte správně - tohle už umí nativně. Appka nedělá
+vlastní gramatiku pro skloňování čísel (to je nad rámec rozumného rozsahu),
+spoléhá na to, co telefonní TTS engine zvládá sám, jakmile dostane číslo
+ve správném formátu.
+
+### Poznámka ke stahování z Facebooku/Instagramu
+
+I po vylepšení heuristik platí totéž omezení jako dřív: FB/IG posílají bez
+přihlášení a bez JavaScriptu jen minimum obsahu (nanejvýš krátký
+og:description popisek), takže spolehlivé stažení celého veřejného
+příspěvku touto cestou není možné - je to omezení dané tím, jak tyto
+platformy fungují, ne otázka lepšího parsování. Spolehlivá cesta zůstává:
+označit text přímo v appce FB/IG a vybrat "Chytrá čtečka textu" z nabídky.
 
 ## Jak spustit
 
