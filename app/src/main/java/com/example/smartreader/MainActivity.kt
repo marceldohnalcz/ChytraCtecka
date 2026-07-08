@@ -147,7 +147,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         binding.btnStop.setOnClickListener { stopReading() }
         binding.btnSpeedMinus.setOnClickListener { changeSpeedStep(-1) }
         binding.btnSpeedPlus.setOnClickListener { changeSpeedStep(1) }
-        binding.btnSettings.setOnClickListener { showSettingsDialog() }
+        binding.btnMoreMenu.setOnClickListener { showMoreMenu(it) }
         binding.btnSave.setOnClickListener { saveCurrentTextToLibrary() }
         binding.btnLibrary.setOnClickListener { showLibraryDialog() }
         binding.btnLink.setOnClickListener { showLinkInputDialog() }
@@ -386,6 +386,22 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
     }
 
     // --- Nastavení: hlasitost a výběr hlasu ---
+
+    /** Menu se třemi tečkami v hlavičce - zatím jen Nastavení, prostor pro další položky. */
+    private fun showMoreMenu(anchor: View) {
+        val popup = android.widget.PopupMenu(this, anchor)
+        popup.menuInflater.inflate(R.menu.menu_more, popup.menu)
+        popup.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.menuSettings -> {
+                    showSettingsDialog()
+                    true
+                }
+                else -> false
+            }
+        }
+        popup.show()
+    }
 
     private fun showSettingsDialog() {
         val svc = service
