@@ -3,4 +3,19 @@
     <item
         android:id="@+id/menuSettings"
         android:title="Nastavení čtení" />
+    <item
+        android:id="@+id/menuHelp"
+        android:title="Nápověda a tipy" />
+    <item
+        android:id="@+id/menuClearLibrary"
+        android:title="Vymazat celou knihovnu" />
+    <item
+        android:id="@+id/menuShareApp"
+        android:title="Sdílet appku" />
+    <item
+        android:id="@+id/menuCheckUpdates"
+        android:title="Zkontrolovat aktualizace" />
+    <item
+        android:id="@+id/menuAbout"
+        android:title="O aplikaci" />
 </menu>

@@ -1,5 +1,27 @@
 # Chytrá čtečka textu (SmartReader)
 
+## Proč tahle appka vznikla
+
+Kolik článků, e-mailů a dlouhých zpráv denně otevřeš a hned zase zavřeš,
+protože "na to teď není čas"? Chytrá čtečka textu vznikla z jednoduché
+myšlenky: čas strávený čtením u obrazovky se dá získat zpátky. Stačí nechat
+text přečíst nahlas a poslouchat ho cestou do práce, při vaření, na
+procházce se psem nebo při skládání prádla.
+
+Nejde o to číst rychleji - jde o to nemuset si sednout a číst vůbec, a
+přesto obsah zachytit. Novinový článek, dlouhý e-mail, PDF report nebo
+vlastní poznámky k učení - všechno se dá "odposlouchat" mimochodem, zatímco
+děláš něco jiného.
+
+Appka rostla postupně, přesně podle toho, co se v praxi hodilo: nejdřív
+základní čtení nahlas, pak možnost pokračovat přesně tam, kde člověk
+přestal, pak čtení na pozadí (aby nebylo nutné civět na telefon), pak
+možnost načíst text rovnou z fotky nebo webového odkazu, aby nebylo potřeba
+nic opisovat ručně. Cíl zůstává od začátku stejný: ušetřit čas tam, kde
+čtení není nutné, jen zvykové.
+
+## Co appka umí
+
 Android aplikace, která nahlas čte český text – "inteligentně", tedy
 přeskakuje odkazy, čísla bankovních účtů/IBAN, dlouhá čísla (telefony apod.),
 podtržítka a emoji.
@@ -38,6 +60,10 @@ podtržítka a emoji.
   článek.
 
 ## Nové v této verzi
+
+- **Menu se třemi tečkami** v hlavičce obsahuje: Nastavení čtení, Nápověda
+  a tipy, Vymazat celou knihovnu, Sdílet appku, Zkontrolovat aktualizace
+  (otevře stránku s releasy), O aplikaci (verze + odkaz na GitHub)
 
 - **Plynulejší čtení textu z OCR** – appka teď spojuje řádky rozpoznané na
   obrázku zpátky do souvislých vět (podle bloků, jak je detekuje ML Kit),

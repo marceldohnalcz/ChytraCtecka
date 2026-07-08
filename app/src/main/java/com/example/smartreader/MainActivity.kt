@@ -387,7 +387,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
 
     // --- Nastavení: hlasitost a výběr hlasu ---
 
-    /** Menu se třemi tečkami v hlavičce - zatím jen Nastavení, prostor pro další položky. */
+    /** Menu se třemi tečkami v hlavičce. */
     private fun showMoreMenu(anchor: View) {
         val popup = android.widget.PopupMenu(this, anchor)
         popup.menuInflater.inflate(R.menu.menu_more, popup.menu)
@@ -397,10 +397,106 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                     showSettingsDialog()
                     true
                 }
+                R.id.menuHelp -> {
+                    showHelpDialog()
+                    true
+                }
+                R.id.menuClearLibrary -> {
+                    confirmClearLibrary()
+                    true
+                }
+                R.id.menuShareApp -> {
+                    shareAppLink()
+                    true
+                }
+                R.id.menuCheckUpdates -> {
+                    openUrlInBrowser("https://github.com/marceldohnalcz/ChytraCtecka/releases/tag/latest-build")
+                    true
+                }
+                R.id.menuAbout -> {
+                    showAboutDialog()
+                    true
+                }
                 else -> false
             }
         }
         popup.show()
+    }
+
+    private fun showHelpDialog() {
+        val message = """
+            • Text jde sdílet z jiných appek přímo sem (tlačítko Sdílet v dané appce).
+
+            • Označ text v libovolné appce a v nabídce vyber "Chytrá čtečka textu" - přečte přesně to, co jsi vybral.
+
+            • Tlačítko Obrázek rozpozná text z fotky nebo screenshotu, funguje i offline.
+
+            • Tlačítko Odkaz stáhne a přečte text z webové stránky. U Facebooku a Instagramu to kvůli technickým omezením těchto platforem obvykle nefunguje - tam radši označ text přímo v appce.
+
+            • Klepnutím kamkoli do textu spustíš čtení přesně od té pozice.
+
+            • V Nastavení jde změnit hlas, hlasitost čtení a rychlost.
+        """.trimIndent()
+        AlertDialog.Builder(this)
+            .setTitle("Nápověda a tipy")
+            .setMessage(message)
+            .setPositiveButton("Zavřít", null)
+            .show()
+    }
+
+    private fun confirmClearLibrary() {
+        val items = TextLibraryStore.getLibrary(this)
+        if (items.isEmpty()) {
+            Toast.makeText(this, "Knihovna je už prázdná", Toast.LENGTH_SHORT).show()
+            return
+        }
+        AlertDialog.Builder(this)
+            .setTitle("Vymazat celou knihovnu?")
+            .setMessage("Smaže se všech ${items.size} uložených textů. Tuhle akci nejde vrátit zpět.")
+            .setPositiveButton("Vymazat vše") { _, _ ->
+                TextLibraryStore.clearLibrary(this)
+                currentLibraryItemId = null
+                Toast.makeText(this, "Knihovna vymazána", Toast.LENGTH_SHORT).show()
+            }
+            .setNegativeButton("Zrušit", null)
+            .show()
+    }
+
+    private fun shareAppLink() {
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_SUBJECT, "Chytrá čtečka textu")
+            putExtra(
+                Intent.EXTRA_TEXT,
+                "Vyzkoušej Chytrou čtečku textu - appku, co ti nahlas přečte text, odkazy nebo i fotky:\n" +
+                    "https://github.com/marceldohnalcz/ChytraCtecka/releases/tag/latest-build"
+            )
+        }
+        startActivity(Intent.createChooser(shareIntent, "Sdílet appku"))
+    }
+
+    private fun openUrlInBrowser(url: String) {
+        try {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+        } catch (e: Exception) {
+            Toast.makeText(this, "Nepodařilo se otevřít prohlížeč", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun showAboutDialog() {
+        val versionName = try {
+            packageManager.getPackageInfo(packageName, 0).versionName
+        } catch (e: Exception) {
+            "?"
+        }
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.app_name))
+            .setMessage("Verze $versionName\n\nZdrojový kód a nejnovější verze:\ngithub.com/marceldohnalcz/ChytraCtecka")
+            .setPositiveButton("Zavřít", null)
+            .setNeutralButton("Otevřít GitHub") { _, _ ->
+                openUrlInBrowser("https://github.com/marceldohnalcz/ChytraCtecka")
+            }
+            .show()
     }
 
     private fun showSettingsDialog() {

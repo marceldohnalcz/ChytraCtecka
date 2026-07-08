@@ -84,6 +84,10 @@ object TextLibraryStore {
         persist(context, list)
     }
 
+    fun clearLibrary(context: Context) {
+        persist(context, emptyList())
+    }
+
     private fun persist(context: Context, list: List<SavedText>) {
         val arr = JSONArray()
         for (item in list) {
