@@ -11,8 +11,10 @@ android {
         applicationId = "com.example.smartreader"
         minSdk = 26
         targetSdk = 34
-        versionCode = 14
-        versionName = "14.0"
+        // Verzování: číslo za tečkou (2.0 -> 2.1 -> 2.2...) se zvyšuje u běžných
+        // úprav a oprav. Celé číslo před tečkou (2.0 -> 3.0) jen u zásadní změny.
+        versionCode = 15
+        versionName = "2.0"
     }
 
     signingConfigs {
