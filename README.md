@@ -42,9 +42,9 @@ podtržítka a emoji.
 - **Plynulejší čtení textu z OCR** – appka teď spojuje řádky rozpoznané na
   obrázku zpátky do souvislých vět (podle bloků, jak je detekuje ML Kit),
   místo aby dělala pauzu na konci každého vizuálního řádku z fotky
-- **Design tlačítek doladěn dle zpětné vazby** – Vložit/Vymazat mají zpět
-  text (ne jen ikonu). Obrázek/Odkaz (s textem) a Uložit/Knihovna/Nastavení
-  (jen ikony) jsou teď v jednom společném řádku místo dvou zvlášť. Mezery
+- **Design tlačítek doladěn dle zpětné vazby** – Vložit/Vymazat mají text.
+  Obrázek, Odkaz, Uložit, Knihovna a Nastavení jsou teď jen ikonová tlačítka
+  zarovnaná vlevo v jednom řádku (bez zalamování textu na dva řádky). Mezery
   mezi řádky i hlavička s názvem appky nahoře jsou užší.
 - **Rozpoznávání textu z obrázku (OCR)** – nové tlačítko "Obrázek" umožní buď
   vybrat fotku/screenshot z galerie, nebo rovnou vyfotit dokument

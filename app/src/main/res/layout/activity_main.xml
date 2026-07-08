@@ -63,13 +63,13 @@
             android:textColor="@color/text_primary"
             android:textColorHint="@color/text_secondary"
             android:hint="Sem vlož nebo napiš text ke čtení…"
-            android:layout_marginBottom="10dp" />
+            android:layout_marginBottom="8dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="6dp">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnPaste"
@@ -104,37 +104,30 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="8dp">
+            android:gravity="center_vertical|start"
+            android:layout_marginBottom="6dp">
 
-            <com.google.android.material.button.MaterialButton
+            <ImageButton
                 android:id="@+id/btnImage"
-                style="@style/Widget.MaterialComponents.Button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_marginEnd="6dp"
-                android:text="Obrázek"
-                android:textAllCaps="false"
-                app:icon="@drawable/ic_image"
-                app:iconGravity="textStart"
-                app:cornerRadius="14dp"
-                app:backgroundTint="@color/brand_accent" />
+                android:background="@drawable/bg_circle_button_accent"
+                android:src="@drawable/ic_image"
+                android:contentDescription="Rozpoznat text z obrázku"
+                android:padding="8dp"
+                android:scaleType="fitCenter" />
 
-            <com.google.android.material.button.MaterialButton
+            <ImageButton
                 android:id="@+id/btnLink"
-                style="@style/Widget.MaterialComponents.Button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="6dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_marginEnd="6dp"
-                android:text="Odkaz"
-                android:textAllCaps="false"
-                app:icon="@drawable/ic_link"
-                app:iconGravity="textStart"
-                app:cornerRadius="14dp"
-                app:backgroundTint="@color/brand_accent" />
+                android:background="@drawable/bg_circle_button_accent"
+                android:src="@drawable/ic_link"
+                android:contentDescription="Načíst text z odkazu"
+                android:padding="8dp"
+                android:scaleType="fitCenter" />
 
             <ImageButton
                 android:id="@+id/btnSave"
