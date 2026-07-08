@@ -11,8 +11,8 @@ android {
         applicationId = "com.example.smartreader"
         minSdk = 26
         targetSdk = 34
-        versionCode = 8
-        versionName = "8.0"
+        versionCode = 9
+        versionName = "9.0"
     }
 
     signingConfigs {
