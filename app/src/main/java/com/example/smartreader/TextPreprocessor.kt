@@ -40,11 +40,29 @@ object TextPreprocessor {
     private val HASHTAG_SYMBOL: Pattern = Pattern.compile("#(?=\\S)")
     private val MENTION_SYMBOL: Pattern = Pattern.compile("@(?=\\S)")
 
+    // Časté české zkratky s tečkou - TTS engine bere tečku jako konec věty a udělá
+    // pauzu i uprostřed souvětí. Rozepsáním na plné znění pauza zmizí a čte se to
+    // navíc srozumitelněji.
+    private val ABBREVIATIONS: Map<String, String> = mapOf(
+        "např" to "například",
+        "tzn" to "to znamená",
+        "atd" to "a tak dále",
+        "atp" to "a tak podobně",
+        "apod" to "a podobně",
+        "tj" to "to jest",
+        "resp" to "respektive",
+        "popř" to "popřípadě",
+        "mj" to "mimo jiné",
+        "tzv" to "takzvaný",
+        "str" to "strana"
+    )
+
     data class Options(
         val skipUrls: Boolean = true,
         val skipBankAccounts: Boolean = true,
         val skipLongNumbers: Boolean = true,
         val normalizeThousands: Boolean = true,
+        val expandAbbreviations: Boolean = true,
         val stripUnderscores: Boolean = true,
         val stripEmoji: Boolean = true,
         val stripHashSymbol: Boolean = true,
@@ -54,6 +72,7 @@ object TextPreprocessor {
     fun clean(input: String, options: Options = Options()): String {
         var text = input
 
+        if (options.expandAbbreviations) text = expandAbbreviations(text)
         if (options.skipUrls) text = URL_PATTERN.matcher(text).replaceAll(" ")
         if (options.skipBankAccounts) {
             text = IBAN_PATTERN.matcher(text).replaceAll(" ")
@@ -93,5 +112,27 @@ object TextPreprocessor {
         }
         matcher.appendTail(sb)
         return sb.toString()
+    }
+
+    /** Rozepíše časté zkratky ("např." -> "například"), ať TTS nedělá pauzu uprostřed věty. */
+    private fun expandAbbreviations(text: String): String {
+        var result = text
+        for ((abbr, full) in ABBREVIATIONS) {
+            val pattern = Pattern.compile("\\b(${Pattern.quote(abbr)})\\.", Pattern.CASE_INSENSITIVE)
+            val matcher = pattern.matcher(result)
+            val sb = StringBuffer()
+            while (matcher.find()) {
+                val matchedAbbr = matcher.group(1)
+                val replacement = if (matchedAbbr.firstOrNull()?.isUpperCase() == true) {
+                    full.replaceFirstChar { it.uppercase() }
+                } else {
+                    full
+                }
+                matcher.appendReplacement(sb, java.util.regex.Matcher.quoteReplacement(replacement))
+            }
+            matcher.appendTail(sb)
+            result = sb.toString()
+        }
+        return result
     }
 }

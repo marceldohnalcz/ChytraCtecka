@@ -81,6 +81,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             service?.setListener(this@MainActivity)
             service?.setSpeed(currentSpeedRate)
             service?.setVolume(currentVolume)
+            service?.setAutoResumeAfterInterruption(AppSettings.loadAutoResumeAfterCall(this@MainActivity))
             AppSettings.loadVoiceName(this@MainActivity)?.let { name ->
                 service?.getAvailableCzechVoices()?.find { it.name == name }?.let { service?.setVoice(it) }
             }
@@ -145,6 +146,8 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         binding.btnClear.setOnClickListener { clearText() }
         binding.btnPlayPause.setOnClickListener { togglePlayPause() }
         binding.btnStop.setOnClickListener { stopReading() }
+        binding.btnSkipPrev.setOnClickListener { skipToParagraph(-1) }
+        binding.btnSkipNext.setOnClickListener { skipToParagraph(1) }
         binding.btnSpeedMinus.setOnClickListener { changeSpeedStep(-1) }
         binding.btnSpeedPlus.setOnClickListener { changeSpeedStep(1) }
         binding.btnMoreMenu.setOnClickListener { showMoreMenu(it) }
@@ -281,6 +284,58 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         placeCursorAt(0)
     }
 
+    /**
+     * Přeskočí na začátek dalšího/předchozího odstavce (podle direction: +1/-1).
+     * Pokud appka právě čte, pokračuje čtení hned od nové pozice. Chová se jako
+     * v audioknihách: "předchozí" hodně hluboko v odstavci skočí na jeho začátek,
+     * blízko začátku skočí až na odstavec před ním.
+     */
+    private fun skipToParagraph(direction: Int) {
+        val text = binding.etContent.text?.toString().orEmpty()
+        if (text.isBlank()) return
+        val svc = service ?: return
+
+        val wasSpeaking = svc.isSpeaking()
+        val currentPos = if (svc.isSpeaking() || svc.isPaused()) {
+            svc.currentAbsolutePosition()
+        } else {
+            binding.etContent.selectionStart
+        }
+
+        val starts = findParagraphStarts(text)
+        val targetPos = if (direction > 0) {
+            starts.firstOrNull { it > currentPos } ?: text.length
+        } else {
+            val currentParagraphStart = starts.lastOrNull { it <= currentPos } ?: 0
+            if (currentPos - currentParagraphStart > 15) {
+                currentParagraphStart
+            } else {
+                starts.lastOrNull { it < currentParagraphStart } ?: 0
+            }
+        }
+
+        if (svc.isSpeaking()) {
+            svc.pause()
+        }
+        placeCursorAt(targetPos)
+        if (wasSpeaking) {
+            startReadingFromCursor()
+        } else {
+            clearHighlight()
+        }
+    }
+
+    /** Vrátí pozice, kde v textu začíná každý odstavec (0 a pak vždy za "\n\n"). */
+    private fun findParagraphStarts(text: String): List<Int> {
+        val starts = mutableListOf(0)
+        var idx = text.indexOf("\n\n")
+        while (idx != -1) {
+            starts.add(idx + 2)
+            idx = text.indexOf("\n\n", idx + 2)
+        }
+        return starts
+    }
+
     private fun placeCursorAt(position: Int) {
         val len = binding.etContent.text?.length ?: 0
         binding.etContent.setSelection(position.coerceIn(0, len))
@@ -333,20 +388,31 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         val view = layoutInflater.inflate(R.layout.dialog_library, null)
         val recycler = view.findViewById<RecyclerView>(R.id.recyclerLibrary)
         val empty = view.findViewById<TextView>(R.id.tvLibraryEmpty)
+        val btnPlaySelected = view.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnPlaySelected)
         recycler.layoutManager = LinearLayoutManager(this)
 
         lateinit var dialog: AlertDialog
         lateinit var adapter: LibraryAdapter
+        val selectedIds = mutableSetOf<String>()
+
+        fun refreshPlayButton() {
+            val count = selectedIds.size
+            btnPlaySelected.isEnabled = count > 0
+            btnPlaySelected.text = if (count > 0) "Přehrát vybrané ($count)" else "Přehrát vybrané"
+        }
 
         fun refresh() {
             val items = TextLibraryStore.getLibrary(this)
+            selectedIds.retainAll(items.map { it.id }.toSet())
             empty.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
             recycler.visibility = if (items.isEmpty()) View.GONE else View.VISIBLE
             adapter.updateItems(items)
+            refreshPlayButton()
         }
 
         adapter = LibraryAdapter(
             items = TextLibraryStore.getLibrary(this),
+            selectedIds = selectedIds,
             onItemClick = { item ->
                 loadSavedTextIntoEditor(item)
                 dialog.dismiss()
@@ -362,10 +428,17 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                     }
                     .setNegativeButton("Zrušit", null)
                     .show()
-            }
+            },
+            onSelectionChanged = { refreshPlayButton() }
         )
         recycler.adapter = adapter
         refresh()
+
+        btnPlaySelected.setOnClickListener {
+            val allItems = TextLibraryStore.getLibrary(this)
+            playSelectedFromLibrary(selectedIds, allItems)
+            dialog.dismiss()
+        }
 
         dialog = AlertDialog.Builder(this)
             .setTitle("Knihovna textů")
@@ -373,6 +446,20 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             .setNegativeButton("Zavřít", null)
             .create()
         dialog.show()
+    }
+
+    /**
+     * Spojí vybrané texty z knihovny do jednoho souvislého textu (v pořadí, v jakém
+     * jsou v knihovně) a rovnou spustí čtení - přehrají se tak jeden po druhém.
+     */
+    private fun playSelectedFromLibrary(selectedIds: Set<String>, allItems: List<SavedText>) {
+        val ordered = allItems.filter { selectedIds.contains(it.id) }
+        if (ordered.isEmpty()) return
+        val combined = ordered.joinToString("\n\n") { it.content }
+        currentLibraryItemId = null
+        binding.etContent.setText(combined)
+        binding.etContent.setSelection(0)
+        startReadingFromCursor()
     }
 
     private fun loadSavedTextIntoEditor(item: SavedText) {
@@ -504,6 +591,13 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         val view = layoutInflater.inflate(R.layout.dialog_settings, null)
         val seekVolume = view.findViewById<SeekBar>(R.id.seekVolumeDialog)
         val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupVoices)
+        val switchAutoResume = view.findViewById<android.widget.Switch>(R.id.switchAutoResume)
+
+        switchAutoResume.isChecked = AppSettings.loadAutoResumeAfterCall(this)
+        switchAutoResume.setOnCheckedChangeListener { _, checked ->
+            AppSettings.saveAutoResumeAfterCall(this, checked)
+            service?.setAutoResumeAfterInterruption(checked)
+        }
 
         seekVolume.progress = (currentVolume * 100).toInt()
         seekVolume.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {

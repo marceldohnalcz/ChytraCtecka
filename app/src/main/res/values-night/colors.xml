@@ -1,0 +1,8 @@
+<resources>
+    <!-- Tmavá varianta - jen barvy pozadí/textu se mění, značkové barvy zůstávají stejné -->
+    <color name="surface">#0F172A</color>
+    <color name="surface_card">#1E293B</color>
+    <color name="border">#334155</color>
+    <color name="text_primary">#F1F5F9</color>
+    <color name="text_secondary">#94A3B8</color>
+</resources>

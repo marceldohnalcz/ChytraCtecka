@@ -6,6 +6,13 @@
     android:gravity="center_vertical"
     android:padding="12dp">
 
+    <CheckBox
+        android:id="@+id/cbLibraryItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:buttonTint="@color/brand_primary" />
+
     <TextView
         android:id="@+id/tvLibraryItemTitle"
         android:layout_width="0dp"

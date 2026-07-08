@@ -51,6 +51,8 @@ class ReadingService : Service() {
     private lateinit var mediaSession: MediaSessionCompat
     private var audioManager: AudioManager? = null
     private var focusRequest: AudioFocusRequest? = null
+    private var autoResumeAfterInterruption = false
+    private var pausedDueToInterruption = false
 
     inner class LocalBinder : Binder() {
         fun getService(): ReadingService = this@ReadingService
@@ -98,6 +100,10 @@ class ReadingService : Service() {
     fun getCurrentVoiceName(): String? = ttsManager.getCurrentVoiceName()
     fun setVoice(voice: android.speech.tts.Voice) = ttsManager.setVoice(voice)
 
+    fun setAutoResumeAfterInterruption(enabled: Boolean) {
+        autoResumeAfterInterruption = enabled
+    }
+
     /** Spustí čtení daného textu. Vždy volá "čerstvě" - MainActivity si sama hlídá, odkud má číst. */
     fun speak(text: String, baseOffset: Int) {
         if (text.isBlank()) return
@@ -112,7 +118,21 @@ class ReadingService : Service() {
 
     fun pause() {
         ttsManager.pause()
+        pausedDueToInterruption = false
         abandonAudioFocus()
+        updatePlaybackState(PlaybackStateCompat.STATE_PAUSED)
+        listener?.onStateChanged(false, true)
+        updateNotification()
+    }
+
+    /**
+     * Pauza vyvolaná systémem (např. příchozí hovor) - na rozdíl od pause() NEZAHAZUJE
+     * audio focus, ať appka dostane AUDIOFOCUS_GAIN zpátky, jakmile hovor skončí, a může
+     * se (pokud je to zapnuté v nastavení) sama obnovit.
+     */
+    private fun pauseForInterruption() {
+        ttsManager.pause()
+        pausedDueToInterruption = true
         updatePlaybackState(PlaybackStateCompat.STATE_PAUSED)
         listener?.onStateChanged(false, true)
         updateNotification()
@@ -206,10 +226,29 @@ class ReadingService : Service() {
         val request = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK)
             .setAudioAttributes(attrs)
             .setOnAudioFocusChangeListener { focusChange ->
-                if (focusChange == AudioManager.AUDIOFOCUS_LOSS ||
-                    focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT
-                ) {
-                    pause()
+                when (focusChange) {
+                    AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
+                        // Typicky telefonát - dočasné přerušení, focus si necháme "podaný",
+                        // ať víme, až se nám vrátí (AUDIOFOCUS_GAIN).
+                        if (ttsManager.isSpeaking) {
+                            pauseForInterruption()
+                        }
+                    }
+                    AudioManager.AUDIOFOCUS_LOSS -> {
+                        // Trvalá ztráta (jiná appka převzala přehrávání natrvalo) - klasická pauza.
+                        pausedDueToInterruption = false
+                        pause()
+                    }
+                    AudioManager.AUDIOFOCUS_GAIN -> {
+                        if (pausedDueToInterruption) {
+                            pausedDueToInterruption = false
+                            if (autoResumeAfterInterruption && ttsManager.isPaused) {
+                                resumeFromPause()
+                            } else {
+                                abandonAudioFocus()
+                            }
+                        }
+                    }
                 }
             }
             .build()

@@ -7,6 +7,7 @@ object AppSettings {
     private const val KEY_VOICE_NAME = "voice_name"
     private const val KEY_SPEED = "speed_rate"
     private const val KEY_VOLUME = "reading_volume"
+    private const val KEY_AUTO_RESUME = "auto_resume_after_call"
 
     fun saveVoiceName(context: Context, name: String) {
         prefs(context).edit().putString(KEY_VOICE_NAME, name).apply()
@@ -28,6 +29,13 @@ object AppSettings {
 
     fun loadVolume(context: Context): Float =
         prefs(context).getFloat(KEY_VOLUME, 1.0f)
+
+    fun saveAutoResumeAfterCall(context: Context, enabled: Boolean) {
+        prefs(context).edit().putBoolean(KEY_AUTO_RESUME, enabled).apply()
+    }
+
+    fun loadAutoResumeAfterCall(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_AUTO_RESUME, false)
 
     private fun prefs(context: Context) =
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)

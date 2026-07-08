@@ -59,7 +59,21 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
-## Nové v této verzi
+## Nové v této verzi (2.1)
+
+- **Tmavý režim** – appka teď automaticky respektuje systémové nastavení
+  tmavého/světlého vzhledu telefonu
+- **Přeskočit odstavec vpřed/vzad** – nová tlačítka vedle Přehrát, chovají
+  se jako v audioknihách (dost hluboko v odstavci "předchozí" skočí na jeho
+  začátek, blízko začátku až na odstavec před ním)
+- **Fronta textů z knihovny** – v dialogu Knihovna jde zaškrtnout víc textů
+  a přehrát je za sebou tlačítkem "Přehrát vybrané" (v1: spojí je do
+  jednoho souvislého textu, ne odděleně track po tracku)
+- **Lepší čtení zkratek** – "např.", "tzn.", "atd." a podobné se teď rozepíší
+  na plné znění, ať TTS nedělá zbytečnou pauzu uprostřed věty
+- **Automatické pokračování po telefonátu** – volitelný přepínač v
+  Nastavení; když je zapnutý, appka po skončení hovoru sama naváže tam, kde
+  přestala
 
 - **Menu se třemi tečkami** v hlavičce obsahuje: Nastavení čtení, Nápověda
   a tipy, Vymazat celou knihovnu, Sdílet appku, Zkontrolovat aktualizace
