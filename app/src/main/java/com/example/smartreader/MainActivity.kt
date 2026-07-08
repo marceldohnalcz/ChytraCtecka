@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
@@ -20,9 +21,11 @@ import android.widget.RadioGroup
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,6 +33,7 @@ import com.example.smartreader.databinding.ActivityMainBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 import java.util.Locale
 
 class MainActivity : AppCompatActivity(), ReadingService.Listener {
@@ -46,6 +50,29 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
 
     private val notificationPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { /* funguje i bez notifikace */ }
+
+    private var pendingCameraUri: Uri? = null
+
+    private val pickImageLauncher =
+        registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            uri?.let { processImageForOcr(it) }
+        }
+
+    private val takePictureLauncher =
+        registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+            if (success) {
+                pendingCameraUri?.let { processImageForOcr(it) }
+            }
+        }
+
+    private val cameraPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            if (granted) {
+                launchCamera()
+            } else {
+                Toast.makeText(this, "Bez přístupu ke kameře nejde fotit", Toast.LENGTH_SHORT).show()
+            }
+        }
 
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, binder: IBinder?) {
@@ -124,6 +151,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         binding.btnSave.setOnClickListener { saveCurrentTextToLibrary() }
         binding.btnLibrary.setOnClickListener { showLibraryDialog() }
         binding.btnLink.setOnClickListener { showLinkInputDialog() }
+        binding.btnImage.setOnClickListener { showImageSourceDialog() }
     }
 
     private fun setupSpeedSlider() {
@@ -572,6 +600,69 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             }
             .setNegativeButton("Zrušit", null)
             .show()
+    }
+
+    /** Otevře dialog pro výběr, odkud vzít obrázek k rozpoznání textu (OCR). */
+    private fun showImageSourceDialog() {
+        val options = arrayOf("Vybrat z galerie", "Vyfotit fotoaparátem")
+        AlertDialog.Builder(this)
+            .setTitle("Rozpoznat text z obrázku")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> pickImageLauncher.launch(
+                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                    )
+                    1 -> captureImageFromCamera()
+                }
+            }
+            .show()
+    }
+
+    private fun captureImageFromCamera() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+        } else {
+            launchCamera()
+        }
+    }
+
+    private fun launchCamera() {
+        val dir = File(cacheDir, "images").apply { mkdirs() }
+        val imageFile = File(dir, "capture_${System.currentTimeMillis()}.jpg")
+        val uri = FileProvider.getUriForFile(this, "$packageName.fileprovider", imageFile)
+        pendingCameraUri = uri
+        takePictureLauncher.launch(uri)
+    }
+
+    /** Rozpozná text z obrázku (ML Kit, na zařízení) a vloží ho do textového pole. */
+    private fun processImageForOcr(uri: Uri) {
+        binding.progress.visibility = View.VISIBLE
+        lifecycleScope.launch {
+            val recognized = try {
+                withContext(Dispatchers.IO) { ImageTextRecognizer.recognize(this@MainActivity, uri) }
+            } catch (e: Exception) {
+                null
+            }
+            binding.progress.visibility = View.GONE
+            if (recognized.isNullOrBlank()) {
+                Toast.makeText(
+                    this@MainActivity,
+                    "V obrázku se nepodařilo najít žádný text. Zkus ostřejší nebo lépe osvětlenou fotku.",
+                    Toast.LENGTH_LONG
+                ).show()
+            } else {
+                currentLibraryItemId = null
+                binding.etContent.setText(recognized)
+                binding.etContent.setSelection(0)
+                Toast.makeText(
+                    this@MainActivity,
+                    "Text rozpoznán (${recognized.length} znaků)",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
     private fun loadFromUrl(url: String) {

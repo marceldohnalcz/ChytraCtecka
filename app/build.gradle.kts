@@ -11,8 +11,8 @@ android {
         applicationId = "com.example.smartreader"
         minSdk = 26
         targetSdk = 34
-        versionCode = 5
-        versionName = "5.0"
+        versionCode = 6
+        versionName = "6.0"
     }
 
     signingConfigs {
@@ -58,6 +58,7 @@ dependencies {
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.media:media:1.7.0")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation("com.google.mlkit:text-recognition:16.0.1")
     // Jsoup - parsování HTML pro vytažení čitelného textu z odkazů (např. novinové články)
     implementation("org.jsoup:jsoup:1.17.2")
 }

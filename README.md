@@ -39,23 +39,15 @@ podtržítka a emoji.
 
 ## Nové v této verzi
 
-- **Změna hlasu za chodu** – dřív bylo potřeba dát Stop a spustit znova,
-  teď pokračuje čtení stejným principem jako u rychlosti (od aktuální pozice)
-- **Nová ikona ve stavové liště** – výrazný glyf reproduktoru se zvukovými
-  vlnami místo nevýrazného obdélníku
-- **Přebarvené tlačítko Přehrát/Pauza** – zelená = Přehrát, oranžová = Pauza,
-  na první pohled jasné, co tlačítko dělá
-- **Čtení čísel v kontextu** – "220.000" se teď sloučí na "220000" a TTS ho
-  přečte jako "dvě stě dvacet tisíc", ne po jednotlivých číslicích (viz
-  poznámka níže)
-- **Auto-scroll po odstavcích** – text se posouvá tak, aby byl začátek
-  právě čteného odstavce v horní třetině obrazovky, ne až na posledním řádku
-- **Redesign hlavičky** – barevný gradientový pruh s vlastním logem místo
-  obyčejného textu
-- **Načtení textu z odkazu ručně** – nové tlačítko s ikonou odkazu otevře
-  dialog, kam vložíš URL, a appka stáhne a vyčistí text článku; totéž se
-  stane automaticky i při vložení URL ze schránky
-- Vylepšené heuristiky stahování článků (blíž k "reader mode" prohlížečů)
+- **Rozpoznávání textu z obrázku (OCR)** – nové tlačítko "Obrázek" umožní buď
+  vybrat fotku/screenshot z galerie, nebo rovnou vyfotit dokument
+  fotoaparátem. Text z obrázku appka rozpozná přímo na telefonu (Google ML
+  Kit, on-device), vloží do textového pole a dá se rovnou přečíst.
+  Funguje offline (po prvním stažení rozpoznávacího modelu přes Google Play
+  Services), obrázek appka nikam neposílá.
+- GitHub Release s přímo stažitelným `.apk` (bez zipu) – vždy aktuální na
+  stálém odkazu `releases/tag/latest-build`
+- Repozitář je nově veřejný – stahování bez přihlášení
 
 ### Poznámka ke čtení čísel
 

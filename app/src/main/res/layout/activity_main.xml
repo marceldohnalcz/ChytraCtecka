@@ -69,7 +69,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical"
             android:layout_marginBottom="10dp">
 
             <com.google.android.material.button.MaterialButton
@@ -93,24 +92,49 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="6dp"
-                android:layout_marginEnd="6dp"
                 android:text="Vymazat"
                 android:textAllCaps="false"
                 app:icon="@drawable/ic_clear"
                 app:iconGravity="textStart"
                 app:cornerRadius="14dp"
                 app:backgroundTint="@color/brand_danger" />
+        </LinearLayout>
 
-            <ImageButton
-                android:id="@+id/btnLink"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="10dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnImage"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:layout_marginEnd="6dp"
-                android:background="@drawable/bg_circle_button"
-                android:src="@drawable/ic_link"
-                android:contentDescription="Načíst text z odkazu"
-                android:padding="9dp"
-                android:scaleType="fitCenter" />
+                android:text="Obrázek"
+                android:textAllCaps="false"
+                app:icon="@drawable/ic_image"
+                app:iconGravity="textStart"
+                app:cornerRadius="14dp"
+                app:backgroundTint="@color/brand_accent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnLink"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:text="Odkaz"
+                android:textAllCaps="false"
+                app:icon="@drawable/ic_link"
+                app:iconGravity="textStart"
+                app:cornerRadius="14dp"
+                app:backgroundTint="@color/brand_accent" />
 
             <ImageButton
                 android:id="@+id/btnSettings"
