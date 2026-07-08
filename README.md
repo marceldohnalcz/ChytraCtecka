@@ -42,10 +42,10 @@ podtržítka a emoji.
 - **Plynulejší čtení textu z OCR** – appka teď spojuje řádky rozpoznané na
   obrázku zpátky do souvislých vět (podle bloků, jak je detekuje ML Kit),
   místo aby dělala pauzu na konci každého vizuálního řádku z fotky
-- **Kompaktnější design** – všech 7 tlačítek (Vložit, Obrázek, Odkaz,
-  Vymazat, Uložit, Knihovna, Nastavení) je teď v jednom úzkém panelu ikon
-  místo tří širokých řádků, díky čemuž zbyde výrazně víc místa pro samotný
-  text ke čtení
+- **Design tlačítek doladěn dle zpětné vazby** – Vložit/Vymazat mají zpět
+  text (ne jen ikonu), ostatní tlačítka jsou rozdělená do skupin: import
+  obsahu (Obrázek, Odkaz, Nastavení), knihovna (Uložit, Knihovna) - místo
+  jednoho nahuštěného pásu ikon
 - **Rozpoznávání textu z obrázku (OCR)** – nové tlačítko "Obrázek" umožní buď
   vybrat fotku/screenshot z galerie, nebo rovnou vyfotit dokument
   fotoaparátem. Text z obrázku appka rozpozná přímo na telefonu (Google ML
