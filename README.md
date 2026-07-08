@@ -39,6 +39,13 @@ podtržítka a emoji.
 
 ## Nové v této verzi
 
+- **Plynulejší čtení textu z OCR** – appka teď spojuje řádky rozpoznané na
+  obrázku zpátky do souvislých vět (podle bloků, jak je detekuje ML Kit),
+  místo aby dělala pauzu na konci každého vizuálního řádku z fotky
+- **Kompaktnější design** – všech 7 tlačítek (Vložit, Obrázek, Odkaz,
+  Vymazat, Uložit, Knihovna, Nastavení) je teď v jednom úzkém panelu ikon
+  místo tří širokých řádků, díky čemuž zbyde výrazně víc místa pro samotný
+  text ke čtení
 - **Rozpoznávání textu z obrázku (OCR)** – nové tlačítko "Obrázek" umožní buď
   vybrat fotku/screenshot z galerie, nebo rovnou vyfotit dokument
   fotoaparátem. Text z obrázku appka rozpozná přímo na telefonu (Google ML
