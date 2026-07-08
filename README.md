@@ -43,8 +43,10 @@ podtržítka a emoji.
   vybrat fotku/screenshot z galerie, nebo rovnou vyfotit dokument
   fotoaparátem. Text z obrázku appka rozpozná přímo na telefonu (Google ML
   Kit, on-device), vloží do textového pole a dá se rovnou přečíst.
-  Funguje offline (po prvním stažení rozpoznávacího modelu přes Google Play
-  Services), obrázek appka nikam neposílá.
+  Rozpoznávací model je rovnou součástí instalačního APK (funguje offline
+  hned od prvního spuštění, bez závislosti na Google Play Services) - proto
+  appka nově váží cca 49 MB místo dřívějších ~5 MB. Obrázek appka nikam
+  neposílá, vše se zpracovává lokálně v telefonu.
 - GitHub Release s přímo stažitelným `.apk` (bez zipu) – vždy aktuální na
   stálém odkazu `releases/tag/latest-build`
 - Repozitář je nově veřejný – stahování bez přihlášení
