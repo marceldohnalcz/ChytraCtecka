@@ -4,27 +4,37 @@ plugins {
 }
 
 android {
-    namespace = "com.example.smartreader"
+    namespace = "io.github.marceldohnalcz.smartreader"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.smartreader"
+        applicationId = "io.github.marceldohnalcz.smartreader"
         minSdk = 26
         targetSdk = 34
-        // Verzování: číslo za tečkou (2.0 -> 2.1 -> 2.2...) se zvyšuje u běžných
-        // úprav a oprav. Celé číslo před tečkou (2.0 -> 3.0) jen u zásadní změny.
-        versionCode = 18
-        versionName = "2.3"
+        // Verzování: číslo za tečkou (3.0 -> 3.1 -> 3.2...) se zvyšuje u běžných
+        // úprav a oprav. Celé číslo před tečkou (3.0 -> 4.0) jen u zásadní změny.
+        // 3.0 = přejmenování balíčku (com.example.* -> io.github.*) + vlastní
+        // release podpisový klíč místo sdíleného debug klíče.
+        versionCode = 19
+        versionName = "3.0"
     }
 
     signingConfigs {
         getByName("debug") {
-            // Pevný, do repozitáře uložený debug klíč - zajišťuje, že se každé nové
-            // sestavené APK dá nainstalovat jako aktualizace té předchozí verze.
+            // Pevný, do repozitáře uložený debug klíč - používá se jen pro lokální
+            // vývoj v Android Studiu (debug build type).
             storeFile = file("../debug.keystore")
             storePassword = "android"
             keyAlias = "androiddebugkey"
             keyPassword = "android"
+        }
+        create("release") {
+            // Vlastní unikátní klíč (jiné heslo, jiný alias než univerzální debug
+            // klíč) - appka distribuovaná uživatelům se podepisuje tímhle.
+            storeFile = file("../release.keystore")
+            storePassword = "nMNFP8dl8frJJwwtzoZBzjae"
+            keyAlias = "chytraCteckaTextuKey"
+            keyPassword = "nMNFP8dl8frJJwwtzoZBzjae"
         }
     }
 
@@ -34,7 +44,7 @@ android {
         }
         release {
             isMinifyEnabled = false
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 

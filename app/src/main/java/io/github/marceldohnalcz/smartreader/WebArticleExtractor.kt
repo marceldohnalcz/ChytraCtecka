@@ -1,4 +1,4 @@
-package com.example.smartreader
+package io.github.marceldohnalcz.smartreader
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document

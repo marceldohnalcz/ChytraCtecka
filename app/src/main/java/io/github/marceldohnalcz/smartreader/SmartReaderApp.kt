@@ -1,4 +1,4 @@
-package com.example.smartreader
+package io.github.marceldohnalcz.smartreader
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate

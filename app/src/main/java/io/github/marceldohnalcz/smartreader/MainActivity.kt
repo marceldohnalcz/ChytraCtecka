@@ -1,4 +1,4 @@
-package com.example.smartreader
+package io.github.marceldohnalcz.smartreader
 
 import android.Manifest
 import android.app.AlertDialog
@@ -29,7 +29,7 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.smartreader.databinding.ActivityMainBinding
+import io.github.marceldohnalcz.smartreader.databinding.ActivityMainBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

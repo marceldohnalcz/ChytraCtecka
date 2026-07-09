@@ -27,17 +27,17 @@ jobs:
         with:
           gradle-version: '8.7'
 
-      - name: Build debug APK
-        run: gradle assembleDebug --no-daemon
+      - name: Build release APK
+        run: gradle assembleRelease --no-daemon
 
       - name: Upload APK as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: SmartReader-debug-apk
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: SmartReader-release-apk
+          path: app/build/outputs/apk/release/app-release.apk
 
       - name: Připravit APK pro Release
-        run: cp app/build/outputs/apk/debug/app-debug.apk ChytraCteckaTextu.apk
+        run: cp app/build/outputs/apk/release/app-release.apk ChytraCteckaTextu.apk
 
       - name: Zveřejnit jako stálý GitHub Release
         uses: softprops/action-gh-release@v2

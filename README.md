@@ -1,5 +1,19 @@
 # Chytrá čtečka textu (SmartReader)
 
+## ⚠️ Verze 3.0 - vyžaduje čistou instalaci
+
+Tahle verze mění identitu appky (balíček `com.example.smartreader` →
+`io.github.marceldohnalcz.smartreader`) a podepisuje ji vlastním klíčem
+místo sdíleného debug klíče. Android to bere jako úplně jinou appku, takže
+**nejde nainstalovat jako update** - před instalací je potřeba starou verzi
+ručně odinstalovat.
+
+Proč tahle změna: Chrome/Android u appek stažených mimo Play Store
+automaticky maže podezřelé soubory. `com.example.*` balíček a podpis
+univerzálním debug klíčem (stejný u každého Android Studio projektu na
+světě) jsou dva silné signály, které tomu nahrávaly. Tahle verze oboje
+řeší.
+
 ## Proč tahle appka vznikla
 
 Kolik článků, e-mailů a dlouhých zpráv denně otevřeš a hned zase zavřeš,
@@ -58,6 +72,17 @@ podtržítka a emoji.
   systému, ne appky. Rozdíl je v tom, o *kolik* textu appka při obnovení
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
+
+## Nové v této verzi (3.0)
+
+- **Nový balíček appky**: `io.github.marceldohnalcz.smartreader` místo
+  placeholderu `com.example.smartreader`
+- **Vlastní release podpisový klíč** místo sdíleného debug klíče
+- **Appka teď staví jako `release` build** (dřív `debug`) - GitHub Actions
+  workflow upraven odpovídajícím způsobem
+- Cíl: omezit signály, kvůli kterým Chrome/Android automaticky mazaly
+  stažený .apk jako "podezřelý soubor" (viz varování nahoře v tomto
+  souboru)
 
 ## Nové v této verzi (2.3)
 
