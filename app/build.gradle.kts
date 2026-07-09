@@ -13,8 +13,8 @@ android {
         targetSdk = 34
         // Verzování: číslo za tečkou (2.0 -> 2.1 -> 2.2...) se zvyšuje u běžných
         // úprav a oprav. Celé číslo před tečkou (2.0 -> 3.0) jen u zásadní změny.
-        versionCode = 16
-        versionName = "2.1"
+        versionCode = 17
+        versionName = "2.2"
     }
 
     signingConfigs {

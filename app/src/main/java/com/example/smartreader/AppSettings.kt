@@ -1,6 +1,7 @@
 package com.example.smartreader
 
 import android.content.Context
+import androidx.appcompat.app.AppCompatDelegate
 
 object AppSettings {
     private const val PREFS = "smartreader_settings"
@@ -8,6 +9,7 @@ object AppSettings {
     private const val KEY_SPEED = "speed_rate"
     private const val KEY_VOLUME = "reading_volume"
     private const val KEY_AUTO_RESUME = "auto_resume_after_call"
+    private const val KEY_THEME_MODE = "theme_mode"
 
     fun saveVoiceName(context: Context, name: String) {
         prefs(context).edit().putString(KEY_VOICE_NAME, name).apply()
@@ -36,6 +38,14 @@ object AppSettings {
 
     fun loadAutoResumeAfterCall(context: Context): Boolean =
         prefs(context).getBoolean(KEY_AUTO_RESUME, false)
+
+    /** Uloží MODE_NIGHT_* konstantu z AppCompatDelegate (NO/YES/FOLLOW_SYSTEM). */
+    fun saveThemeMode(context: Context, mode: Int) {
+        prefs(context).edit().putInt(KEY_THEME_MODE, mode).apply()
+    }
+
+    fun loadThemeMode(context: Context): Int =
+        prefs(context).getInt(KEY_THEME_MODE, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
 
     private fun prefs(context: Context) =
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)

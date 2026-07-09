@@ -599,6 +599,25 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             service?.setAutoResumeAfterInterruption(checked)
         }
 
+        val radioGroupTheme = view.findViewById<RadioGroup>(R.id.radioGroupTheme)
+        when (AppSettings.loadThemeMode(this)) {
+            androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO ->
+                radioGroupTheme.check(R.id.radioThemeLight)
+            androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES ->
+                radioGroupTheme.check(R.id.radioThemeDark)
+            else ->
+                radioGroupTheme.check(R.id.radioThemeSystem)
+        }
+        radioGroupTheme.setOnCheckedChangeListener { _, checkedId ->
+            val mode = when (checkedId) {
+                R.id.radioThemeLight -> androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
+                R.id.radioThemeDark -> androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
+                else -> androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+            }
+            AppSettings.saveThemeMode(this, mode)
+            androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(mode)
+        }
+
         seekVolume.progress = (currentVolume * 100).toInt()
         seekVolume.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(sb: SeekBar?, progress: Int, fromUser: Boolean) {

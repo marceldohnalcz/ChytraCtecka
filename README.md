@@ -59,6 +59,12 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.2)
+
+- **Ruční přepínač vzhledu** – v Nastavení jde appce vynutit Světlý nebo
+  Tmavý motiv nezávisle na systémovém nastavení telefonu (nebo nechat na
+  "Podle systému", jako dřív)
+
 ## Nové v této verzi (2.1)
 
 - **Tmavý režim** – appka teď automaticky respektuje systémové nastavení
