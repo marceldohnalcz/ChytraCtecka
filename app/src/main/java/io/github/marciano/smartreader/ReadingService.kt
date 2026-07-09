@@ -1,4 +1,4 @@
-package io.github.marceldohnalcz.smartreader
+package io.github.marciano.smartreader
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -35,8 +35,8 @@ class ReadingService : Service() {
     companion object {
         const val CHANNEL_ID = "reading_channel"
         const val NOTIFICATION_ID = 1
-        const val ACTION_PLAY_PAUSE = "io.github.marceldohnalcz.smartreader.action.PLAY_PAUSE"
-        const val ACTION_STOP = "io.github.marceldohnalcz.smartreader.action.STOP"
+        const val ACTION_PLAY_PAUSE = "io.github.marciano.smartreader.action.PLAY_PAUSE"
+        const val ACTION_STOP = "io.github.marciano.smartreader.action.STOP"
     }
 
     interface Listener {

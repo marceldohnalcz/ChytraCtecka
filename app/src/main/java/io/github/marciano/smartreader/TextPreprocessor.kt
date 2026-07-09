@@ -1,4 +1,4 @@
-package io.github.marceldohnalcz.smartreader
+package io.github.marciano.smartreader
 
 import java.util.regex.Pattern
 

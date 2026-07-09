@@ -4,19 +4,17 @@ plugins {
 }
 
 android {
-    namespace = "io.github.marceldohnalcz.smartreader"
+    namespace = "io.github.marciano.smartreader"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "io.github.marceldohnalcz.smartreader"
+        applicationId = "io.github.marciano.smartreader"
         minSdk = 26
         targetSdk = 34
-        // Verzování: číslo za tečkou (3.0 -> 3.1 -> 3.2...) se zvyšuje u běžných
-        // úprav a oprav. Celé číslo před tečkou (3.0 -> 4.0) jen u zásadní změny.
-        // 3.0 = přejmenování balíčku (com.example.* -> io.github.*) + vlastní
-        // release podpisový klíč místo sdíleného debug klíče.
-        versionCode = 19
-        versionName = "3.0"
+        // Verzování: číslo za tečkou (2.0 -> 2.1 -> 2.2...) se zvyšuje u běžných
+        // úprav a oprav. Celé číslo před tečkou (2.0 -> 3.0) jen u zásadní změny.
+        versionCode = 20
+        versionName = "2.0"
     }
 
     signingConfigs {

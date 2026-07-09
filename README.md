@@ -1,18 +1,11 @@
 # Chytrá čtečka textu (SmartReader)
 
-## ⚠️ Verze 3.0 - vyžaduje čistou instalaci
+## ⚠️ Balíček appky se znovu změnil - vyžaduje čistou instalaci
 
-Tahle verze mění identitu appky (balíček `com.example.smartreader` →
-`io.github.marceldohnalcz.smartreader`) a podepisuje ji vlastním klíčem
-místo sdíleného debug klíče. Android to bere jako úplně jinou appku, takže
-**nejde nainstalovat jako update** - před instalací je potřeba starou verzi
-ručně odinstalovat.
-
-Proč tahle změna: Chrome/Android u appek stažených mimo Play Store
-automaticky maže podezřelé soubory. `com.example.*` balíček a podpis
-univerzálním debug klíčem (stejný u každého Android Studio projektu na
-světě) jsou dva silné signály, které tomu nahrávaly. Tahle verze oboje
-řeší.
+Balíček byl přejmenován z `io.github.marceldohnalcz.smartreader` na
+`io.github.marciano.smartreader` (předchozí verze použila GitHub
+uživatelské jméno bez svolení, teď je to opravené). Před instalací je
+znovu potřeba starou verzi ručně odinstalovat - nejde o update.
 
 ## Proč tahle appka vznikla
 
@@ -72,6 +65,15 @@ podtržítka a emoji.
   systému, ne appky. Rozdíl je v tom, o *kolik* textu appka při obnovení
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
+
+## Nové v této verzi (2.0)
+
+- **Balíček přejmenován** na `io.github.marciano.smartreader` (bez
+  reálného GitHub jména, jak jsi chtěl)
+- **Přeskládané ovládání přehrávání**: Přehrát → zpět/vpřed vedle sebe →
+  Stop
+- **Přečíslování verze** zpět na 2.0 - další běžné úpravy budou přidávat
+  0.1 (2.1, 2.2...), celé číslo jen u zásadní změny
 
 ## Nové v této verzi (3.0)
 

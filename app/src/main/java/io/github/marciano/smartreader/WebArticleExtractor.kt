@@ -1,4 +1,4 @@
-package io.github.marceldohnalcz.smartreader
+package io.github.marciano.smartreader
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
