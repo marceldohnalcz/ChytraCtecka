@@ -59,6 +59,32 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.3)
+
+- **Zmenšení appky z ~49 MB zpátky na pár MB** – OCR model se teď stahuje
+  přes Google Play Services místo aby byl celý zabalený v APK. Cílem bylo
+  hlavně omezit, aby Chrome/Android při stahování appku automaticky mazal
+  jako "neznámý soubor s nízkou reputací" (viz níže).
+- Release je zpátky jako přímé `.apk`, ne zip
+
+### Poznámka k automatickému mazání staženého APK
+
+Chrome/Android má vestavěné skenování stažených souborů (přes Google Play
+Protect) a u aplikací mimo Play Store s "nízkou reputací" je umí sám po
+stažení smazat. Zmenšení appky je krok, který by tomu měl pomoct, ale
+nejde o garantovanou opravu - jde o heuristiku na straně Googlu, kterou
+neovlivníme stoprocentně. Pokud se soubor bude i tak ztrácet, pomůže:
+
+- Dočasně vypnout **Play Protect** sken při stahování: Obchod Play → ikona
+  profilu → Play Protect → ozubené kolo → vypnout "Scan apps with Play
+  Protect" (po instalaci zase zapnout)
+- Stáhnout appku na počítač a nahrát do telefonu kabelem/přes soubor,
+  místo stahování rovnou v telefonu
+- Dlouhodobě nejspolehlivější řešení je distribuce přes **Google Play
+  Internal Testing** (viz uložený návod k publikaci na Google Play) - tam
+  tohle mazání vůbec nehrozí, protože appka jde přes důvěryhodný kanál
+  Google Play, ne přes libovolné stažení souboru z internetu.
+
 ## Nové v této verzi (2.2)
 
 - **Ruční přepínač vzhledu** – v Nastavení jde appce vynutit Světlý nebo

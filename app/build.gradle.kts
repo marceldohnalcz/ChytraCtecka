@@ -13,8 +13,8 @@ android {
         targetSdk = 34
         // Verzování: číslo za tečkou (2.0 -> 2.1 -> 2.2...) se zvyšuje u běžných
         // úprav a oprav. Celé číslo před tečkou (2.0 -> 3.0) jen u zásadní změny.
-        versionCode = 17
-        versionName = "2.2"
+        versionCode = 18
+        versionName = "2.3"
     }
 
     signingConfigs {
@@ -60,7 +60,7 @@ dependencies {
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.media:media:1.7.0")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
-    implementation("com.google.mlkit:text-recognition:16.0.1")
+    implementation("com.google.android.gms:play-services-mlkit-text-recognition:19.0.1")
     // Jsoup - parsování HTML pro vytažení čitelného textu z odkazů (např. novinové články)
     implementation("org.jsoup:jsoup:1.17.2")
 }
