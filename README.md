@@ -136,8 +136,15 @@ označit text přímo v appce FB/IG a vybrat "Chytrá čtečka textu" z nabídky
 ## Sestavení přes GitHub Actions
 
 Repozitář obsahuje `.github/workflows/build.yml` – při každém pushi na
-`main` se automaticky sestaví `app-debug.apk`, který najdeš v záložce
-**Actions** u daného běhu, sekce **Artifacts**.
+`main` se automaticky sestaví appka a zveřejní jako GitHub Release na
+stálém odkazu `releases/tag/latest-build`.
+
+**Proč je stažený soubor .zip, ne rovnou .apk:** Chrome/Android má
+automatické skenování stažených souborů (souvisí s Google Play Protect) a
+u .apk souborů s nízkou "reputací" (typicky malé appky mimo Play Store,
+jako je tahle) je umí sám po stažení smazat, aniž by šlo poznat proč. Zip
+tomuhle skenování nepodléhá, takže po stažení stačí rozbalit a
+nainstalovat `ChytraCteckaTextu.apk`, který je uvnitř.
 
 ## Důležité omezení
 

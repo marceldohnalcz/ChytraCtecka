@@ -36,16 +36,18 @@ jobs:
           name: SmartReader-debug-apk
           path: app/build/outputs/apk/debug/app-debug.apk
 
-      - name: Připravit APK pro Release
-        run: cp app/build/outputs/apk/debug/app-debug.apk ChytraCteckaTextu.apk
+      - name: Připravit APK pro Release (zabalené do zipu)
+        run: |
+          cp app/build/outputs/apk/debug/app-debug.apk ChytraCteckaTextu.apk
+          zip ChytraCteckaTextu.zip ChytraCteckaTextu.apk
 
-      - name: Zveřejnit APK jako stálý GitHub Release
+      - name: Zveřejnit jako stálý GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: latest-build
           name: "Nejnovější sestavení"
-          body: "Automaticky sestaveno z commitu ${{ github.sha }}."
-          files: ChytraCteckaTextu.apk
+          body: "Automaticky sestaveno z commitu ${{ github.sha }}. Stáhni ZIP a rozbal - přímé .apk Chrome/Android někdy automaticky maže."
+          files: ChytraCteckaTextu.zip
           make_latest: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
