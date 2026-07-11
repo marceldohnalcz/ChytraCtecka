@@ -66,6 +66,13 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.04)
+
+- **Oprava**: unicode znak elipsy "…" (jeden znak, vypadá jako tři tečky -
+  proto kurzor přes něj "skáče" najednou) se teď převádí na obyčejnou
+  tečku, takže i řada takových znaků za sebou ("…………") se správně sloučí
+  na jednu pauzu místo doslovného "tři tečky, tři tečky..."
+
 ## Nové v této verzi (2.03)
 
 - **Oprava**: opakovaná interpunkce oddělená mezerami (". . . . .", časté u

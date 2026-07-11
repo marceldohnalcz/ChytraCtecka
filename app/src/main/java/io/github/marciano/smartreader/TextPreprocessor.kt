@@ -98,6 +98,10 @@ object TextPreprocessor {
         // částky jako "1.234.567" po sloučení mylně chytily do stejného filtru.
         if (options.skipLongNumbers) text = LONG_DIGIT_PATTERN.matcher(text).replaceAll(" ")
         if (options.normalizeThousands) text = normalizeThousandsSeparators(text)
+        // Unicode znak elipsy "…" (U+2026) je JEDEN znak, co vypadá jako tři tečky -
+        // TTS ho čte doslova jako "tři tečky". Převedeme na obyčejnou tečku, ať ho
+        // pak zachytí i sloučení opakované interpunkce níž (u víc elips za sebou).
+        if (options.simplifyRepeatedPunctuation) text = text.replace('\u2026', '.')
         if (options.simplifyRepeatedPunctuation) {
             text = REPEATED_PUNCTUATION_PATTERN.matcher(text).replaceAll("$1")
         }
