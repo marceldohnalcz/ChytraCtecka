@@ -66,6 +66,16 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.05)
+
+- **Skutečně tažitelný posuvník** - dřív jen ukazoval pozici (systémový
+  scrollbar), teď kdekoli v pravém pruhu textu dotkneš/táhneš prstem a
+  text se rovnou posune na odpovídající místo
+- **Oprava zaznamenávání historie** - zápis "přehráno" se teď dělá přímo
+  v okamžiku spuštění čtení (klepnutí na Přehrát), ne podmíněně podle
+  toho, jestli šlo o čerstvý start nebo pokračování - i částečné
+  poslechnutí se teď spolehlivě zaznamená
+
 ## Nové v této verzi (2.04)
 
 - **Oprava**: unicode znak elipsy "…" (jeden znak, vypadá jako tři tečky -

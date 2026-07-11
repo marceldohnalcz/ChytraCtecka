@@ -14,8 +14,8 @@ android {
         // Verzování: dvě desetinná místa (2.02 -> 2.03 -> 2.04...) se zvyšují
         // u běžných úprav a oprav. Skok na "velký" krok (např. 2.10) jen po
         // výslovné dohodě předem, nikdy automaticky.
-        versionCode = 24
-        versionName = "2.04"
+        versionCode = 25
+        versionName = "2.05"
     }
 
     signingConfigs {

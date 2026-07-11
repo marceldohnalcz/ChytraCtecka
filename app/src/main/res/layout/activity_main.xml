@@ -61,25 +61,40 @@
             android:visibility="gone"
             android:layout_marginBottom="8dp" />
 
-        <EditText
-            android:id="@+id/etContent"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="top|start"
-            android:inputType="textMultiLine"
-            android:background="@drawable/bg_edittext_rounded"
-            android:padding="14dp"
-            android:textSize="17sp"
-            android:textColor="@color/text_primary"
-            android:textColorHint="@color/text_secondary"
-            android:hint="Sem vlož nebo napiš text ke čtení…"
-            android:layout_marginBottom="8dp"
-            android:scrollbars="vertical"
-            android:scrollbarStyle="outsideOverlay"
-            android:fadeScrollbars="false"
-            android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
-            android:scrollbarSize="6dp" />
+            android:layout_marginBottom="8dp">
+
+            <EditText
+                android:id="@+id/etContent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="top|start"
+                android:inputType="textMultiLine"
+                android:background="@drawable/bg_edittext_rounded"
+                android:padding="14dp"
+                android:textSize="17sp"
+                android:textColor="@color/text_primary"
+                android:textColorHint="@color/text_secondary"
+                android:hint="Sem vlož nebo napiš text ke čtení…"
+                android:scrollbars="vertical"
+                android:scrollbarStyle="outsideOverlay"
+                android:fadeScrollbars="false"
+                android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
+                android:scrollbarSize="6dp" />
+
+            <!-- Neviditelná vrstva přes pravý okraj - dotek + tažení kdekoli v ní
+                 rovnou posune text (na rozdíl od systémového scrollbaru, který je
+                 jen vizuální indikátor a nejde ho chytit prstem). -->
+            <View
+                android:id="@+id/scrollDragHandle"
+                android:layout_width="32dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:background="@android:color/transparent" />
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

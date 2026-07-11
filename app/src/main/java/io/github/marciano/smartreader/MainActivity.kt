@@ -1,6 +1,7 @@
 package io.github.marciano.smartreader
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.ClipboardManager
 import android.content.ComponentName
@@ -104,6 +105,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         requestNotificationPermissionIfNeeded()
         setupButtons()
         setupSpeedSlider()
+        setupScrollDragHandle()
         restoreDraftOrHandleIntent(intent)
     }
 
@@ -156,6 +158,37 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         binding.btnHistory.setOnClickListener { showHistoryDialog() }
         binding.btnLink.setOnClickListener { showLinkInputDialog() }
         binding.btnImage.setOnClickListener { showImageSourceDialog() }
+    }
+
+    /**
+     * Neviditelná dotyková vrstva přes pravý okraj textového pole. Na rozdíl od
+     * systémového scrollbaru (jen vizuální indikátor, nejde chytit prstem) tohle
+     * skutečně reaguje na dotek - kdekoli v pruhu dotkneš/táhneš prstem, text se
+     * posune na odpovídající pozici (poměr pozice prstu v pruhu = poměr pozice
+     * v textu).
+     */
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setupScrollDragHandle() {
+        binding.scrollDragHandle.setOnTouchListener { view, event ->
+            when (event.action) {
+                android.view.MotionEvent.ACTION_DOWN,
+                android.view.MotionEvent.ACTION_MOVE -> {
+                    scrollTextToTouchRatio(event.y / view.height.toFloat())
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    private fun scrollTextToTouchRatio(rawRatio: Float) {
+        val editText = binding.etContent
+        val layout = editText.layout ?: return
+        val visibleHeight = editText.height - editText.paddingTop - editText.paddingBottom
+        val maxScroll = (layout.height - visibleHeight).coerceAtLeast(0)
+        if (maxScroll <= 0) return
+        val ratio = rawRatio.coerceIn(0f, 1f)
+        editText.scrollTo(0, (ratio * maxScroll).toInt())
     }
 
     private fun setupSpeedSlider() {
@@ -245,17 +278,12 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         if (svc.isSpeaking()) {
             svc.pause()
         } else {
-            if (!svc.isPaused()) {
-                // Čerstvý start čtení (ne pokračování po pauze) - zaznamenat do historie
-                recordHistoryIfEnabled()
-            }
             startReadingFromCursor()
         }
     }
 
-    private fun recordHistoryIfEnabled() {
+    private fun recordHistoryIfEnabled(text: String) {
         if (!AppSettings.loadHistoryEnabled(this)) return
-        val text = binding.etContent.text?.toString().orEmpty()
         if (text.isBlank()) return
         ReadingHistoryStore.markPlayedByContent(this, text)
     }
@@ -285,6 +313,10 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             binding.etContent.text?.replace(cursor, liveText.length, cleaned)
         }
         placeCursorAt(cursor)
+
+        // Zaznamenat do historie hned v okamžiku spuštění čtení (klepnutí na Přehrát),
+        // ne až po dokončení - i částečné poslechnutí se tak počítá jako "přehráno".
+        recordHistoryIfEnabled(liveText)
 
         ensureServiceStarted()
         service?.setSpeed(currentSpeedRate)
