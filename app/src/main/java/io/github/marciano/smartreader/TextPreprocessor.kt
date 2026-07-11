@@ -40,11 +40,11 @@ object TextPreprocessor {
     private val HASHTAG_SYMBOL: Pattern = Pattern.compile("#(?=\\S)")
     private val MENTION_SYMBOL: Pattern = Pattern.compile("@(?=\\S)")
 
-    // Opakovaná interpunkce za sebou (elipsa "...", ale i "!!!" nebo "???") -
-    // některé TTS enginy je čtou doslova jako "tečka tečka tečka" / "vykřičník
-    // vykřičník" místo přirozeného důrazu/pauzy. Zachytí libovolný z .!? po sobě
-    // opakovaný 2x a víckrát a sloučí na jeden jediný znak.
-    private val REPEATED_PUNCTUATION_PATTERN: Pattern = Pattern.compile("([.!?])\\1{1,}")
+    // Opakovaná interpunkce za sebou (elipsa "...", "!!!", "???") - některé TTS
+    // enginy je čtou doslova jako "tečka tečka tečka" místo přirozené pauzy.
+    // Zachytí i variantu oddělenou mezerami (". . . . ."), což je časté např.
+    // u textů z OCR nebo naskenovaných dokumentů (tečkované "vodicí čáry").
+    private val REPEATED_PUNCTUATION_PATTERN: Pattern = Pattern.compile("([.!?])(?:\\s*\\1){1,}")
 
     // Závorky (kulaté, hranaté, složené) a uvozovky všech běžných typů - TTS je
     // někdy čte doslova ("uvozovky", "levá závorka"). Nahrazujeme mezerou, aby se

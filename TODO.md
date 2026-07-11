@@ -24,19 +24,9 @@
 
 ## 2. Ověřit: dlouhá řada teček (".....................") se čte doslova
 
-- **Zpětná vazba**: appka prý čte dlouhou řadu teček doslova (např. "tři
-  tečky") místo aby je jen sloučila do jedné pauzy.
-- **Důležitá poznámka**: tohle by měl řešit fix z verze 2.02
-  (`REPEATED_PUNCTUATION_PATTERN` v `TextPreprocessor.kt`), který slučuje
-  JAKKOLIV dlouhou řadu stejné interpunkce (`.`, `!`, `?`) na jeden jediný
-  znak - tedy i 20 teček za sebou by se mělo zredukovat na jednu tečku, ne
-  jen konkrétně tři.
-- **První krok příště**: ověřit, jestli hlášení vzniklo na verzi PŘED
-  2.02 (pak stačí potvrdit, že už je to v pořádku), nebo jestli se
-  problém reálně objevuje i po instalaci 2.02 (pak jde o skutečný bug v
-  regexu/pipeline, který bude potřeba dohledat samostatně - např. zda se
-  `simplifyRepeatedPunctuation` v `TextPreprocessor.Options` skutečně
-  aplikuje na text z OCR/staženého odkazu stejně jako na ručně psaný text).
+**VYŘEŠENO ve verzi 2.03** - problém byl v tom, že tečky oddělené mezerami
+(". . . . .", časté u OCR textů) regex nezachytil, jen tečky přímo za
+sebou. Opraveno rozšířením patternu o volitelné mezery mezi opakováními.
 
 ---
 

@@ -66,6 +66,12 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.03)
+
+- **Oprava**: opakovaná interpunkce oddělená mezerami (". . . . .", časté u
+  textů z OCR/naskenovaných dokumentů) se teď taky správně sloučí na jeden
+  znak - dřív to zachytávalo jen tečky přímo za sebou bez mezer
+
 ## Nové v této verzi (2.02)
 
 - **Nový formát verzování**: dvě desetinná místa (2.02, 2.03...), skok na
