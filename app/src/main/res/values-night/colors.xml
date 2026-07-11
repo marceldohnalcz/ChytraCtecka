@@ -5,4 +5,5 @@
     <color name="border">#334155</color>
     <color name="text_primary">#F1F5F9</color>
     <color name="text_secondary">#94A3B8</color>
+    <color name="icon_secondary">#5EEAD4</color>
 </resources>

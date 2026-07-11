@@ -10,4 +10,5 @@
     <color name="border">#E2E8F0</color>
     <color name="text_primary">#0F172A</color>
     <color name="text_secondary">#64748B</color>
+    <color name="icon_secondary">#155E75</color>
 </resources>

@@ -40,6 +40,17 @@ object TextPreprocessor {
     private val HASHTAG_SYMBOL: Pattern = Pattern.compile("#(?=\\S)")
     private val MENTION_SYMBOL: Pattern = Pattern.compile("@(?=\\S)")
 
+    // Víc teček za sebou (elipsa "...") - některé TTS enginy je čtou doslova
+    // jako "tečka tečka tečka" místo přirozené pauzy.
+    private val ELLIPSIS_PATTERN: Pattern = Pattern.compile("\\.{2,}")
+
+    // Závorky (kulaté, hranaté, složené) a uvozovky všech běžných typů - TTS je
+    // někdy čte doslova ("uvozovky", "levá závorka"). Nahrazujeme mezerou, aby se
+    // slova kolem nespojila, ale zůstal zachovaný přirozený tok věty.
+    private val BRACKETS_AND_QUOTES_PATTERN: Pattern = Pattern.compile(
+        "[()\\[\\]{}\"„“«»‘’']"
+    )
+
     // Časté české zkratky s tečkou - TTS engine bere tečku jako konec věty a udělá
     // pauzu i uprostřed souvětí. Rozepsáním na plné znění pauza zmizí a čte se to
     // navíc srozumitelněji.
@@ -63,6 +74,8 @@ object TextPreprocessor {
         val skipLongNumbers: Boolean = true,
         val normalizeThousands: Boolean = true,
         val expandAbbreviations: Boolean = true,
+        val simplifyEllipsis: Boolean = true,
+        val stripBracketsAndQuotes: Boolean = true,
         val stripUnderscores: Boolean = true,
         val stripEmoji: Boolean = true,
         val stripHashSymbol: Boolean = true,
@@ -83,6 +96,8 @@ object TextPreprocessor {
         // částky jako "1.234.567" po sloučení mylně chytily do stejného filtru.
         if (options.skipLongNumbers) text = LONG_DIGIT_PATTERN.matcher(text).replaceAll(" ")
         if (options.normalizeThousands) text = normalizeThousandsSeparators(text)
+        if (options.simplifyEllipsis) text = ELLIPSIS_PATTERN.matcher(text).replaceAll(".")
+        if (options.stripBracketsAndQuotes) text = BRACKETS_AND_QUOTES_PATTERN.matcher(text).replaceAll(" ")
         if (options.stripEmoji) text = EMOJI_PATTERN.matcher(text).replaceAll("")
         if (options.stripUnderscores) text = text.replace('_', ' ')
         if (options.stripHashSymbol) text = HASHTAG_SYMBOL.matcher(text).replaceAll("")

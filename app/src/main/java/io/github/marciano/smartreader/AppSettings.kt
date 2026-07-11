@@ -10,6 +10,7 @@ object AppSettings {
     private const val KEY_VOLUME = "reading_volume"
     private const val KEY_AUTO_RESUME = "auto_resume_after_call"
     private const val KEY_THEME_MODE = "theme_mode"
+    private const val KEY_HISTORY_ENABLED = "history_enabled"
 
     fun saveVoiceName(context: Context, name: String) {
         prefs(context).edit().putString(KEY_VOICE_NAME, name).apply()
@@ -46,6 +47,13 @@ object AppSettings {
 
     fun loadThemeMode(context: Context): Int =
         prefs(context).getInt(KEY_THEME_MODE, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+
+    fun saveHistoryEnabled(context: Context, enabled: Boolean) {
+        prefs(context).edit().putBoolean(KEY_HISTORY_ENABLED, enabled).apply()
+    }
+
+    fun loadHistoryEnabled(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_HISTORY_ENABLED, false)
 
     private fun prefs(context: Context) =
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)

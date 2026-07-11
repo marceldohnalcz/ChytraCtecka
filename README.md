@@ -66,6 +66,23 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.1)
+
+- **Čtení interpunkce**: elipsy ("...") se sloučí na jednu tečku a
+  závorky/uvozovky všech typů se teď z textu odstraní (nahrazují se
+  mezerou) - TTS je dřív občas četlo doslova
+- **Design**: prostřední řádek ikon je teď vycentrovaný, tlačítka Vložit/
+  Vymazat a Přehrát/Stop mají garantovaně stejnou šířku, ikony Uložit/
+  Knihovna/Historie mají v tmavém režimu světlejší barvu (dřív byla tmavě
+  modrá na tmavém pozadí špatně vidět)
+- **Nová Historie čtení** – nové tlačítko v prostředním řádku (vpravo).
+  Zaznamenávání je vypnuté ve výchozím stavu, zapíná se v Nastavení (nebo
+  přímo v dialogu Historie). Jednotlivé záznamy jde mazat samostatně nebo
+  smazat historii celou.
+- Poznámka ke schránce: appka nemůže číst "historii" schránky Androidu -
+  to není přes veřejné API dostupné žádné aplikaci, jen aktuální jedna
+  položka (což už řeší tlačítko Vložit)
+
 ## Nové v této verzi (2.0)
 
 - **Balíček přejmenován** na `io.github.marciano.smartreader` (bez

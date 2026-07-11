@@ -153,6 +153,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         binding.btnMoreMenu.setOnClickListener { showMoreMenu(it) }
         binding.btnSave.setOnClickListener { saveCurrentTextToLibrary() }
         binding.btnLibrary.setOnClickListener { showLibraryDialog() }
+        binding.btnHistory.setOnClickListener { showHistoryDialog() }
         binding.btnLink.setOnClickListener { showLinkInputDialog() }
         binding.btnImage.setOnClickListener { showImageSourceDialog() }
     }
@@ -237,8 +238,19 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         if (svc.isSpeaking()) {
             svc.pause()
         } else {
+            if (!svc.isPaused()) {
+                // Čerstvý start čtení (ne pokračování po pauze) - zaznamenat do historie
+                recordHistoryIfEnabled()
+            }
             startReadingFromCursor()
         }
+    }
+
+    private fun recordHistoryIfEnabled() {
+        if (!AppSettings.loadHistoryEnabled(this)) return
+        val text = binding.etContent.text?.toString().orEmpty()
+        if (text.isBlank()) return
+        ReadingHistoryStore.addEntry(this, text)
     }
 
     /**
@@ -472,6 +484,72 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         Toast.makeText(this, "Načteno: ${item.title}", Toast.LENGTH_SHORT).show()
     }
 
+    // --- Historie čtení ---
+
+    private fun showHistoryDialog() {
+        val view = layoutInflater.inflate(R.layout.dialog_history, null)
+        val recycler = view.findViewById<RecyclerView>(R.id.recyclerHistory)
+        val empty = view.findViewById<TextView>(R.id.tvHistoryEmpty)
+        val switchEnabled = view.findViewById<android.widget.Switch>(R.id.switchHistoryEnabledInDialog)
+        val btnClearHistory = view.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnClearHistory)
+        recycler.layoutManager = LinearLayoutManager(this)
+
+        switchEnabled.isChecked = AppSettings.loadHistoryEnabled(this)
+        switchEnabled.setOnCheckedChangeListener { _, checked ->
+            AppSettings.saveHistoryEnabled(this, checked)
+        }
+
+        lateinit var dialog: AlertDialog
+        lateinit var adapter: HistoryAdapter
+
+        fun refresh() {
+            val items = ReadingHistoryStore.getHistory(this)
+            empty.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
+            recycler.visibility = if (items.isEmpty()) View.GONE else View.VISIBLE
+            adapter.updateItems(items)
+        }
+
+        adapter = HistoryAdapter(
+            items = ReadingHistoryStore.getHistory(this),
+            onItemClick = { item ->
+                currentLibraryItemId = null
+                binding.etContent.setText(item.content)
+                binding.etContent.setSelection(0)
+                dialog.dismiss()
+            },
+            onDeleteClick = { item ->
+                ReadingHistoryStore.removeEntry(this, item.id)
+                refresh()
+            }
+        )
+        recycler.adapter = adapter
+        refresh()
+
+        btnClearHistory.setOnClickListener {
+            val items = ReadingHistoryStore.getHistory(this)
+            if (items.isEmpty()) {
+                Toast.makeText(this, "Historie je už prázdná", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            AlertDialog.Builder(this)
+                .setTitle("Vymazat celou historii?")
+                .setMessage("Smaže se všech ${items.size} záznamů. Tuhle akci nejde vrátit zpět.")
+                .setPositiveButton("Vymazat vše") { _, _ ->
+                    ReadingHistoryStore.clearHistory(this)
+                    refresh()
+                }
+                .setNegativeButton("Zrušit", null)
+                .show()
+        }
+
+        dialog = AlertDialog.Builder(this)
+            .setTitle("Historie čtení")
+            .setView(view)
+            .setNegativeButton("Zavřít", null)
+            .create()
+        dialog.show()
+    }
+
     // --- Nastavení: hlasitost a výběr hlasu ---
 
     /** Menu se třemi tečkami v hlavičce. */
@@ -592,11 +670,17 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         val seekVolume = view.findViewById<SeekBar>(R.id.seekVolumeDialog)
         val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupVoices)
         val switchAutoResume = view.findViewById<android.widget.Switch>(R.id.switchAutoResume)
+        val switchHistoryEnabled = view.findViewById<android.widget.Switch>(R.id.switchHistoryEnabled)
 
         switchAutoResume.isChecked = AppSettings.loadAutoResumeAfterCall(this)
         switchAutoResume.setOnCheckedChangeListener { _, checked ->
             AppSettings.saveAutoResumeAfterCall(this, checked)
             service?.setAutoResumeAfterInterruption(checked)
+        }
+
+        switchHistoryEnabled.isChecked = AppSettings.loadHistoryEnabled(this)
+        switchHistoryEnabled.setOnCheckedChangeListener { _, checked ->
+            AppSettings.saveHistoryEnabled(this, checked)
         }
 
         val radioGroupTheme = view.findViewById<RadioGroup>(R.id.radioGroupTheme)

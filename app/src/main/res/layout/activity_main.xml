@@ -88,6 +88,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:minWidth="0dp"
                 android:layout_marginEnd="6dp"
                 android:text="Vložit"
                 android:textAllCaps="false"
@@ -102,6 +103,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:minWidth="0dp"
                 android:layout_marginStart="6dp"
                 android:text="Vymazat"
                 android:textAllCaps="false"
@@ -114,6 +116,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:background="@drawable/bg_toolbar_pill"
@@ -164,7 +167,7 @@
                 android:layout_height="44dp"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_save"
-                android:tint="@color/brand_primary_dark"
+                android:tint="@color/icon_secondary"
                 android:contentDescription="Uložit do knihovny"
                 android:padding="9dp"
                 android:scaleType="fitCenter" />
@@ -182,8 +185,26 @@
                 android:layout_height="44dp"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_library"
-                android:tint="@color/brand_primary_dark"
+                android:tint="@color/icon_secondary"
                 android:contentDescription="Otevřít knihovnu textů"
+                android:padding="9dp"
+                android:scaleType="fitCenter" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="1dp"
+                android:layout_marginEnd="1dp"
+                android:background="@color/border" />
+
+            <ImageButton
+                android:id="@+id/btnHistory"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_history"
+                android:tint="@color/icon_secondary"
+                android:contentDescription="Historie čtení"
                 android:padding="9dp"
                 android:scaleType="fitCenter" />
         </LinearLayout>
@@ -262,6 +283,7 @@
                 android:layout_width="0dp"
                 android:layout_height="52dp"
                 android:layout_weight="1"
+                android:minWidth="0dp"
                 android:layout_marginEnd="6dp"
                 android:text="Přehrát"
                 android:textAllCaps="false"
@@ -299,6 +321,7 @@
                 android:layout_width="0dp"
                 android:layout_height="52dp"
                 android:layout_weight="1"
+                android:minWidth="0dp"
                 android:layout_marginStart="0dp"
                 android:text="Stop"
                 android:textAllCaps="false"
