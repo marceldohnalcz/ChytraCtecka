@@ -66,6 +66,21 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.02)
+
+- **Nový formát verzování**: dvě desetinná místa (2.02, 2.03...), skok na
+  "velký" krok (2.10) jen po výslovné dohodě předem
+- **Posuvník na pravé straně textového pole** - jde scrollovat přímým
+  tažením prstu za posuvník, ne jen gestem v textu
+- **Oprava spodního řádku ovládání** - Přehrát a Stop teď mají šířku
+  garantovanou jednoduchým obalovým kontejnerem (ne jen `layout_weight`
+  přímo na tlačítku), což by mělo definitivně vyřešit nerovnoměrnou šířku
+- **Vylepšená historie**: zaznamenává se každé vložení textu (přes
+  Vložit i Odkaz), a pokud byl text následně přehrán, označí se to na
+  STEJNÉM záznamu (příznak "▶ přehráno"), místo aby vznikl duplicitní řádek
+- **Opakovaná interpunkce**: stejná oprava jako dřív u elipsy teď platí
+  obecně pro tečky, vykřičníky i otazníky ("!!!" → "!", "???" → "?")
+
 ## Nové v této verzi (2.1)
 
 - **Čtení interpunkce**: elipsy ("...") se sloučí na jednu tečku a

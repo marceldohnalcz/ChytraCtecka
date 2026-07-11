@@ -11,10 +11,11 @@ android {
         applicationId = "io.github.marciano.smartreader"
         minSdk = 26
         targetSdk = 34
-        // Verzování: číslo za tečkou (2.0 -> 2.1 -> 2.2...) se zvyšuje u běžných
-        // úprav a oprav. Celé číslo před tečkou (2.0 -> 3.0) jen u zásadní změny.
-        versionCode = 21
-        versionName = "2.1"
+        // Verzování: dvě desetinná místa (2.02 -> 2.03 -> 2.04...) se zvyšují
+        // u běžných úprav a oprav. Skok na "velký" krok (např. 2.10) jen po
+        // výslovné dohodě předem, nikdy automaticky.
+        versionCode = 22
+        versionName = "2.02"
     }
 
     signingConfigs {

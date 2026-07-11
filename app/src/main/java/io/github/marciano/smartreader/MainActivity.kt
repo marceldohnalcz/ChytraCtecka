@@ -223,8 +223,15 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             } else {
                 binding.etContent.setText(text)
                 binding.etContent.setSelection(0)
+                recordPasteInHistory(text)
             }
         }
+    }
+
+    private fun recordPasteInHistory(text: String) {
+        if (!AppSettings.loadHistoryEnabled(this)) return
+        if (text.isBlank()) return
+        ReadingHistoryStore.addEntry(this, text)
     }
 
     private fun clearText() {
@@ -250,7 +257,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         if (!AppSettings.loadHistoryEnabled(this)) return
         val text = binding.etContent.text?.toString().orEmpty()
         if (text.isBlank()) return
-        ReadingHistoryStore.addEntry(this, text)
+        ReadingHistoryStore.markPlayedByContent(this, text)
     }
 
     /**
@@ -990,6 +997,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             } else {
                 binding.etContent.setText(extracted)
                 binding.etContent.setSelection(0)
+                recordPasteInHistory(extracted)
             }
         }
     }

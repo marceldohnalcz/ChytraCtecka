@@ -40,9 +40,11 @@ object TextPreprocessor {
     private val HASHTAG_SYMBOL: Pattern = Pattern.compile("#(?=\\S)")
     private val MENTION_SYMBOL: Pattern = Pattern.compile("@(?=\\S)")
 
-    // Víc teček za sebou (elipsa "...") - některé TTS enginy je čtou doslova
-    // jako "tečka tečka tečka" místo přirozené pauzy.
-    private val ELLIPSIS_PATTERN: Pattern = Pattern.compile("\\.{2,}")
+    // Opakovaná interpunkce za sebou (elipsa "...", ale i "!!!" nebo "???") -
+    // některé TTS enginy je čtou doslova jako "tečka tečka tečka" / "vykřičník
+    // vykřičník" místo přirozeného důrazu/pauzy. Zachytí libovolný z .!? po sobě
+    // opakovaný 2x a víckrát a sloučí na jeden jediný znak.
+    private val REPEATED_PUNCTUATION_PATTERN: Pattern = Pattern.compile("([.!?])\\1{1,}")
 
     // Závorky (kulaté, hranaté, složené) a uvozovky všech běžných typů - TTS je
     // někdy čte doslova ("uvozovky", "levá závorka"). Nahrazujeme mezerou, aby se
@@ -74,7 +76,7 @@ object TextPreprocessor {
         val skipLongNumbers: Boolean = true,
         val normalizeThousands: Boolean = true,
         val expandAbbreviations: Boolean = true,
-        val simplifyEllipsis: Boolean = true,
+        val simplifyRepeatedPunctuation: Boolean = true,
         val stripBracketsAndQuotes: Boolean = true,
         val stripUnderscores: Boolean = true,
         val stripEmoji: Boolean = true,
@@ -96,7 +98,9 @@ object TextPreprocessor {
         // částky jako "1.234.567" po sloučení mylně chytily do stejného filtru.
         if (options.skipLongNumbers) text = LONG_DIGIT_PATTERN.matcher(text).replaceAll(" ")
         if (options.normalizeThousands) text = normalizeThousandsSeparators(text)
-        if (options.simplifyEllipsis) text = ELLIPSIS_PATTERN.matcher(text).replaceAll(".")
+        if (options.simplifyRepeatedPunctuation) {
+            text = REPEATED_PUNCTUATION_PATTERN.matcher(text).replaceAll("$1")
+        }
         if (options.stripBracketsAndQuotes) text = BRACKETS_AND_QUOTES_PATTERN.matcher(text).replaceAll(" ")
         if (options.stripEmoji) text = EMOJI_PATTERN.matcher(text).replaceAll("")
         if (options.stripUnderscores) text = text.replace('_', ' ')

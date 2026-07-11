@@ -74,7 +74,12 @@
             android:textColor="@color/text_primary"
             android:textColorHint="@color/text_secondary"
             android:hint="Sem vlož nebo napiš text ke čtení…"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:scrollbars="vertical"
+            android:scrollbarStyle="outsideOverlay"
+            android:fadeScrollbars="false"
+            android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
+            android:scrollbarSize="6dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -275,23 +280,32 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical|center_horizontal">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnPlayPause"
-                style="@style/Widget.MaterialComponents.Button"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="52dp"
                 android:layout_weight="1"
-                android:minWidth="0dp"
-                android:layout_marginEnd="6dp"
-                android:text="Přehrát"
-                android:textAllCaps="false"
-                android:textSize="15sp"
-                app:icon="@drawable/ic_play"
-                app:iconGravity="textStart"
-                app:cornerRadius="15dp"
-                app:backgroundTint="@color/brand_play" />
+                android:layout_marginEnd="6dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnPlayPause"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:insetLeft="0dp"
+                    android:insetRight="0dp"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:text="Přehrát"
+                    android:textAllCaps="false"
+                    android:textSize="15sp"
+                    app:icon="@drawable/ic_play"
+                    app:iconGravity="textStart"
+                    app:iconPadding="6dp"
+                    app:cornerRadius="15dp"
+                    app:backgroundTint="@color/brand_play" />
+            </LinearLayout>
 
             <ImageButton
                 android:id="@+id/btnSkipPrev"
@@ -315,21 +329,29 @@
                 android:padding="10dp"
                 android:scaleType="fitCenter" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnStop"
-                style="@style/Widget.MaterialComponents.Button"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="52dp"
-                android:layout_weight="1"
-                android:minWidth="0dp"
-                android:layout_marginStart="0dp"
-                android:text="Stop"
-                android:textAllCaps="false"
-                android:textSize="15sp"
-                app:icon="@drawable/ic_stop"
-                app:iconGravity="textStart"
-                app:cornerRadius="15dp"
-                app:backgroundTint="@color/brand_accent" />
+                android:layout_weight="1">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnStop"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:insetLeft="0dp"
+                    android:insetRight="0dp"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:text="Stop"
+                    android:textAllCaps="false"
+                    android:textSize="15sp"
+                    app:icon="@drawable/ic_stop"
+                    app:iconGravity="textStart"
+                    app:iconPadding="6dp"
+                    app:cornerRadius="15dp"
+                    app:backgroundTint="@color/brand_accent" />
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>

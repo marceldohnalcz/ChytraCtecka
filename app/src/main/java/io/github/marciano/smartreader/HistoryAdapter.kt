@@ -26,7 +26,7 @@ class HistoryAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
-        holder.title.text = item.preview
+        holder.title.text = if (item.played) "▶ ${item.preview}" else item.preview
         holder.itemView.setOnClickListener { onItemClick(item) }
         holder.delete.setOnClickListener { onDeleteClick(item) }
     }
