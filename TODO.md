@@ -1,11 +1,27 @@
 # TODO
 
-Aktuálně žádné otevřené úkoly - všech 5 bodů z poslední dávky bylo
-vyřešeno ve verzi 2.02 (viz README.md, sekce "Nové v této verzi").
+## 1. Posuvník vpravo od textu není chytatelný/tažitelný
 
-Pokud se po instalaci ukáže, že spodní řádek (Přehrát/zpět/vpřed/Stop)
-pořád není vyrovnaný nebo vycentrovaný tak, jak má být, napiš to znovu i s
-tím, jak přesně to vypadá - tahle konkrétní věc se opravovala už podruhé,
-takže by bylo dobré u dalšího hlášení popsat co nejkonkrétněji, v čem
-přesně je rozdíl vidět (např. o kolik cca širší/užší, jestli je to jen
-vizuální dojem apod.), ať se to dá spolehlivě odladit.
+- **Zpětná vazba**: posuvník (scrollbar) na pravé straně textového pole je
+  sice vidět, ale nejde ho chytit prstem a přetažením posouvat text - jen
+  ukazuje pozici, neumí ovládat scroll.
+- **Příčina**: standardní `android:scrollbars="vertical"` u EditTextu je
+  jen vizuální indikátor, Android ho u běžného TextView/EditText neumí
+  udělat interaktivním/tažitelným - to je jiný mechanismus než třeba
+  "fast scroller" u RecyclerView.
+- **Řešení pro příště**: udělat vlastní draggable overlay - průhledný pruh
+  přes pravý okraj textového pole, který:
+  - zachytává `onTouchListener` (ACTION_DOWN/ACTION_MOVE) jen v oblasti
+    tenkého pruhu vpravo
+  - podle pozice prstu v pruhu přepočítá odpovídající scroll pozici a
+    zavolá `editText.scrollTo(0, vypočtenéY)`
+  - vizuálně by šlo znovu použít `scrollbar_thumb.xml`, jen by nešlo o
+    systémový scrollbar, ale o vlastní View/kreslený indikátor navázaný
+    na `editText.scrollY` / `editText.layout.height`
+- Bude potřeba dát pozor na souběh s auto-scrollem při čtení
+  (`autoScrollToPosition` v MainActivity.kt) - manuální tažení uživatelem
+  by nemělo být přebíjeno auto-scrollem v okamžiku, kdy appka zrovna čte.
+
+---
+
+Až budeme na dalším update pracovat, stačí říct "pokračuj v TODO".
