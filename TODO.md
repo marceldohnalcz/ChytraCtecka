@@ -23,7 +23,27 @@ neimplementováno):
   Androidu funguje dobře v kombinaci s auto-scrollem při čtení
   (viz `autoScrollToPosition` v MainActivity.kt).
 
+## 3. Oprava spodního řádku (Přehrát / zpět / vpřed / Stop)
+
+- **Zpětná vazba**: předchozí pokus o opravu (přidání `android:minWidth="0dp"`
+  na obě tlačítka) problém nevyřešil - zelené tlačítko Přehrát je pořád
+  užší než tlačítko Stop vpravo
+- Řádek navíc není vycentrovaný
+- Bude potřeba jít hlouběji než jen minWidth - zkontrolovat, jestli
+  MaterialButton nemá i jiné defaultní inset/padding hodnoty, které
+  narušují rovnoměrné rozdělení `layout_weight`, případně zkusit úplně
+  jiný přístup k tomuhle řádku (např. bez MaterialButton stylu, nebo s
+  explicitním `app:iconPadding`/`insetLeft`/`insetRight`)
+
+## 4. Vylepšit zaznamenávání do historie
+
+- Zaznamenávat do historie **každý vložený text** (přes tlačítko Vložit
+  i další cesty vkládání), ne jen ve chvíli, kdy se spustí čtení
+- Pokud byl daný text následně i přehrán, poznamenat to k **tomu samému**
+  již existujícímu záznamu v historii (přidat příznak "přehráno" apod.) -
+  ne vytvářet duplicitní druhý záznam pro stejný text
+
 ---
 
 Až budeme na dalším update pracovat, stačí říct "pokračuj v TODO" nebo
-rovnou zadat konkrétní z těchto dvou bodů.
+rovnou zadat konkrétní z těchto bodů.
