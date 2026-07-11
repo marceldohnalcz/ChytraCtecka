@@ -43,16 +43,37 @@
         android:layout_height="wrap_content"
         android:maxHeight="380dp" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnClearHistory"
-        style="@style/Widget.MaterialComponents.Button"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Vymazat celou historii"
-        android:textAllCaps="false"
-        app:icon="@drawable/ic_clear"
-        app:iconGravity="textStart"
-        app:cornerRadius="14dp"
-        app:backgroundTint="@color/brand_danger" />
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnClearHistory"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vymazat vše"
+            android:textAllCaps="false"
+            app:icon="@drawable/ic_clear"
+            app:iconGravity="textStart"
+            app:cornerRadius="14dp"
+            app:backgroundTint="@color/brand_danger" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCloseHistory"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Zavřít"
+            android:textAllCaps="false"
+            app:cornerRadius="14dp"
+            app:backgroundTint="@color/icon_secondary" />
+    </LinearLayout>
 </LinearLayout>

@@ -168,12 +168,24 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
      * v textu).
      */
     @SuppressLint("ClickableViewAccessibility")
+    // Kolikrát rychleji se text posune oproti tomu, o kolik se posune prst -
+    // čisté 1:1 mapování bylo na dlouhé texty vnímané jako pomalé.
+    private val SCROLL_DRAG_SPEED_MULTIPLIER = 3.5f
+    private var lastScrollDragY = 0f
+
     private fun setupScrollDragHandle() {
         binding.scrollDragHandle.setOnTouchListener { view, event ->
             when (event.action) {
-                android.view.MotionEvent.ACTION_DOWN,
-                android.view.MotionEvent.ACTION_MOVE -> {
+                android.view.MotionEvent.ACTION_DOWN -> {
+                    lastScrollDragY = event.y
+                    // Rovnou skoč zhruba na odpovídající místo podle pozice doteku
                     scrollTextToTouchRatio(event.y / view.height.toFloat())
+                    true
+                }
+                android.view.MotionEvent.ACTION_MOVE -> {
+                    val deltaY = event.y - lastScrollDragY
+                    lastScrollDragY = event.y
+                    scrollTextByDelta(deltaY * SCROLL_DRAG_SPEED_MULTIPLIER)
                     true
                 }
                 else -> false
@@ -189,6 +201,16 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         if (maxScroll <= 0) return
         val ratio = rawRatio.coerceIn(0f, 1f)
         editText.scrollTo(0, (ratio * maxScroll).toInt())
+    }
+
+    private fun scrollTextByDelta(deltaY: Float) {
+        val editText = binding.etContent
+        val layout = editText.layout ?: return
+        val visibleHeight = editText.height - editText.paddingTop - editText.paddingBottom
+        val maxScroll = (layout.height - visibleHeight).coerceAtLeast(0)
+        if (maxScroll <= 0) return
+        val newScroll = (editText.scrollY + deltaY.toInt()).coerceIn(0, maxScroll)
+        editText.scrollTo(0, newScroll)
     }
 
     private fun setupSpeedSlider() {
@@ -531,6 +553,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         val empty = view.findViewById<TextView>(R.id.tvHistoryEmpty)
         val switchEnabled = view.findViewById<android.widget.Switch>(R.id.switchHistoryEnabledInDialog)
         val btnClearHistory = view.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnClearHistory)
+        val btnCloseHistory = view.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnCloseHistory)
         recycler.layoutManager = LinearLayoutManager(this)
 
         switchEnabled.isChecked = AppSettings.loadHistoryEnabled(this)
@@ -584,8 +607,9 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         dialog = AlertDialog.Builder(this)
             .setTitle("Historie čtení")
             .setView(view)
-            .setNegativeButton("Zavřít", null)
             .create()
+
+        btnCloseHistory.setOnClickListener { dialog.dismiss() }
         dialog.show()
     }
 

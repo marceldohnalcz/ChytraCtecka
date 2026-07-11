@@ -66,6 +66,14 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.06)
+
+- **Zelená šipka** u přehraných položek v Historii
+- **Přeskládaný dialog Historie** - Vymazat vše (vlevo) a Zavřít (vpravo)
+  jsou teď na jednom řádku dole; Zavřít má barvu čitelnou i v tmavém režimu
+- **Rychlejší posuvník** - tažení textu teď zrychlené (~3,5×), ať se dá
+  rychle proskrolovat i dlouhý text
+
 ## Nové v této verzi (2.05)
 
 - **Skutečně tažitelný posuvník** - dřív jen ukazoval pozici (systémový
