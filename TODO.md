@@ -43,6 +43,16 @@ neimplementováno):
   již existujícímu záznamu v historii (přidat příznak "přehráno" apod.) -
   ne vytvářet duplicitní druhý záznam pro stejný text
 
+## 5. Opakovaná interpunkce (např. "!!!") se čte doslova
+
+- Stejný problém jako dřív opravená elipsa ("..." → "."), teď u
+  vykřičníků: víc vykřičníků za sebou ("!!!") TTS čte doslova jako
+  "vykřičník vykřičník" místo přirozeného důrazu
+- Řešení podle stejného vzoru jako `ELLIPSIS_PATTERN` v
+  `TextPreprocessor.kt` - sloučit 2+ opakování na jeden znak (`!{2,}` → `!`)
+- Zkontrolovat i další opakovatelnou interpunkci se stejným rizikem
+  (např. víc otazníků "???", kombinace "?!" apod.)
+
 ---
 
 Až budeme na dalším update pracovat, stačí říct "pokračuj v TODO" nebo
