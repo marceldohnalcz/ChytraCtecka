@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/menuSettings"
-        android:title="Nastavení čtení" />
+        android:title="Nastavení" />
     <item
         android:id="@+id/menuHelp"
         android:title="Nápověda a tipy" />

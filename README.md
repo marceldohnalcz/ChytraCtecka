@@ -66,6 +66,18 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.07)
+
+- **Redesign dialogu Historie** - vlastní nadpis s ikonou (místo obyčejného
+  systémového titulku), karta pro přepínač "Zaznamenávat historii", a
+  zarovnání Vymazat/Zavřít se sloupcem textu a mazacích křížků v seznamu
+  nad nimi
+- **Oprava**: tlačítko Zavřít má teď vždy bílý text (v tmavém režimu bylo
+  špatně čitelné)
+- **Přejmenováno**: "Nastavení čtení" v menu → jen "Nastavení" (nastavuje
+  se tam i motiv appky, historie a pokračování po telefonátu, ne jen
+  parametry čtení)
+
 ## Nové v této verzi (2.06)
 
 - **Zelená šipka** u přehraných položek v Historii

@@ -605,7 +605,6 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         }
 
         dialog = AlertDialog.Builder(this)
-            .setTitle("Historie čtení")
             .setView(view)
             .create()
 
@@ -800,7 +799,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         }
 
         AlertDialog.Builder(this)
-            .setTitle("Nastavení čtení")
+            .setTitle("Nastavení")
             .setView(view)
             .setPositiveButton("Hotovo", null)
             .show()

@@ -4,16 +4,47 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:paddingTop="16dp"
+    android:paddingBottom="14dp">
 
+    <!-- Vlastní nadpis s ikonou (místo obyčejného systémového textového titulku) -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:paddingBottom="8dp">
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:layout_marginBottom="14dp">
+
+        <ImageView
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/ic_history"
+            android:contentDescription="null"
+            android:tint="@color/brand_primary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="Historie čtení"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/brand_primary" />
+    </LinearLayout>
+
+    <!-- Karta s přepínačem záznamu historie -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/bg_edittext_rounded"
+        android:padding="12dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="14dp">
 
         <TextView
             android:layout_width="0dp"
@@ -41,13 +72,17 @@
         android:id="@+id/recyclerHistory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
         android:maxHeight="380dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="10dp">
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:layout_marginTop="12dp">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnClearHistory"
@@ -56,6 +91,7 @@
             android:layout_height="wrap_content"
             android:text="Vymazat vše"
             android:textAllCaps="false"
+            android:textColor="#FFFFFF"
             app:icon="@drawable/ic_clear"
             app:iconGravity="textStart"
             app:cornerRadius="14dp"
@@ -73,6 +109,7 @@
             android:layout_height="wrap_content"
             android:text="Zavřít"
             android:textAllCaps="false"
+            android:textColor="#FFFFFF"
             app:cornerRadius="14dp"
             app:backgroundTint="@color/icon_secondary" />
     </LinearLayout>
