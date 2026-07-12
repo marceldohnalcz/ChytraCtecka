@@ -66,6 +66,16 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.11)
+
+- **Zpět na jednoduché potvrzení tlačítkem**: mazání knihovny/historie už
+  nevyžaduje psát slovo (bylo to otravné) - stačí tlačítko "Ano, vymazat"
+  v potvrzovacím dialogu
+- **Redesign dialogu Knihovna** - stejný styl jako Historie: barevné
+  kolečko s ikonou v nadpisu, oddělovací linka, vlastní tlačítko Zavřít
+- **Oprava čitelnosti**: text tlačítka "Přehrát vybrané" je teď vždy bílý
+  (dřív byl matoucí, málo kontrastní vůči zelenému pozadí)
+
 ## Nové v této verzi (2.09)
 
 - **Silnější ochrana proti omylem smazané knihovně/historii**: tlačítko
