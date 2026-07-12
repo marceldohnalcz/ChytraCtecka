@@ -66,6 +66,17 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.08)
+
+- **Oprava textu tlačítka Zavřít**: barva textu se teď otáčí podle motivu
+  (bílá ve světlém režimu na tmavě tyrkysovém pozadí, tmavá v tmavém
+  režimu na světle tyrkysovém pozadí) - dřív byla natvrdo bílá, což na
+  světlém pozadí v tmavém režimu nešlo přečíst
+- **Přepracovaný nadpis dialogu Historie**: barevné kolečko s bílou ikonou
+  (kontrast nezávislý na motivu) + text v neutrální vysoce čitelné barvě
+  (dřív byl celý nadpis barevný, což mělo na tmavém pozadí špatný
+  kontrast) + oddělovací linka pod nadpisem
+
 ## Nové v této verzi (2.07)
 
 - **Redesign dialogu Historie** - vlastní nadpis s ikonou (místo obyčejného

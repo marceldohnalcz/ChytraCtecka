@@ -7,7 +7,9 @@
     android:paddingTop="16dp"
     android:paddingBottom="14dp">
 
-    <!-- Vlastní nadpis s ikonou (místo obyčejného systémového textového titulku) -->
+    <!-- Vlastní nadpis: barevné kolečko s ikonou (kontrast nezávislý na motivu) +
+         text v neutrální, vysoce čitelné barvě (ne barevný text, který má na
+         tmavém pozadí špatný kontrast) + oddělovací linka -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,22 +19,35 @@
         android:paddingEnd="20dp"
         android:layout_marginBottom="14dp">
 
-        <ImageView
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:src="@drawable/ic_history"
-            android:contentDescription="null"
-            android:tint="@color/brand_primary" />
+        <FrameLayout
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:background="@drawable/bg_circle_button">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_history"
+                android:contentDescription="@null"
+                android:tint="#FFFFFF" />
+        </FrameLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="12dp"
             android:text="Historie čtení"
-            android:textSize="18sp"
+            android:textSize="19sp"
             android:textStyle="bold"
-            android:textColor="@color/brand_primary" />
+            android:textColor="@color/text_primary" />
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/border"
+        android:layout_marginBottom="14dp" />
 
     <!-- Karta s přepínačem záznamu historie -->
     <LinearLayout
@@ -109,7 +124,7 @@
             android:layout_height="wrap_content"
             android:text="Zavřít"
             android:textAllCaps="false"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/on_icon_secondary"
             app:cornerRadius="14dp"
             app:backgroundTint="@color/icon_secondary" />
     </LinearLayout>
