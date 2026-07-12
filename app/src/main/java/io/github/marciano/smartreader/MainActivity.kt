@@ -14,7 +14,9 @@ import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.speech.tts.Voice
+import android.text.Editable
 import android.text.Spannable
+import android.text.TextWatcher
 import android.text.style.BackgroundColorSpan
 import android.view.View
 import android.widget.RadioButton
@@ -593,15 +595,13 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                 Toast.makeText(this, "Historie je už prázdná", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            AlertDialog.Builder(this)
-                .setTitle("Vymazat celou historii?")
-                .setMessage("Smaže se všech ${items.size} záznamů. Tuhle akci nejde vrátit zpět.")
-                .setPositiveButton("Vymazat vše") { _, _ ->
-                    ReadingHistoryStore.clearHistory(this)
-                    refresh()
-                }
-                .setNegativeButton("Zrušit", null)
-                .show()
+            showTypeToConfirmDialog(
+                title = "Vymazat celou historii?",
+                message = "Smaže se všech ${items.size} záznamů. Tuhle akci nejde vrátit zpět."
+            ) {
+                ReadingHistoryStore.clearHistory(this)
+                refresh()
+            }
         }
 
         dialog = AlertDialog.Builder(this)
@@ -677,16 +677,58 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             Toast.makeText(this, "Knihovna je už prázdná", Toast.LENGTH_SHORT).show()
             return
         }
-        AlertDialog.Builder(this)
-            .setTitle("Vymazat celou knihovnu?")
-            .setMessage("Smaže se všech ${items.size} uložených textů. Tuhle akci nejde vrátit zpět.")
-            .setPositiveButton("Vymazat vše") { _, _ ->
-                TextLibraryStore.clearLibrary(this)
-                currentLibraryItemId = null
-                Toast.makeText(this, "Knihovna vymazána", Toast.LENGTH_SHORT).show()
-            }
+        showTypeToConfirmDialog(
+            title = "Vymazat celou knihovnu?",
+            message = "Smaže se všech ${items.size} uložených textů. Tuhle akci nejde vrátit zpět."
+        ) {
+            TextLibraryStore.clearLibrary(this)
+            currentLibraryItemId = null
+            Toast.makeText(this, "Knihovna vymazána", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    /**
+     * Silnější potvrzení pro nevratné akce (smazání celé knihovny/historie) -
+     * tlačítko potvrzení je neaktivní, dokud uživatel nenapíše přesně slovo
+     * "SMAZAT". Chrání proti omylem odklepnutému běžnému Ano/Ne dialogu.
+     */
+    private fun showTypeToConfirmDialog(title: String, message: String, onConfirmed: () -> Unit) {
+        val input = android.widget.EditText(this).apply {
+            hint = "Napiš SMAZAT"
+            val pad = (16 * resources.displayMetrics.density).toInt()
+            setPadding(pad, pad / 2, pad, pad / 2)
+        }
+        val container = android.widget.LinearLayout(this).apply {
+            orientation = android.widget.LinearLayout.VERTICAL
+            val pad = (20 * resources.displayMetrics.density).toInt()
+            setPadding(pad, 0, pad, 0)
+            addView(input)
+        }
+
+        val dialog = AlertDialog.Builder(this)
+            .setTitle(title)
+            .setMessage("$message\n\nPro potvrzení napiš do pole níže slovo SMAZAT.")
+            .setView(container)
+            .setPositiveButton("Vymazat vše", null)
             .setNegativeButton("Zrušit", null)
-            .show()
+            .create()
+
+        dialog.setOnShowListener {
+            val confirmButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            confirmButton.isEnabled = false
+            input.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) {
+                    confirmButton.isEnabled = s?.toString()?.trim()?.equals("SMAZAT", ignoreCase = true) == true
+                }
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            })
+            confirmButton.setOnClickListener {
+                onConfirmed()
+                dialog.dismiss()
+            }
+        }
+        dialog.show()
     }
 
     private fun shareAppLink() {

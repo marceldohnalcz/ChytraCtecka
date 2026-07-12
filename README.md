@@ -66,6 +66,13 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.09)
+
+- **Silnější ochrana proti omylem smazané knihovně/historii**: tlačítko
+  "Vymazat vše" (jak v knihovně, tak v historii) teď vyžaduje napsat do
+  pole slovo "SMAZAT", než jde vůbec potvrdit - jedno rychlé odklepnutí
+  dialogu už nestačí ke smazání
+
 ## Nové v této verzi (2.08)
 
 - **Oprava textu tlačítka Zavřít**: barva textu se teď otáčí podle motivu
