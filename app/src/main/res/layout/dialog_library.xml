@@ -62,10 +62,14 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerLibrary"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="340dp"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
-        android:maxHeight="420dp" />
+        android:scrollbars="vertical"
+        android:scrollbarStyle="outsideOverlay"
+        android:fadeScrollbars="false"
+        android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
+        android:scrollbarSize="6dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnPlaySelected"

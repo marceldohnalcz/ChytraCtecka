@@ -66,6 +66,16 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.12)
+
+- **Oprava**: dialogy Historie a Knihovna měly u hodně položek problém, že
+  seznam přerostl obrazovku a tlačítka dole (Vymazat/Zavřít) úplně zmizela
+  - `maxHeight` u seznamu totiž ve skutečnosti nefungoval. Teď má seznam
+  pevnou výšku s viditelným posuvníkem, tlačítka dole zůstávají vždy na
+  místě
+- **Oprava verzování**: žádné přeskakování čísel, jen prosté postupné
+  číslování (2.11 → 2.12 → 2.13...)
+
 ## Nové v této verzi (2.11)
 
 - **Zpět na jednoduché potvrzení tlačítkem**: mazání knihovny/historie už
