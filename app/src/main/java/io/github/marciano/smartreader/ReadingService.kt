@@ -27,8 +27,9 @@ import androidx.media.app.NotificationCompat as MediaNotificationCompat
  * widget, jaký znáš ze Spotify/YouTube Music), včetně reakce na sluchátková
  * tlačítka.
  *
- * Zároveň při čtení požádá o "audio focus" typu MAY_DUCK, díky čemuž
- * ostatní přehrávače automaticky ztiší hlasitost po dobu čtení.
+ * Zároveň při čtení požádá o "audio focus", díky čemuž se ostatní přehrávače
+ * (YouTube, Spotify apod.) na dobu čtení samy pozastaví a po dočtení se
+ * obvykle samy pustí zpátky.
  */
 class ReadingService : Service() {
 
@@ -215,7 +216,7 @@ class ReadingService : Service() {
         mediaSession.setMetadata(metadata)
     }
 
-    // --- Audio focus / ducking ---
+    // --- Audio focus (zastavení jiných přehrávačů) ---
 
     private fun requestAudioFocus() {
         val am = audioManager ?: return
@@ -223,7 +224,11 @@ class ReadingService : Service() {
             .setUsage(AudioAttributes.USAGE_ASSISTANCE_NAVIGATION_GUIDANCE)
             .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
             .build()
-        val request = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK)
+        // AUDIOFOCUS_GAIN_TRANSIENT (bez MAY_DUCK) - slušně napsané appky (YouTube,
+        // Spotify apod.) na tohle reagují úplnou pauzou, ne jen ztišením hlasitosti.
+        // Po dočtení appka focus pustí (abandonAudioFocus) a ony se obvykle samy
+        // pustí zpátky, protože si pamatují, že předtím hrály.
+        val request = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
             .setAudioAttributes(attrs)
             .setOnAudioFocusChangeListener { focusChange ->
                 when (focusChange) {

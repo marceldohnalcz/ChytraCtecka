@@ -172,11 +172,13 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
     // čisté 1:1 mapování bylo na dlouhé texty vnímané jako pomalé.
     private val SCROLL_DRAG_SPEED_MULTIPLIER = 3.5f
     private var lastScrollDragY = 0f
+    private var isUserDraggingScroll = false
 
     private fun setupScrollDragHandle() {
         binding.scrollDragHandle.setOnTouchListener { view, event ->
             when (event.action) {
                 android.view.MotionEvent.ACTION_DOWN -> {
+                    isUserDraggingScroll = true
                     lastScrollDragY = event.y
                     // Rovnou skoč zhruba na odpovídající místo podle pozice doteku
                     scrollTextToTouchRatio(event.y / view.height.toFloat())
@@ -186,6 +188,11 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                     val deltaY = event.y - lastScrollDragY
                     lastScrollDragY = event.y
                     scrollTextByDelta(deltaY * SCROLL_DRAG_SPEED_MULTIPLIER)
+                    true
+                }
+                android.view.MotionEvent.ACTION_UP,
+                android.view.MotionEvent.ACTION_CANCEL -> {
+                    isUserDraggingScroll = false
                     true
                 }
                 else -> false
@@ -692,13 +699,24 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
      * "SMAZAT". Chrání proti omylem odklepnutému běžnému Ano/Ne dialogu.
      */
     /** Jednoduché potvrzení nevratné akce tlačítkem Ano/Zrušit. */
+    /** Potvrzení nevratné akce - Zrušit vlevo, Ano/vymazat vpravo s rozestupem mezi nimi. */
     private fun showConfirmDialog(title: String, message: String, onConfirmed: () -> Unit) {
-        AlertDialog.Builder(this)
-            .setTitle(title)
-            .setMessage(message)
-            .setPositiveButton("Ano, vymazat") { _, _ -> onConfirmed() }
-            .setNegativeButton("Zrušit", null)
-            .show()
+        val view = layoutInflater.inflate(R.layout.dialog_confirm_action, null)
+        view.findViewById<TextView>(R.id.tvConfirmTitle).text = title
+        view.findViewById<TextView>(R.id.tvConfirmMessage).text = message
+
+        val dialog = AlertDialog.Builder(this)
+            .setView(view)
+            .create()
+
+        view.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnConfirmCancel)
+            .setOnClickListener { dialog.dismiss() }
+        view.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnConfirmOk)
+            .setOnClickListener {
+                onConfirmed()
+                dialog.dismiss()
+            }
+        dialog.show()
     }
 
     private fun shareAppLink() {
@@ -902,6 +920,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
      * ať text neposkakuje při každé větě uvnitř stejného odstavce.
      */
     private fun autoScrollToPosition(position: Int) {
+        if (isUserDraggingScroll) return
         val editText = binding.etContent
         val layout = editText.layout ?: return
         val fullText = editText.text?.toString() ?: return

@@ -66,6 +66,21 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.13)
+
+- **Rozestup tlačítek v potvrzovacím dialogu**: "Zrušit" je teď vlevo,
+  potvrzovací tlačítko vpravo, s velkou mezerou mezi nimi (dřív byla těsně
+  vedle sebe, snadno se dalo trefit špatné) - týká se dialogů "Vymazat
+  celou knihovnu/historii?"
+- **Oprava**: tažení posuvníku a automatický posun textu při čtení si už
+  nekonkurují - jakmile appka detekuje, že držíš posuvník, auto-scroll se
+  na tu dobu úplně vypne
+- **Jiné appky (YouTube, Spotify) se teď při čtení zastaví, ne jen
+  ztiší** - appka žádá o jiný typ "audio focus", který slušně napsané
+  appky berou jako "pozastav se", ne jen "buď potichu". Po dočtení se
+  obvykle samy pustí zpátky (to už je jejich vlastní chování, appka jen
+  korektně pustí focus)
+
 ## Nové v této verzi (2.12)
 
 - **Oprava**: dialogy Historie a Knihovna měly u hodně položek problém, že
