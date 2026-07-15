@@ -231,12 +231,14 @@ object TextPreprocessor {
 
         var result = text
         for ((abbr, full) in abbreviations) {
-            // Zkratka musí být ohraničená mezerou/začátkem textu vlevo (zachyceno
-            // do skupiny 1, ať ji můžeme zachovat) a mezerou/koncem/interpunkcí
-            // vpravo - ne uprostřed jiného slova.
+            // Zkratka musí být ohraničená mezerou/začátkem textu/závorkou/uvozovkou
+            // vlevo (zachyceno do skupiny 1, ať ji můžeme zachovat) a mezerou,
+            // koncem, interpunkcí nebo závorkou/uvozovkou vpravo - ne uprostřed
+            // jiného slova. UNICODE_CASE je nutný, ať malá/velká písmena správně
+            // fungují i mimo ASCII (azbuka, čeština, němčina s přehláskami...).
             val pattern = Pattern.compile(
-                "(^|\\s)" + Pattern.quote(abbr) + "(?=\\s|$|[,.!?;:])",
-                Pattern.CASE_INSENSITIVE
+                "(^|[\\s(\\[{\"'„«])" + Pattern.quote(abbr) + "(?=[\\s,.!?;:)\\]}\"'„»]|$)",
+                Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE
             )
             val matcher = pattern.matcher(result)
             val sb = StringBuffer()

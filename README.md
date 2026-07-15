@@ -66,6 +66,17 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.16)
+
+- **Oprava nalezená při důkladném auditu před vydáním**: rozepisování
+  zkratek přestalo fungovat, když byla zkratka hned vedle závorky nebo
+  uvozovky (např. "apod.)" nebo "(str."). Způsobil to nedopatření při
+  přepisu na víc jazyků v 2.15 - hranice rozpoznávání zkratky byla příliš
+  úzká (jen mezera/začátek/konec věty). Opraveno a znovu důkladně
+  otestováno na desítkách vět ve všech 9 jazycích.
+- Přidán `UNICODE_CASE` příznak pro správné rozlišení velkých/malých
+  písmen mimo ASCII (důležité hlavně pro ruštinu/azbuku).
+
 ## Nové v této verzi (2.15)
 
 - **Chytré čtení teď funguje ve všech 9 podporovaných jazycích**, ne jen
