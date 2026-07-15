@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:text="Historie čtení"
+            android:text="@string/title_history"
             android:textSize="19sp"
             android:textStyle="bold"
             android:textColor="@color/text_primary" />
@@ -65,7 +65,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Zaznamenávat historii čtení"
+            android:text="@string/label_record_history"
             android:textColor="@color/text_primary" />
 
         <Switch
@@ -78,7 +78,7 @@
         android:id="@+id/tvHistoryEmpty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Historie je zatím prázdná."
+        android:text="@string/msg_history_empty"
         android:textColor="@color/text_secondary"
         android:padding="16dp"
         android:visibility="gone" />
@@ -108,7 +108,7 @@
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Vymazat vše"
+            android:text="@string/btn_clear_all"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
             app:icon="@drawable/ic_clear"
@@ -126,7 +126,7 @@
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Zavřít"
+            android:text="@string/btn_close"
             android:textAllCaps="false"
             android:textColor="@color/on_icon_secondary"
             app:cornerRadius="14dp"

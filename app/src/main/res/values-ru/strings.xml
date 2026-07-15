@@ -1,0 +1,123 @@
+<resources>
+    <string name="app_name">Умный Чтец Текста</string>
+
+    <string name="content_desc_logo">Логотип</string>
+    <string name="content_desc_more_options">Дополнительные параметры</string>
+    <string name="hint_content_text">Вставьте или введите здесь текст для чтения…</string>
+    <string name="btn_paste">Вставить</string>
+    <string name="btn_clear">Очистить</string>
+    <string name="content_desc_image">Распознать текст с изображения</string>
+    <string name="content_desc_link">Загрузить текст по ссылке</string>
+    <string name="content_desc_save">Сохранить в библиотеку</string>
+    <string name="content_desc_library">Открыть библиотеку текстов</string>
+    <string name="content_desc_history">История чтения</string>
+    <string name="label_speed">Скорость</string>
+    <string name="content_desc_speed_minus">Медленнее</string>
+    <string name="content_desc_speed_plus">Быстрее</string>
+    <string name="btn_play">Слушать</string>
+    <string name="btn_pause">Пауза</string>
+    <string name="content_desc_skip_prev">Предыдущий абзац</string>
+    <string name="content_desc_skip_next">Следующий абзац</string>
+    <string name="btn_stop">Стоп</string>
+    <string name="content_desc_delete">Удалить</string>
+
+    <string name="title_library">Библиотека текстов</string>
+    <string name="msg_library_empty">Библиотека пока пуста. Сохраните первый текст кнопкой Сохранить.</string>
+    <string name="btn_play_selected">Прочитать выбранное</string>
+    <string name="btn_play_selected_count">Прочитать выбранное (%1$d)</string>
+    <string name="btn_close">Закрыть</string>
+
+    <string name="btn_cancel">Отмена</string>
+    <string name="btn_confirm_delete">Да, удалить</string>
+
+    <string name="title_history">История чтения</string>
+    <string name="label_record_history">Записывать историю чтения</string>
+    <string name="msg_history_empty">История пока пуста.</string>
+    <string name="btn_clear_all">Очистить всё</string>
+
+    <string name="label_reading_volume">Громкость чтения</string>
+    <string name="desc_volume_independent">Не зависит от системной громкости медиа</string>
+    <string name="label_voice">Голос</string>
+    <string name="label_auto_resume">Продолжить после звонка</string>
+    <string name="desc_auto_resume">После окончания звонка приложение само продолжит с того места, где остановилось</string>
+    <string name="desc_record_history">Приложение запомнит, что вам читало</string>
+    <string name="label_appearance">Внешний вид приложения</string>
+    <string name="theme_system">Как в системе</string>
+    <string name="theme_light">Светлая</string>
+    <string name="theme_dark">Тёмная</string>
+    <string name="btn_done">Готово</string>
+    <string name="voice_none_found">Другой голос не найден. Проверьте Настройки &gt; Голосовой ввод на телефоне.</string>
+    <string name="voice_label">Голос %1$d (%2$s%3$s)</string>
+    <string name="voice_quality_very_high">очень высокое качество</string>
+    <string name="voice_quality_high">высокое качество</string>
+    <string name="voice_quality_normal">нормальное качество</string>
+    <string name="voice_quality_low">низкое качество</string>
+    <string name="voice_quality_unknown">качество неизвестно</string>
+    <string name="voice_needs_internet"> • требуется интернет</string>
+    <string name="dialog_title_settings">Настройки</string>
+
+    <string name="menu_settings">Настройки</string>
+    <string name="menu_help">Справка и советы</string>
+    <string name="menu_clear_library">Очистить всю библиотеку</string>
+    <string name="menu_share_app">Поделиться приложением</string>
+    <string name="menu_check_updates">Проверить обновления</string>
+    <string name="menu_about">О приложении</string>
+
+    <string name="toast_no_camera_access">Без доступа к камере фотографировать нельзя</string>
+    <string name="toast_clipboard_empty">Буфер обмена пуст</string>
+    <string name="toast_nothing_to_read_from_cursor">От позиции курсора больше нечего читать</string>
+    <string name="toast_enter_text_first">Сначала вставьте или введите текст</string>
+    <string name="toast_nothing_to_save">Нечего сохранять - текстовое поле пусто</string>
+    <string name="toast_saved_to_library">Сохранено в библиотеку</string>
+    <string name="toast_loaded_named">Загружено: %1$s</string>
+    <string name="toast_history_already_empty">История уже пуста</string>
+    <string name="toast_library_already_empty">Библиотека уже пуста</string>
+    <string name="toast_library_cleared">Библиотека очищена</string>
+    <string name="toast_failed_open_browser">Не удалось открыть браузер</string>
+    <string name="toast_ocr_no_text_found">На изображении не найден текст. Попробуйте более чёткое или лучше освещённое фото.</string>
+    <string name="toast_ocr_recognized_chars">Текст распознан (%1$d символов)</string>
+
+    <string name="dialog_title_delete_text">Удалить текст?</string>
+    <string name="dialog_msg_delete_text">«%1$s» будет безвозвратно удалён из библиотеки.</string>
+    <string name="btn_delete">Удалить</string>
+    <string name="dialog_title_clear_history">Очистить всю историю?</string>
+    <string name="dialog_msg_clear_history">Будут удалены все %1$d записей. Это действие нельзя отменить.</string>
+    <string name="dialog_title_clear_library">Очистить всю библиотеку?</string>
+    <string name="dialog_msg_clear_library">Будут удалены все %1$d сохранённых текстов. Это действие нельзя отменить.</string>
+    <string name="dialog_title_link_input">Загрузить текст по ссылке</string>
+    <string name="hint_link_input">https://…</string>
+    <string name="btn_download">Скачать</string>
+    <string name="dialog_title_image_source">Распознать текст с изображения</string>
+    <string name="option_pick_gallery">Выбрать из галереи</string>
+    <string name="option_take_photo">Сделать фото</string>
+    <string name="dialog_title_help">Справка и советы</string>
+    <string name="help_message"><![CDATA[
+• Текст можно отправить сюда прямо из других приложений (кнопка "Поделиться" в этом приложении).
+
+• Выделите текст в любом приложении и выберите "Умный Чтец Текста" из меню - он прочитает именно то, что вы выделили.
+
+• Кнопка "Изображение" распознаёт текст с фото или скриншота, работает и офлайн.
+
+• Кнопка "Ссылка" загружает и читает текст с веб-страницы. Обычно не работает с Facebook и Instagram из-за технических ограничений этих платформ - в этом случае выделите текст прямо в приложении.
+
+• Нажатие в любом месте текста начинает чтение именно с этой позиции.
+
+• В Настройках можно изменить голос, громкость чтения и скорость.
+]]></string>
+    <string name="dialog_title_about">О приложении</string>
+    <string name="about_message">Версия %1$s\n\nИсходный код и последняя версия:\ngithub.com/marceldohnalcz/ChytraCtecka</string>
+    <string name="btn_open_github">Открыть GitHub</string>
+    <string name="toast_stahuji_stranku">Загрузка текста страницы…</string>
+    <string name="toast_url_extract_failed">Не удалось извлечь текст по ссылке (обычно не работает с Facebook/Instagram из-за JavaScript). Попробуйте выделить текст в этом приложении и использовать \"%1$s\" из меню, либо скопируйте и вставьте вручную.</string>
+    <string name="share_app_text">Попробуйте %1$s - приложение, которое читает вам вслух тексты, ссылки или даже фото:\n%2$s</string>
+    <string name="share_app_chooser_title">Поделиться приложением</string>
+
+    <string name="notification_channel_name">Чтение текста</string>
+    <string name="notification_channel_desc">Управление чтением в фоне</string>
+    <string name="notification_reading">Читаю текст вслух…</string>
+    <string name="notification_paused">Чтение приостановлено</string>
+
+    <string name="error_playback">Ошибка воспроизведения</string>
+    <string name="error_voice_not_available">Этот язык недоступен на устройстве. Установите голос в Настройки &gt; Голосовой ввод &gt; Синтез речи.</string>
+    <string name="error_tts_failed_start">Не удалось запустить голосовой модуль (TTS).</string>
+</resources>

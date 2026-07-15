@@ -1,0 +1,123 @@
+<resources>
+    <string name="app_name">Inteligentny Czytnik Tekstu</string>
+
+    <string name="content_desc_logo">Logo</string>
+    <string name="content_desc_more_options">Więcej opcji</string>
+    <string name="hint_content_text">Wklej lub wpisz tutaj tekst do odczytania…</string>
+    <string name="btn_paste">Wklej</string>
+    <string name="btn_clear">Wyczyść</string>
+    <string name="content_desc_image">Rozpoznaj tekst ze zdjęcia</string>
+    <string name="content_desc_link">Wczytaj tekst z linku</string>
+    <string name="content_desc_save">Zapisz w bibliotece</string>
+    <string name="content_desc_library">Otwórz bibliotekę tekstów</string>
+    <string name="content_desc_history">Historia czytania</string>
+    <string name="label_speed">Szybkość</string>
+    <string name="content_desc_speed_minus">Zwolnij</string>
+    <string name="content_desc_speed_plus">Przyspiesz</string>
+    <string name="btn_play">Odtwórz</string>
+    <string name="btn_pause">Pauza</string>
+    <string name="content_desc_skip_prev">Poprzedni akapit</string>
+    <string name="content_desc_skip_next">Następny akapit</string>
+    <string name="btn_stop">Stop</string>
+    <string name="content_desc_delete">Usuń</string>
+
+    <string name="title_library">Biblioteka tekstów</string>
+    <string name="msg_library_empty">Biblioteka jest jeszcze pusta. Zapisz pierwszy tekst przyciskiem Zapisz.</string>
+    <string name="btn_play_selected">Odtwórz zaznaczone</string>
+    <string name="btn_play_selected_count">Odtwórz zaznaczone (%1$d)</string>
+    <string name="btn_close">Zamknij</string>
+
+    <string name="btn_cancel">Anuluj</string>
+    <string name="btn_confirm_delete">Tak, usuń</string>
+
+    <string name="title_history">Historia czytania</string>
+    <string name="label_record_history">Zapisuj historię czytania</string>
+    <string name="msg_history_empty">Historia jest jeszcze pusta.</string>
+    <string name="btn_clear_all">Wyczyść wszystko</string>
+
+    <string name="label_reading_volume">Głośność czytania</string>
+    <string name="desc_volume_independent">Niezależna od głośności multimediów systemu</string>
+    <string name="label_voice">Głos</string>
+    <string name="label_auto_resume">Wznów po połączeniu</string>
+    <string name="desc_auto_resume">Po zakończeniu połączenia aplikacja sama wznowi od miejsca, w którym skończyła</string>
+    <string name="desc_record_history">Aplikacja zapamięta, co jej kazano przeczytać</string>
+    <string name="label_appearance">Wygląd aplikacji</string>
+    <string name="theme_system">Zgodnie z systemem</string>
+    <string name="theme_light">Jasny</string>
+    <string name="theme_dark">Ciemny</string>
+    <string name="btn_done">Gotowe</string>
+    <string name="voice_none_found">Nie znaleziono innego głosu. Sprawdź Ustawienia &gt; Mowa w telefonie.</string>
+    <string name="voice_label">Głos %1$d (%2$s%3$s)</string>
+    <string name="voice_quality_very_high">bardzo wysoka jakość</string>
+    <string name="voice_quality_high">wysoka jakość</string>
+    <string name="voice_quality_normal">normalna jakość</string>
+    <string name="voice_quality_low">niska jakość</string>
+    <string name="voice_quality_unknown">nieznana jakość</string>
+    <string name="voice_needs_internet"> • wymaga internetu</string>
+    <string name="dialog_title_settings">Ustawienia</string>
+
+    <string name="menu_settings">Ustawienia</string>
+    <string name="menu_help">Pomoc i wskazówki</string>
+    <string name="menu_clear_library">Wyczyść całą bibliotekę</string>
+    <string name="menu_share_app">Udostępnij aplikację</string>
+    <string name="menu_check_updates">Sprawdź aktualizacje</string>
+    <string name="menu_about">O aplikacji</string>
+
+    <string name="toast_no_camera_access">Nie można robić zdjęć bez dostępu do aparatu</string>
+    <string name="toast_clipboard_empty">Schowek jest pusty</string>
+    <string name="toast_nothing_to_read_from_cursor">Od pozycji kursora nie ma już nic do czytania</string>
+    <string name="toast_enter_text_first">Najpierw wklej lub wpisz jakiś tekst</string>
+    <string name="toast_nothing_to_save">Nie ma co zapisać - pole tekstowe jest puste</string>
+    <string name="toast_saved_to_library">Zapisano w bibliotece</string>
+    <string name="toast_loaded_named">Wczytano: %1$s</string>
+    <string name="toast_history_already_empty">Historia jest już pusta</string>
+    <string name="toast_library_already_empty">Biblioteka jest już pusta</string>
+    <string name="toast_library_cleared">Biblioteka wyczyszczona</string>
+    <string name="toast_failed_open_browser">Nie udało się otworzyć przeglądarki</string>
+    <string name="toast_ocr_no_text_found">Nie znaleziono tekstu na obrazie. Spróbuj ostrzejszego lub lepiej oświetlonego zdjęcia.</string>
+    <string name="toast_ocr_recognized_chars">Rozpoznano tekst (%1$d znaków)</string>
+
+    <string name="dialog_title_delete_text">Usunąć tekst?</string>
+    <string name="dialog_msg_delete_text">„%1$s” zostanie trwale usunięty z biblioteki.</string>
+    <string name="btn_delete">Usuń</string>
+    <string name="dialog_title_clear_history">Wyczyścić całą historię?</string>
+    <string name="dialog_msg_clear_history">Wszystkie %1$d wpisów zostanie usuniętych. Tej czynności nie można cofnąć.</string>
+    <string name="dialog_title_clear_library">Wyczyścić całą bibliotekę?</string>
+    <string name="dialog_msg_clear_library">Wszystkie %1$d zapisanych tekstów zostanie usuniętych. Tej czynności nie można cofnąć.</string>
+    <string name="dialog_title_link_input">Wczytaj tekst z linku</string>
+    <string name="hint_link_input">https://…</string>
+    <string name="btn_download">Pobierz</string>
+    <string name="dialog_title_image_source">Rozpoznaj tekst ze zdjęcia</string>
+    <string name="option_pick_gallery">Wybierz z galerii</string>
+    <string name="option_take_photo">Zrób zdjęcie</string>
+    <string name="dialog_title_help">Pomoc i wskazówki</string>
+    <string name="help_message"><![CDATA[
+• Tekst można udostępnić bezpośrednio tutaj z innych aplikacji (przycisk Udostępnij w danej aplikacji).
+
+• Zaznacz tekst w dowolnej aplikacji i wybierz "Inteligentny Czytnik Tekstu" z menu - przeczyta dokładnie to, co zaznaczyłeś.
+
+• Przycisk Obraz rozpoznaje tekst ze zdjęcia lub zrzutu ekranu, działa też offline.
+
+• Przycisk Link pobiera i czyta tekst ze strony internetowej. Zwykle nie działa z Facebookiem i Instagramem z powodu technicznych ograniczeń tych platform - w takim przypadku zaznacz tekst bezpośrednio w aplikacji.
+
+• Dotknięcie dowolnego miejsca w tekście rozpoczyna czytanie dokładnie od tej pozycji.
+
+• W Ustawieniach możesz zmienić głos, głośność czytania i szybkość.
+]]></string>
+    <string name="dialog_title_about">O aplikacji</string>
+    <string name="about_message">Wersja %1$s\n\nKod źródłowy i najnowsza wersja:\ngithub.com/marceldohnalcz/ChytraCtecka</string>
+    <string name="btn_open_github">Otwórz GitHub</string>
+    <string name="toast_stahuji_stranku">Pobieranie tekstu strony…</string>
+    <string name="toast_url_extract_failed">Nie udało się wyodrębnić tekstu z linku (zwykle nie działa z Facebookiem/Instagramem z powodu JavaScript). Spróbuj zaznaczyć tekst w danej aplikacji i użyć \"%1$s\" z menu, albo skopiuj go i wklej ręcznie.</string>
+    <string name="share_app_text">Wypróbuj %1$s - aplikację, która czyta ci na głos teksty, linki, a nawet zdjęcia:\n%2$s</string>
+    <string name="share_app_chooser_title">Udostępnij aplikację</string>
+
+    <string name="notification_channel_name">Czytanie tekstu</string>
+    <string name="notification_channel_desc">Sterowanie czytaniem w tle</string>
+    <string name="notification_reading">Czytanie tekstu na głos…</string>
+    <string name="notification_paused">Czytanie wstrzymane</string>
+
+    <string name="error_playback">Błąd odtwarzania</string>
+    <string name="error_voice_not_available">Ten język nie jest dostępny na tym urządzeniu. Zainstaluj głos w Ustawienia &gt; Mowa &gt; Zamiana tekstu na mowę.</string>
+    <string name="error_tts_failed_start">Nie udało się uruchomić silnika mowy (TTS).</string>
+</resources>

@@ -30,7 +30,7 @@
         android:layout_marginStart="8dp"
         android:background="@drawable/bg_circle_button_danger"
         android:src="@drawable/ic_clear"
-        android:contentDescription="Smazat"
+        android:contentDescription="@string/content_desc_delete"
         android:padding="8dp"
         android:scaleType="fitCenter" />
 </LinearLayout>

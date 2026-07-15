@@ -1,0 +1,123 @@
+<resources>
+    <string name="app_name">Lecteur de Texte Intelligent</string>
+
+    <string name="content_desc_logo">Logo</string>
+    <string name="content_desc_more_options">Plus d\'options</string>
+    <string name="hint_content_text">Collez ou saisissez ici le texte à lire…</string>
+    <string name="btn_paste">Coller</string>
+    <string name="btn_clear">Effacer</string>
+    <string name="content_desc_image">Reconnaître le texte d\'une image</string>
+    <string name="content_desc_link">Charger le texte depuis un lien</string>
+    <string name="content_desc_save">Enregistrer dans la bibliothèque</string>
+    <string name="content_desc_library">Ouvrir la bibliothèque de textes</string>
+    <string name="content_desc_history">Historique de lecture</string>
+    <string name="label_speed">Vitesse</string>
+    <string name="content_desc_speed_minus">Ralentir</string>
+    <string name="content_desc_speed_plus">Accélérer</string>
+    <string name="btn_play">Lire</string>
+    <string name="btn_pause">Pause</string>
+    <string name="content_desc_skip_prev">Paragraphe précédent</string>
+    <string name="content_desc_skip_next">Paragraphe suivant</string>
+    <string name="btn_stop">Arrêter</string>
+    <string name="content_desc_delete">Supprimer</string>
+
+    <string name="title_library">Bibliothèque de textes</string>
+    <string name="msg_library_empty">La bibliothèque est encore vide. Enregistrez votre premier texte avec le bouton Enregistrer.</string>
+    <string name="btn_play_selected">Lire la sélection</string>
+    <string name="btn_play_selected_count">Lire la sélection (%1$d)</string>
+    <string name="btn_close">Fermer</string>
+
+    <string name="btn_cancel">Annuler</string>
+    <string name="btn_confirm_delete">Oui, supprimer</string>
+
+    <string name="title_history">Historique de lecture</string>
+    <string name="label_record_history">Enregistrer l\'historique de lecture</string>
+    <string name="msg_history_empty">L\'historique est encore vide.</string>
+    <string name="btn_clear_all">Tout effacer</string>
+
+    <string name="label_reading_volume">Volume de lecture</string>
+    <string name="desc_volume_independent">Indépendant du volume multimédia du système</string>
+    <string name="label_voice">Voix</string>
+    <string name="label_auto_resume">Reprendre après un appel</string>
+    <string name="desc_auto_resume">Après l\'appel, l\'application reprendra automatiquement là où elle s\'est arrêtée</string>
+    <string name="desc_record_history">L\'application se souviendra de ce qu\'elle vous a lu</string>
+    <string name="label_appearance">Apparence de l\'application</string>
+    <string name="theme_system">Selon le système</string>
+    <string name="theme_light">Clair</string>
+    <string name="theme_dark">Sombre</string>
+    <string name="btn_done">Terminé</string>
+    <string name="voice_none_found">Aucune autre voix trouvée. Vérifiez Paramètres &gt; Voix sur votre téléphone.</string>
+    <string name="voice_label">Voix %1$d (%2$s%3$s)</string>
+    <string name="voice_quality_very_high">très haute qualité</string>
+    <string name="voice_quality_high">haute qualité</string>
+    <string name="voice_quality_normal">qualité normale</string>
+    <string name="voice_quality_low">qualité basse</string>
+    <string name="voice_quality_unknown">qualité inconnue</string>
+    <string name="voice_needs_internet"> • nécessite internet</string>
+    <string name="dialog_title_settings">Paramètres</string>
+
+    <string name="menu_settings">Paramètres</string>
+    <string name="menu_help">Aide et astuces</string>
+    <string name="menu_clear_library">Vider toute la bibliothèque</string>
+    <string name="menu_share_app">Partager l\'application</string>
+    <string name="menu_check_updates">Vérifier les mises à jour</string>
+    <string name="menu_about">À propos</string>
+
+    <string name="toast_no_camera_access">Impossible de prendre des photos sans accès à la caméra</string>
+    <string name="toast_clipboard_empty">Le presse-papiers est vide</string>
+    <string name="toast_nothing_to_read_from_cursor">Plus rien à lire depuis la position du curseur</string>
+    <string name="toast_enter_text_first">Collez ou saisissez d\'abord du texte</string>
+    <string name="toast_nothing_to_save">Rien à enregistrer - le champ de texte est vide</string>
+    <string name="toast_saved_to_library">Enregistré dans la bibliothèque</string>
+    <string name="toast_loaded_named">Chargé : %1$s</string>
+    <string name="toast_history_already_empty">L\'historique est déjà vide</string>
+    <string name="toast_library_already_empty">La bibliothèque est déjà vide</string>
+    <string name="toast_library_cleared">Bibliothèque vidée</string>
+    <string name="toast_failed_open_browser">Impossible d\'ouvrir le navigateur</string>
+    <string name="toast_ocr_no_text_found">Aucun texte trouvé dans l\'image. Essayez une photo plus nette ou mieux éclairée.</string>
+    <string name="toast_ocr_recognized_chars">Texte reconnu (%1$d caractères)</string>
+
+    <string name="dialog_title_delete_text">Supprimer le texte ?</string>
+    <string name="dialog_msg_delete_text">« %1$s » sera définitivement supprimé de la bibliothèque.</string>
+    <string name="btn_delete">Supprimer</string>
+    <string name="dialog_title_clear_history">Vider tout l\'historique ?</string>
+    <string name="dialog_msg_clear_history">Les %1$d entrées seront supprimées. Cette action est irréversible.</string>
+    <string name="dialog_title_clear_library">Vider toute la bibliothèque ?</string>
+    <string name="dialog_msg_clear_library">Les %1$d textes enregistrés seront supprimés. Cette action est irréversible.</string>
+    <string name="dialog_title_link_input">Charger le texte depuis un lien</string>
+    <string name="hint_link_input">https://…</string>
+    <string name="btn_download">Télécharger</string>
+    <string name="dialog_title_image_source">Reconnaître le texte d\'une image</string>
+    <string name="option_pick_gallery">Choisir dans la galerie</string>
+    <string name="option_take_photo">Prendre une photo</string>
+    <string name="dialog_title_help">Aide et astuces</string>
+    <string name="help_message"><![CDATA[
+• Le texte peut être partagé directement ici depuis d\'autres applications (bouton Partager dans l\'application concernée).
+
+• Sélectionnez du texte dans n\'importe quelle application et choisissez "Lecteur de Texte Intelligent" dans le menu - il lira exactement ce que vous avez sélectionné.
+
+• Le bouton Image reconnaît le texte d\'une photo ou d\'une capture d\'écran, fonctionne même hors ligne.
+
+• Le bouton Lien télécharge et lit le texte d\'une page web. Cela ne fonctionne généralement pas avec Facebook et Instagram en raison de limitations techniques de ces plateformes - sélectionnez plutôt le texte directement dans l\'application.
+
+• Toucher n\'importe où dans le texte démarre la lecture exactement à cette position.
+
+• Dans les paramètres, vous pouvez changer la voix, le volume de lecture et la vitesse.
+]]></string>
+    <string name="dialog_title_about">À propos</string>
+    <string name="about_message">Version %1$s\n\nCode source et dernière version :\ngithub.com/marceldohnalcz/ChytraCtecka</string>
+    <string name="btn_open_github">Ouvrir GitHub</string>
+    <string name="toast_stahuji_stranku">Téléchargement du texte de la page…</string>
+    <string name="toast_url_extract_failed">Impossible d\'extraire le texte du lien (cela ne fonctionne généralement pas avec Facebook/Instagram à cause de JavaScript). Essayez de sélectionner le texte dans l\'application et d\'utiliser \"%1$s\" depuis le menu, ou copiez-collez-le manuellement.</string>
+    <string name="share_app_text">Essayez %1$s - une application qui vous lit à voix haute des textes, des liens ou même des photos :\n%2$s</string>
+    <string name="share_app_chooser_title">Partager l\'application</string>
+
+    <string name="notification_channel_name">Lecture de texte</string>
+    <string name="notification_channel_desc">Contrôles de lecture en arrière-plan</string>
+    <string name="notification_reading">Lecture du texte à voix haute…</string>
+    <string name="notification_paused">Lecture en pause</string>
+
+    <string name="error_playback">Erreur de lecture</string>
+    <string name="error_voice_not_available">Cette langue n\'est pas disponible sur cet appareil. Installez une voix dans Paramètres &gt; Voix &gt; Synthèse vocale.</string>
+    <string name="error_tts_failed_start">Impossible de démarrer le moteur vocal (TTS).</string>
+</resources>

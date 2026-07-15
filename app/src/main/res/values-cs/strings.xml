@@ -1,0 +1,123 @@
+<resources>
+    <string name="app_name">Chytrá čtečka textu</string>
+
+    <string name="content_desc_logo">Logo</string>
+    <string name="content_desc_more_options">Další možnosti</string>
+    <string name="hint_content_text">Sem vlož nebo napiš text ke čtení…</string>
+    <string name="btn_paste">Vložit</string>
+    <string name="btn_clear">Vymazat</string>
+    <string name="content_desc_image">Rozpoznat text z obrázku</string>
+    <string name="content_desc_link">Načíst text z odkazu</string>
+    <string name="content_desc_save">Uložit do knihovny</string>
+    <string name="content_desc_library">Otevřít knihovnu textů</string>
+    <string name="content_desc_history">Historie čtení</string>
+    <string name="label_speed">Rychlost</string>
+    <string name="content_desc_speed_minus">Zpomalit</string>
+    <string name="content_desc_speed_plus">Zrychlit</string>
+    <string name="btn_play">Přehrát</string>
+    <string name="btn_pause">Pauza</string>
+    <string name="content_desc_skip_prev">Předchozí odstavec</string>
+    <string name="content_desc_skip_next">Další odstavec</string>
+    <string name="btn_stop">Stop</string>
+    <string name="content_desc_delete">Smazat</string>
+
+    <string name="title_library">Knihovna textů</string>
+    <string name="msg_library_empty">Knihovna je zatím prázdná. Ulož si první text tlačítkem Uložit.</string>
+    <string name="btn_play_selected">Přehrát vybrané</string>
+    <string name="btn_play_selected_count">Přehrát vybrané (%1$d)</string>
+    <string name="btn_close">Zavřít</string>
+
+    <string name="btn_cancel">Zrušit</string>
+    <string name="btn_confirm_delete">Ano, vymazat</string>
+
+    <string name="title_history">Historie čtení</string>
+    <string name="label_record_history">Zaznamenávat historii čtení</string>
+    <string name="msg_history_empty">Historie je zatím prázdná.</string>
+    <string name="btn_clear_all">Vymazat vše</string>
+
+    <string name="label_reading_volume">Hlasitost čtení</string>
+    <string name="desc_volume_independent">Nezávislá na systémové hlasitosti médií</string>
+    <string name="label_voice">Hlas</string>
+    <string name="label_auto_resume">Pokračovat po telefonátu</string>
+    <string name="desc_auto_resume">Po skončení hovoru appka sama naváže tam, kde přestala</string>
+    <string name="desc_record_history">Appka si bude pamatovat, co jsi nechal přečíst</string>
+    <string name="label_appearance">Vzhled appky</string>
+    <string name="theme_system">Podle systému</string>
+    <string name="theme_light">Světlý</string>
+    <string name="theme_dark">Tmavý</string>
+    <string name="btn_done">Hotovo</string>
+    <string name="voice_none_found">Nenalezen žádný další český hlas. Zkontroluj Nastavení &gt; Řeč v telefonu.</string>
+    <string name="voice_label">Hlas %1$d (%2$s%3$s)</string>
+    <string name="voice_quality_very_high">velmi vysoká kvalita</string>
+    <string name="voice_quality_high">vysoká kvalita</string>
+    <string name="voice_quality_normal">normální kvalita</string>
+    <string name="voice_quality_low">nízká kvalita</string>
+    <string name="voice_quality_unknown">kvalita neznámá</string>
+    <string name="voice_needs_internet"> • potřebuje internet</string>
+    <string name="dialog_title_settings">Nastavení</string>
+
+    <string name="menu_settings">Nastavení</string>
+    <string name="menu_help">Nápověda a tipy</string>
+    <string name="menu_clear_library">Vymazat celou knihovnu</string>
+    <string name="menu_share_app">Sdílet appku</string>
+    <string name="menu_check_updates">Zkontrolovat aktualizace</string>
+    <string name="menu_about">O aplikaci</string>
+
+    <string name="toast_no_camera_access">Bez přístupu ke kameře nejde fotit</string>
+    <string name="toast_clipboard_empty">Schránka je prázdná</string>
+    <string name="toast_nothing_to_read_from_cursor">Od pozice kurzoru už není co číst</string>
+    <string name="toast_enter_text_first">Nejprve vlož nebo napiš text</string>
+    <string name="toast_nothing_to_save">Není co uložit - textové pole je prázdné</string>
+    <string name="toast_saved_to_library">Uloženo do knihovny</string>
+    <string name="toast_loaded_named">Načteno: %1$s</string>
+    <string name="toast_history_already_empty">Historie je už prázdná</string>
+    <string name="toast_library_already_empty">Knihovna je už prázdná</string>
+    <string name="toast_library_cleared">Knihovna vymazána</string>
+    <string name="toast_failed_open_browser">Nepodařilo se otevřít prohlížeč</string>
+    <string name="toast_ocr_no_text_found">V obrázku se nepodařilo najít žádný text. Zkus ostřejší nebo lépe osvětlenou fotku.</string>
+    <string name="toast_ocr_recognized_chars">Text rozpoznán (%1$d znaků)</string>
+
+    <string name="dialog_title_delete_text">Smazat text?</string>
+    <string name="dialog_msg_delete_text">„%1$s“ bude natrvalo odstraněn z knihovny.</string>
+    <string name="btn_delete">Smazat</string>
+    <string name="dialog_title_clear_history">Vymazat celou historii?</string>
+    <string name="dialog_msg_clear_history">Smaže se všech %1$d záznamů. Tuhle akci nejde vrátit zpět.</string>
+    <string name="dialog_title_clear_library">Vymazat celou knihovnu?</string>
+    <string name="dialog_msg_clear_library">Smaže se všech %1$d uložených textů. Tuhle akci nejde vrátit zpět.</string>
+    <string name="dialog_title_link_input">Načíst text z odkazu</string>
+    <string name="hint_link_input">https://…</string>
+    <string name="btn_download">Stáhnout</string>
+    <string name="dialog_title_image_source">Rozpoznat text z obrázku</string>
+    <string name="option_pick_gallery">Vybrat z galerie</string>
+    <string name="option_take_photo">Vyfotit fotoaparátem</string>
+    <string name="dialog_title_help">Nápověda a tipy</string>
+    <string name="help_message"><![CDATA[
+• Text jde sdílet z jiných appek přímo sem (tlačítko Sdílet v dané appce).
+
+• Označ text v libovolné appce a v nabídce vyber "Chytrá čtečka textu" - přečte přesně to, co jsi vybral.
+
+• Tlačítko Obrázek rozpozná text z fotky nebo screenshotu, funguje i offline.
+
+• Tlačítko Odkaz stáhne a přečte text z webové stránky. U Facebooku a Instagramu to kvůli technickým omezením těchto platforem obvykle nefunguje - tam radši označ text přímo v appce.
+
+• Klepnutím kamkoli do textu spustíš čtení přesně od té pozice.
+
+• V Nastavení jde změnit hlas, hlasitost čtení a rychlost.
+]]></string>
+    <string name="dialog_title_about">O aplikaci</string>
+    <string name="about_message">Verze %1$s\n\nZdrojový kód a nejnovější verze:\ngithub.com/marceldohnalcz/ChytraCtecka</string>
+    <string name="btn_open_github">Otevřít GitHub</string>
+    <string name="toast_stahuji_stranku">Stahuji text ze stránky…</string>
+    <string name="toast_url_extract_failed">Nepodařilo se z odkazu vytáhnout text (u Facebooku/Instagramu to kvůli JavaScriptu často nejde). Zkus text v dané appce označit a použít \"%1$s\" z nabídky, nebo ho zkopíruj a vlož ručně.</string>
+    <string name="share_app_text">Vyzkoušej %1$s - appku, co ti nahlas přečte text, odkazy nebo i fotky:\n%2$s</string>
+    <string name="share_app_chooser_title">Sdílet appku</string>
+
+    <string name="notification_channel_name">Čtení textu</string>
+    <string name="notification_channel_desc">Ovládání čtení na pozadí</string>
+    <string name="notification_reading">Čtu text nahlas…</string>
+    <string name="notification_paused">Čtení pozastaveno</string>
+
+    <string name="error_playback">Chyba při přehrávání</string>
+    <string name="error_voice_not_available">Tenhle jazyk není na tomto zařízení dostupný. Nainstaluj hlas v Nastavení &gt; Řeč &gt; Převod textu na řeč.</string>
+    <string name="error_tts_failed_start">Nepodařilo se spustit hlasový modul (TTS).</string>
+</resources>

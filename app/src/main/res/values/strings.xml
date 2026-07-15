@@ -1,3 +1,133 @@
 <resources>
-    <string name="app_name">Chytrá čtečka textu</string>
+    <string name="app_name">Smart Text Reader</string>
+
+    <!-- Main screen -->
+    <string name="content_desc_logo">Logo</string>
+    <string name="content_desc_more_options">More options</string>
+    <string name="hint_content_text">Paste or type text to read here…</string>
+    <string name="btn_paste">Paste</string>
+    <string name="btn_clear">Clear</string>
+    <string name="content_desc_image">Recognize text from image</string>
+    <string name="content_desc_link">Load text from link</string>
+    <string name="content_desc_save">Save to library</string>
+    <string name="content_desc_library">Open text library</string>
+    <string name="content_desc_history">Reading history</string>
+    <string name="label_speed">Speed</string>
+    <string name="content_desc_speed_minus">Slow down</string>
+    <string name="content_desc_speed_plus">Speed up</string>
+    <string name="btn_play">Play</string>
+    <string name="btn_pause">Pause</string>
+    <string name="content_desc_skip_prev">Previous paragraph</string>
+    <string name="content_desc_skip_next">Next paragraph</string>
+    <string name="btn_stop">Stop</string>
+    <string name="content_desc_delete">Delete</string>
+
+    <!-- Library dialog -->
+    <string name="title_library">Text Library</string>
+    <string name="msg_library_empty">The library is empty. Save your first text with the Save button.</string>
+    <string name="btn_play_selected">Play Selected</string>
+    <string name="btn_play_selected_count">Play Selected (%1$d)</string>
+    <string name="btn_close">Close</string>
+
+    <!-- Confirm dialog -->
+    <string name="btn_cancel">Cancel</string>
+    <string name="btn_confirm_delete">Yes, delete</string>
+
+    <!-- History dialog -->
+    <string name="title_history">Reading History</string>
+    <string name="label_record_history">Record reading history</string>
+    <string name="msg_history_empty">History is empty yet.</string>
+    <string name="btn_clear_all">Clear all</string>
+
+    <!-- Settings dialog -->
+    <string name="label_reading_volume">Reading volume</string>
+    <string name="desc_volume_independent">Independent of system media volume</string>
+    <string name="label_voice">Voice</string>
+    <string name="label_auto_resume">Resume after call</string>
+    <string name="desc_auto_resume">After the call ends, the app will automatically resume where it left off</string>
+    <string name="desc_record_history">The app will remember what you had it read</string>
+    <string name="label_appearance">App appearance</string>
+    <string name="theme_system">System default</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="btn_done">Done</string>
+    <string name="voice_none_found">No other voice found. Check Settings > Speech on your phone.</string>
+    <string name="voice_label">Voice %1$d (%2$s%3$s)</string>
+    <string name="voice_quality_very_high">very high quality</string>
+    <string name="voice_quality_high">high quality</string>
+    <string name="voice_quality_normal">normal quality</string>
+    <string name="voice_quality_low">low quality</string>
+    <string name="voice_quality_unknown">unknown quality</string>
+    <string name="voice_needs_internet"> • needs internet</string>
+    <string name="dialog_title_settings">Settings</string>
+
+    <!-- Overflow menu -->
+    <string name="menu_settings">Settings</string>
+    <string name="menu_help">Help &amp; Tips</string>
+    <string name="menu_clear_library">Clear entire library</string>
+    <string name="menu_share_app">Share app</string>
+    <string name="menu_check_updates">Check for updates</string>
+    <string name="menu_about">About</string>
+
+    <!-- Toasts -->
+    <string name="toast_no_camera_access">Can\'t take photos without camera access</string>
+    <string name="toast_clipboard_empty">Clipboard is empty</string>
+    <string name="toast_nothing_to_read_from_cursor">Nothing to read from the cursor position</string>
+    <string name="toast_enter_text_first">First paste or type some text</string>
+    <string name="toast_nothing_to_save">Nothing to save - the text field is empty</string>
+    <string name="toast_saved_to_library">Saved to library</string>
+    <string name="toast_loaded_named">Loaded: %1$s</string>
+    <string name="toast_history_already_empty">History is already empty</string>
+    <string name="toast_library_already_empty">Library is already empty</string>
+    <string name="toast_library_cleared">Library cleared</string>
+    <string name="toast_failed_open_browser">Couldn\'t open the browser</string>
+    <string name="toast_ocr_no_text_found">No text found in the image. Try a sharper or better-lit photo.</string>
+    <string name="toast_ocr_recognized_chars">Text recognized (%1$d characters)</string>
+
+    <!-- Dialogs invoked from code -->
+    <string name="dialog_title_delete_text">Delete text?</string>
+    <string name="dialog_msg_delete_text">\"%1$s\" will be permanently removed from the library.</string>
+    <string name="btn_delete">Delete</string>
+    <string name="dialog_title_clear_history">Clear entire history?</string>
+    <string name="dialog_msg_clear_history">This will delete all %1$d entries. This action cannot be undone.</string>
+    <string name="dialog_title_clear_library">Clear entire library?</string>
+    <string name="dialog_msg_clear_library">This will delete all %1$d saved texts. This action cannot be undone.</string>
+    <string name="dialog_title_link_input">Load text from link</string>
+    <string name="hint_link_input">https://…</string>
+    <string name="btn_download">Download</string>
+    <string name="dialog_title_image_source">Recognize text from image</string>
+    <string name="option_pick_gallery">Choose from gallery</string>
+    <string name="option_take_photo">Take a photo</string>
+    <string name="dialog_title_help">Help &amp; Tips</string>
+    <string name="help_message"><![CDATA[
+• Text can be shared from other apps directly here (Share button in that app).
+
+• Select text in any app and choose "Smart Text Reader" from the menu - it reads exactly what you selected.
+
+• The Image button recognizes text from a photo or screenshot, it also works offline.
+
+• The Link button downloads and reads text from a web page. It usually doesn\'t work for Facebook and Instagram due to technical limitations of those platforms - select the text directly in the app instead.
+
+• Tapping anywhere in the text starts reading from exactly that position.
+
+• In Settings you can change the voice, reading volume, and speed.
+]]></string>
+    <string name="dialog_title_about">About</string>
+    <string name="about_message">Version %1$s\n\nSource code and latest version:\ngithub.com/marceldohnalcz/ChytraCtecka</string>
+    <string name="btn_open_github">Open GitHub</string>
+    <string name="toast_stahuji_stranku">Downloading page text…</string>
+    <string name="toast_url_extract_failed">Couldn\'t extract text from the link (this usually doesn\'t work for Facebook/Instagram due to JavaScript). Try selecting the text in that app and using \"%1$s\" from the menu, or copy and paste it manually.</string>
+    <string name="share_app_text">Try %1$s — an app that reads text, links, or even photos aloud to you:\n%2$s</string>
+    <string name="share_app_chooser_title">Share app</string>
+
+    <!-- ReadingService notification -->
+    <string name="notification_channel_name">Reading text</string>
+    <string name="notification_channel_desc">Background reading controls</string>
+    <string name="notification_reading">Reading text aloud…</string>
+    <string name="notification_paused">Reading paused</string>
+
+    <!-- TtsManager errors -->
+    <string name="error_playback">Playback error</string>
+    <string name="error_voice_not_available">This language isn\'t available on this device. Install a voice in Settings > Speech > Text-to-speech.</string>
+    <string name="error_tts_failed_start">Couldn\'t start the voice engine (TTS).</string>
 </resources>

@@ -97,7 +97,7 @@ class ReadingService : Service() {
     fun currentAbsolutePosition() = ttsManager.currentAbsolutePosition()
     fun setSpeed(rate: Float) = ttsManager.setSpeed(rate)
     fun setVolume(v: Float) = ttsManager.setVolume(v)
-    fun getAvailableCzechVoices() = ttsManager.getAvailableCzechVoices()
+    fun getAvailableVoicesForCurrentLanguage() = ttsManager.getAvailableVoicesForCurrentLanguage()
     fun getCurrentVoiceName(): String? = ttsManager.getCurrentVoiceName()
     fun setVoice(voice: android.speech.tts.Voice) = ttsManager.setVoice(voice)
 
@@ -271,9 +271,9 @@ class ReadingService : Service() {
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
-                CHANNEL_ID, "Čtení textu", NotificationManager.IMPORTANCE_LOW
+                CHANNEL_ID, getString(R.string.notification_channel_name), NotificationManager.IMPORTANCE_LOW
             ).apply {
-                description = "Ovládání čtení na pozadí"
+                description = getString(R.string.notification_channel_desc)
                 setShowBadge(false)
             }
             val nm = getSystemService(NotificationManager::class.java)
@@ -296,14 +296,14 @@ class ReadingService : Service() {
         }
 
         val playPauseIcon = if (isPlaying) R.drawable.ic_pause else R.drawable.ic_play
-        val playPauseLabel = if (isPlaying) "Pauza" else "Přehrát"
+        val playPauseLabel = if (isPlaying) getString(R.string.btn_pause) else getString(R.string.btn_play)
 
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notif_read)
             .setContentTitle(getString(R.string.app_name))
-            .setContentText(if (isPlaying) "Čtu text nahlas…" else "Čtení pozastaveno")
+            .setContentText(if (isPlaying) getString(R.string.notification_reading) else getString(R.string.notification_paused))
             .addAction(playPauseIcon, playPauseLabel, playPausePending)
-            .addAction(R.drawable.ic_stop, "Stop", stopPending)
+            .addAction(R.drawable.ic_stop, getString(R.string.btn_stop), stopPending)
             .setOngoing(isPlaying)
             .setOnlyAlertOnce(true)
             .setPriority(NotificationCompat.PRIORITY_LOW)

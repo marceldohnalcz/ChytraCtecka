@@ -12,7 +12,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hlasitost čtení"
+            android:text="@string/label_reading_volume"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
             android:layout_marginBottom="4dp" />
@@ -20,7 +20,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nezávislá na systémové hlasitosti médií"
+            android:text="@string/desc_volume_independent"
             android:textSize="12sp"
             android:textColor="@color/text_secondary"
             android:layout_marginBottom="8dp" />
@@ -36,7 +36,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hlas"
+            android:text="@string/label_voice"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
             android:layout_marginTop="16dp"
@@ -71,14 +71,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Pokračovat po telefonátu"
+                    android:text="@string/label_auto_resume"
                     android:textStyle="bold"
                     android:textColor="@color/text_primary" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Po skončení hovoru appka sama naváže tam, kde přestala"
+                    android:text="@string/desc_auto_resume"
                     android:textSize="12sp"
                     android:textColor="@color/text_secondary" />
             </LinearLayout>
@@ -106,14 +106,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Zaznamenávat historii čtení"
+                    android:text="@string/label_record_history"
                     android:textStyle="bold"
                     android:textColor="@color/text_primary" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Appka si bude pamatovat, co jsi nechal přečíst"
+                    android:text="@string/desc_record_history"
                     android:textSize="12sp"
                     android:textColor="@color/text_secondary" />
             </LinearLayout>
@@ -134,7 +134,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Vzhled appky"
+            android:text="@string/label_appearance"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
             android:layout_marginBottom="4dp" />
@@ -149,19 +149,19 @@
                 android:id="@+id/radioThemeSystem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Podle systému" />
+                android:text="@string/theme_system" />
 
             <RadioButton
                 android:id="@+id/radioThemeLight"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Světlý" />
+                android:text="@string/theme_light" />
 
             <RadioButton
                 android:id="@+id/radioThemeDark"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Tmavý" />
+                android:text="@string/theme_dark" />
         </RadioGroup>
 
     </LinearLayout>

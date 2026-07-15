@@ -27,6 +27,7 @@ class TtsManager(
     private val onError: (String) -> Unit,
     private val onReady: () -> Unit
 ) {
+    private val appContext = context.applicationContext
     private var tts: TextToSpeech? = null
     private var isReady = false
 
@@ -47,7 +48,7 @@ class TtsManager(
     init {
         tts = TextToSpeech(context) { status ->
             if (status == TextToSpeech.SUCCESS) {
-                val result = tts?.setLanguage(Locale("cs", "CZ"))
+                val result = tts?.setLanguage(Locale.getDefault())
                 isReady = result != TextToSpeech.LANG_MISSING_DATA &&
                     result != TextToSpeech.LANG_NOT_SUPPORTED
 
@@ -70,7 +71,7 @@ class TtsManager(
 
                     @Deprecated("Deprecated in Java")
                     override fun onError(utteranceId: String?) {
-                        onError("Chyba při přehrávání")
+                        onError(appContext.getString(R.string.error_playback))
                     }
 
                     override fun onRangeStart(utteranceId: String?, start: Int, end: Int, frame: Int) {
@@ -89,10 +90,10 @@ class TtsManager(
                 if (isReady) {
                     onReady()
                 } else {
-                    onError("Čeština není na tomto zařízení dostupná. Nainstaluj český hlas v Nastavení > Řeč > Převod textu na řeč.")
+                    onError(appContext.getString(R.string.error_voice_not_available))
                 }
             } else {
-                onError("Nepodařilo se spustit hlasový modul (TTS).")
+                onError(appContext.getString(R.string.error_tts_failed_start))
             }
         }
     }
@@ -106,9 +107,9 @@ class TtsManager(
         volume = v.coerceIn(0f, 1f)
     }
 
-    /** Vrátí dostupné české hlasy nainstalované v systému. */
-    fun getAvailableCzechVoices(): List<Voice> =
-        tts?.voices?.filter { it.locale.language == "cs" }?.sortedBy { it.name } ?: emptyList()
+    /** Vrátí dostupné hlasy nainstalované v systému pro aktuální jazyk appky. */
+    fun getAvailableVoicesForCurrentLanguage(): List<Voice> =
+        tts?.voices?.filter { it.locale.language == Locale.getDefault().language }?.sortedBy { it.name } ?: emptyList()
 
     fun setVoice(voice: Voice) {
         tts?.voice = voice

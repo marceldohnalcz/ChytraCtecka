@@ -34,7 +34,7 @@
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Zrušit"
+            android:text="@string/btn_cancel"
             android:textAllCaps="false"
             android:textColor="@color/text_secondary" />
 
@@ -48,7 +48,7 @@
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ano, vymazat"
+            android:text="@string/btn_confirm_delete"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
             app:cornerRadius="14dp"

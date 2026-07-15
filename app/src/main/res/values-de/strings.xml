@@ -1,0 +1,123 @@
+<resources>
+    <string name="app_name">Intelligenter Textleser</string>
+
+    <string name="content_desc_logo">Logo</string>
+    <string name="content_desc_more_options">Weitere Optionen</string>
+    <string name="hint_content_text">Text zum Vorlesen hier einfügen oder eingeben…</string>
+    <string name="btn_paste">Einfügen</string>
+    <string name="btn_clear">Löschen</string>
+    <string name="content_desc_image">Text aus Bild erkennen</string>
+    <string name="content_desc_link">Text von Link laden</string>
+    <string name="content_desc_save">In Bibliothek speichern</string>
+    <string name="content_desc_library">Textbibliothek öffnen</string>
+    <string name="content_desc_history">Verlauf</string>
+    <string name="label_speed">Geschwindigkeit</string>
+    <string name="content_desc_speed_minus">Langsamer</string>
+    <string name="content_desc_speed_plus">Schneller</string>
+    <string name="btn_play">Abspielen</string>
+    <string name="btn_pause">Pause</string>
+    <string name="content_desc_skip_prev">Vorheriger Absatz</string>
+    <string name="content_desc_skip_next">Nächster Absatz</string>
+    <string name="btn_stop">Stopp</string>
+    <string name="content_desc_delete">Löschen</string>
+
+    <string name="title_library">Textbibliothek</string>
+    <string name="msg_library_empty">Die Bibliothek ist noch leer. Speichere deinen ersten Text mit der Schaltfläche Speichern.</string>
+    <string name="btn_play_selected">Auswahl abspielen</string>
+    <string name="btn_play_selected_count">Auswahl abspielen (%1$d)</string>
+    <string name="btn_close">Schließen</string>
+
+    <string name="btn_cancel">Abbrechen</string>
+    <string name="btn_confirm_delete">Ja, löschen</string>
+
+    <string name="title_history">Leseverlauf</string>
+    <string name="label_record_history">Leseverlauf aufzeichnen</string>
+    <string name="msg_history_empty">Der Verlauf ist noch leer.</string>
+    <string name="btn_clear_all">Alles löschen</string>
+
+    <string name="label_reading_volume">Vorlesegläutstärke</string>
+    <string name="desc_volume_independent">Unabhängig von der Systemlautstärke</string>
+    <string name="label_voice">Stimme</string>
+    <string name="label_auto_resume">Nach Anruf fortsetzen</string>
+    <string name="desc_auto_resume">Nach dem Anruf setzt die App automatisch dort fort, wo sie aufgehört hat</string>
+    <string name="desc_record_history">Die App merkt sich, was du dir hast vorlesen lassen</string>
+    <string name="label_appearance">App-Erscheinungsbild</string>
+    <string name="theme_system">Systemstandard</string>
+    <string name="theme_light">Hell</string>
+    <string name="theme_dark">Dunkel</string>
+    <string name="btn_done">Fertig</string>
+    <string name="voice_none_found">Keine weitere Stimme gefunden. Prüfe Einstellungen &gt; Sprache auf deinem Telefon.</string>
+    <string name="voice_label">Stimme %1$d (%2$s%3$s)</string>
+    <string name="voice_quality_very_high">sehr hohe Qualität</string>
+    <string name="voice_quality_high">hohe Qualität</string>
+    <string name="voice_quality_normal">normale Qualität</string>
+    <string name="voice_quality_low">niedrige Qualität</string>
+    <string name="voice_quality_unknown">Qualität unbekannt</string>
+    <string name="voice_needs_internet"> • benötigt Internet</string>
+    <string name="dialog_title_settings">Einstellungen</string>
+
+    <string name="menu_settings">Einstellungen</string>
+    <string name="menu_help">Hilfe &amp; Tipps</string>
+    <string name="menu_clear_library">Gesamte Bibliothek löschen</string>
+    <string name="menu_share_app">App teilen</string>
+    <string name="menu_check_updates">Nach Updates suchen</string>
+    <string name="menu_about">Über die App</string>
+
+    <string name="toast_no_camera_access">Ohne Kamerazugriff kann nicht fotografiert werden</string>
+    <string name="toast_clipboard_empty">Zwischenablage ist leer</string>
+    <string name="toast_nothing_to_read_from_cursor">Ab der Cursorposition gibt es nichts mehr zu lesen</string>
+    <string name="toast_enter_text_first">Zuerst Text einfügen oder eingeben</string>
+    <string name="toast_nothing_to_save">Nichts zu speichern - das Textfeld ist leer</string>
+    <string name="toast_saved_to_library">In Bibliothek gespeichert</string>
+    <string name="toast_loaded_named">Geladen: %1$s</string>
+    <string name="toast_history_already_empty">Verlauf ist bereits leer</string>
+    <string name="toast_library_already_empty">Bibliothek ist bereits leer</string>
+    <string name="toast_library_cleared">Bibliothek gelöscht</string>
+    <string name="toast_failed_open_browser">Browser konnte nicht geöffnet werden</string>
+    <string name="toast_ocr_no_text_found">Im Bild wurde kein Text gefunden. Versuche ein schärferes oder besser beleuchtetes Foto.</string>
+    <string name="toast_ocr_recognized_chars">Text erkannt (%1$d Zeichen)</string>
+
+    <string name="dialog_title_delete_text">Text löschen?</string>
+    <string name="dialog_msg_delete_text">„%1$s“ wird dauerhaft aus der Bibliothek entfernt.</string>
+    <string name="btn_delete">Löschen</string>
+    <string name="dialog_title_clear_history">Gesamten Verlauf löschen?</string>
+    <string name="dialog_msg_clear_history">Alle %1$d Einträge werden gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.</string>
+    <string name="dialog_title_clear_library">Gesamte Bibliothek löschen?</string>
+    <string name="dialog_msg_clear_library">Alle %1$d gespeicherten Texte werden gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.</string>
+    <string name="dialog_title_link_input">Text von Link laden</string>
+    <string name="hint_link_input">https://…</string>
+    <string name="btn_download">Herunterladen</string>
+    <string name="dialog_title_image_source">Text aus Bild erkennen</string>
+    <string name="option_pick_gallery">Aus Galerie wählen</string>
+    <string name="option_take_photo">Foto aufnehmen</string>
+    <string name="dialog_title_help">Hilfe &amp; Tipps</string>
+    <string name="help_message"><![CDATA[
+• Text kann aus anderen Apps direkt hierher geteilt werden (Teilen-Schaltfläche in der jeweiligen App).
+
+• Wähle Text in einer beliebigen App aus und wähle "Intelligenter Textleser" aus dem Menü - er liest genau das vor, was du ausgewählt hast.
+
+• Die Bild-Schaltfläche erkennt Text aus einem Foto oder Screenshot, funktioniert auch offline.
+
+• Die Link-Schaltfläche lädt Text von einer Webseite und liest ihn vor. Bei Facebook und Instagram funktioniert das wegen technischer Einschränkungen dieser Plattformen meist nicht - wähle dort den Text direkt in der App aus.
+
+• Ein Antippen an beliebiger Stelle im Text startet das Vorlesen genau ab dieser Position.
+
+• In den Einstellungen kannst du Stimme, Lautstärke und Geschwindigkeit ändern.
+]]></string>
+    <string name="dialog_title_about">Über die App</string>
+    <string name="about_message">Version %1$s\n\nQuellcode und neueste Version:\ngithub.com/marceldohnalcz/ChytraCtecka</string>
+    <string name="btn_open_github">GitHub öffnen</string>
+    <string name="toast_stahuji_stranku">Seitentext wird geladen…</string>
+    <string name="toast_url_extract_failed">Der Text konnte nicht aus dem Link extrahiert werden (funktioniert wegen JavaScript meist nicht bei Facebook/Instagram). Wähle den Text in der jeweiligen App aus und nutze \"%1$s\" aus dem Menü, oder kopiere ihn manuell.</string>
+    <string name="share_app_text">Probiere %1$s aus - eine App, die dir Text, Links oder sogar Fotos vorliest:\n%2$s</string>
+    <string name="share_app_chooser_title">App teilen</string>
+
+    <string name="notification_channel_name">Textvorlesen</string>
+    <string name="notification_channel_desc">Steuerung des Vorlesens im Hintergrund</string>
+    <string name="notification_reading">Text wird vorgelesen…</string>
+    <string name="notification_paused">Vorlesen pausiert</string>
+
+    <string name="error_playback">Wiedergabefehler</string>
+    <string name="error_voice_not_available">Diese Sprache ist auf diesem Gerät nicht verfügbar. Installiere eine Stimme unter Einstellungen &gt; Sprache &gt; Text-zu-Sprache.</string>
+    <string name="error_tts_failed_start">Die Sprachausgabe (TTS) konnte nicht gestartet werden.</string>
+</resources>

@@ -66,6 +66,22 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.14)
+
+- **Kompletní lokalizace appky do 9 jazyků**: čeština, angličtina
+  (výchozí/fallback), němčina, španělština, francouzština, italština,
+  portugalština, polština, ruština. Appka automaticky použije jazyk
+  nastavený v telefonu; nepodporovaný jazyk spadne zpátky na angličtinu.
+- **Čtení teď respektuje jazyk telefonu** - dřív byl hlas i "chytré"
+  čtení natvrdo pro češtinu bez ohledu na jazyk appky. TTS teď použije
+  jazyk zařízení (`Locale.getDefault()`), výběr hlasu v Nastavení nabízí
+  jen hlasy pro aktuální jazyk, a české specifikum (rozepisování zkratek
+  jako "např.") se aplikuje jen když appka skutečně čte česky - u jiných
+  jazyků se nepoužije.
+- Poznámka: název appky samotné je taky lokalizovaný (např. anglicky
+  "Smart Text Reader", německy "Intelligenter Textleser" atd.) - jak appka
+  bude na plochu telefonu, závisí na jazyce zařízení.
+
 ## Nové v této verzi (2.13)
 
 - **Rozestup tlačítek v potvrzovacím dialogu**: "Zrušit" je teď vlevo,

@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             if (granted) {
                 launchCamera()
             } else {
-                Toast.makeText(this, "Bez přístupu ke kameře nejde fotit", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.toast_no_camera_access), Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             service?.setVolume(currentVolume)
             service?.setAutoResumeAfterInterruption(AppSettings.loadAutoResumeAfterCall(this@MainActivity))
             AppSettings.loadVoiceName(this@MainActivity)?.let { name ->
-                service?.getAvailableCzechVoices()?.find { it.name == name }?.let { service?.setVoice(it) }
+                service?.getAvailableVoicesForCurrentLanguage()?.find { it.name == name }?.let { service?.setVoice(it) }
             }
             syncButtonWithServiceState()
         }
@@ -276,7 +276,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         } else null
 
         if (text.isNullOrBlank()) {
-            Toast.makeText(this, "Schránka je prázdná", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.toast_clipboard_empty), Toast.LENGTH_SHORT).show()
         } else {
             currentLibraryItemId = null
             val url = TextPreprocessor.extractFirstUrl(text)
@@ -326,15 +326,22 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
     private fun startReadingFromCursor() {
         val liveText = binding.etContent.text?.toString().orEmpty()
         if (liveText.isBlank()) {
-            Toast.makeText(this, "Nejprve vlož nebo napiš text", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.toast_enter_text_first), Toast.LENGTH_SHORT).show()
             return
         }
         val cursor = binding.etContent.selectionStart.coerceIn(0, liveText.length)
         val remaining = liveText.substring(cursor)
-        val cleaned = TextPreprocessor.clean(remaining)
+        // Rozepisování zkratek ("např." -> "například") je specifické pro češtinu -
+        // aplikuje se jen když appka zrovna čte v češtině, jinak by mohlo nesmyslně
+        // zasahovat do textu v jiném jazyce.
+        val isCzech = Locale.getDefault().language == "cs"
+        val cleaned = TextPreprocessor.clean(
+            remaining,
+            TextPreprocessor.Options(expandAbbreviations = isCzech)
+        )
 
         if (cleaned.isBlank()) {
-            Toast.makeText(this, "Od pozice kurzoru už není co číst", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.toast_nothing_to_read_from_cursor), Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -456,12 +463,12 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
     private fun saveCurrentTextToLibrary() {
         val text = binding.etContent.text?.toString().orEmpty()
         if (text.isBlank()) {
-            Toast.makeText(this, "Není co uložit - textové pole je prázdné", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.toast_nothing_to_save), Toast.LENGTH_SHORT).show()
             return
         }
         val saved = TextLibraryStore.addToLibrary(this, text)
         currentLibraryItemId = saved.id
-        Toast.makeText(this, "Uloženo do knihovny", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.toast_saved_to_library), Toast.LENGTH_SHORT).show()
     }
 
     private fun showLibraryDialog() {
@@ -479,7 +486,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         fun refreshPlayButton() {
             val count = selectedIds.size
             btnPlaySelected.isEnabled = count > 0
-            btnPlaySelected.text = if (count > 0) "Přehrát vybrané ($count)" else "Přehrát vybrané"
+            btnPlaySelected.text = if (count > 0) getString(R.string.btn_play_selected_count, count) else getString(R.string.btn_play_selected)
         }
 
         fun refresh() {
@@ -500,14 +507,14 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             },
             onDeleteClick = { item ->
                 AlertDialog.Builder(this)
-                    .setTitle("Smazat text?")
-                    .setMessage("„${item.title}“ bude natrvalo odstraněn z knihovny.")
-                    .setPositiveButton("Smazat") { _, _ ->
+                    .setTitle(getString(R.string.dialog_title_delete_text))
+                    .setMessage(getString(R.string.dialog_msg_delete_text, item.title))
+                    .setPositiveButton(getString(R.string.btn_delete)) { _, _ ->
                         TextLibraryStore.removeFromLibrary(this, item.id)
                         if (currentLibraryItemId == item.id) currentLibraryItemId = null
                         refresh()
                     }
-                    .setNegativeButton("Zrušit", null)
+                    .setNegativeButton(getString(R.string.btn_cancel), null)
                     .show()
             },
             onSelectionChanged = { refreshPlayButton() }
@@ -550,7 +557,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         val pos = item.cursorPosition.coerceIn(0, item.content.length)
         binding.etContent.setSelection(pos)
         currentLibraryItemId = item.id
-        Toast.makeText(this, "Načteno: ${item.title}", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.toast_loaded_named, item.title), Toast.LENGTH_SHORT).show()
     }
 
     // --- Historie čtení ---
@@ -598,12 +605,12 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         btnClearHistory.setOnClickListener {
             val items = ReadingHistoryStore.getHistory(this)
             if (items.isEmpty()) {
-                Toast.makeText(this, "Historie je už prázdná", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.toast_history_already_empty), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             showConfirmDialog(
-                title = "Vymazat celou historii?",
-                message = "Smaže se všech ${items.size} záznamů. Tuhle akci nejde vrátit zpět."
+                title = getString(R.string.dialog_title_clear_history),
+                message = getString(R.string.dialog_msg_clear_history, items.size)
             ) {
                 ReadingHistoryStore.clearHistory(this)
                 refresh()
@@ -657,39 +664,26 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
     }
 
     private fun showHelpDialog() {
-        val message = """
-            • Text jde sdílet z jiných appek přímo sem (tlačítko Sdílet v dané appce).
-
-            • Označ text v libovolné appce a v nabídce vyber "Chytrá čtečka textu" - přečte přesně to, co jsi vybral.
-
-            • Tlačítko Obrázek rozpozná text z fotky nebo screenshotu, funguje i offline.
-
-            • Tlačítko Odkaz stáhne a přečte text z webové stránky. U Facebooku a Instagramu to kvůli technickým omezením těchto platforem obvykle nefunguje - tam radši označ text přímo v appce.
-
-            • Klepnutím kamkoli do textu spustíš čtení přesně od té pozice.
-
-            • V Nastavení jde změnit hlas, hlasitost čtení a rychlost.
-        """.trimIndent()
         AlertDialog.Builder(this)
-            .setTitle("Nápověda a tipy")
-            .setMessage(message)
-            .setPositiveButton("Zavřít", null)
+            .setTitle(getString(R.string.dialog_title_help))
+            .setMessage(getString(R.string.help_message))
+            .setPositiveButton(getString(R.string.btn_close), null)
             .show()
     }
 
     private fun confirmClearLibrary() {
         val items = TextLibraryStore.getLibrary(this)
         if (items.isEmpty()) {
-            Toast.makeText(this, "Knihovna je už prázdná", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.toast_library_already_empty), Toast.LENGTH_SHORT).show()
             return
         }
         showConfirmDialog(
-            title = "Vymazat celou knihovnu?",
-            message = "Smaže se všech ${items.size} uložených textů. Tuhle akci nejde vrátit zpět."
+            title = getString(R.string.dialog_title_clear_library),
+            message = getString(R.string.dialog_msg_clear_library, items.size)
         ) {
             TextLibraryStore.clearLibrary(this)
             currentLibraryItemId = null
-            Toast.makeText(this, "Knihovna vymazána", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.toast_library_cleared), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -722,21 +716,24 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
     private fun shareAppLink() {
         val shareIntent = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
-            putExtra(Intent.EXTRA_SUBJECT, "Chytrá čtečka textu")
+            putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
             putExtra(
                 Intent.EXTRA_TEXT,
-                "Vyzkoušej Chytrou čtečku textu - appku, co ti nahlas přečte text, odkazy nebo i fotky:\n" +
+                getString(
+                    R.string.share_app_text,
+                    getString(R.string.app_name),
                     "https://github.com/marceldohnalcz/ChytraCtecka/releases/tag/latest-build"
+                )
             )
         }
-        startActivity(Intent.createChooser(shareIntent, "Sdílet appku"))
+        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_app_chooser_title)))
     }
 
     private fun openUrlInBrowser(url: String) {
         try {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
         } catch (e: Exception) {
-            Toast.makeText(this, "Nepodařilo se otevřít prohlížeč", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.toast_failed_open_browser), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -748,9 +745,9 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         }
         AlertDialog.Builder(this)
             .setTitle(getString(R.string.app_name))
-            .setMessage("Verze $versionName\n\nZdrojový kód a nejnovější verze:\ngithub.com/marceldohnalcz/ChytraCtecka")
-            .setPositiveButton("Zavřít", null)
-            .setNeutralButton("Otevřít GitHub") { _, _ ->
+            .setMessage(getString(R.string.about_message, versionName))
+            .setPositiveButton(getString(R.string.btn_close), null)
+            .setNeutralButton(getString(R.string.btn_open_github)) { _, _ ->
                 openUrlInBrowser("https://github.com/marceldohnalcz/ChytraCtecka")
             }
             .show()
@@ -807,11 +804,11 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             override fun onStopTrackingTouch(sb: SeekBar?) {}
         })
 
-        val voices = svc?.getAvailableCzechVoices().orEmpty()
+        val voices = svc?.getAvailableVoicesForCurrentLanguage().orEmpty()
         val currentVoiceName = svc?.getCurrentVoiceName()
         if (voices.isEmpty()) {
             val tv = TextView(this)
-            tv.text = "Nenalezen žádný další český hlas. Zkontroluj Nastavení > Řeč v telefonu."
+            tv.text = getString(R.string.voice_none_found)
             tv.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
             radioGroup.addView(tv)
         } else {
@@ -829,22 +826,22 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         }
 
         AlertDialog.Builder(this)
-            .setTitle("Nastavení")
+            .setTitle(getString(R.string.dialog_title_settings))
             .setView(view)
-            .setPositiveButton("Hotovo", null)
+            .setPositiveButton(getString(R.string.btn_done), null)
             .show()
     }
 
     private fun voiceLabel(voice: Voice, index: Int): String {
         val quality = when (voice.quality) {
-            Voice.QUALITY_VERY_HIGH -> "velmi vysoká kvalita"
-            Voice.QUALITY_HIGH -> "vysoká kvalita"
-            Voice.QUALITY_NORMAL -> "normální kvalita"
-            Voice.QUALITY_LOW -> "nízká kvalita"
-            else -> "kvalita neznámá"
+            Voice.QUALITY_VERY_HIGH -> getString(R.string.voice_quality_very_high)
+            Voice.QUALITY_HIGH -> getString(R.string.voice_quality_high)
+            Voice.QUALITY_NORMAL -> getString(R.string.voice_quality_normal)
+            Voice.QUALITY_LOW -> getString(R.string.voice_quality_low)
+            else -> getString(R.string.voice_quality_unknown)
         }
-        val network = if (voice.isNetworkConnectionRequired) " • potřebuje internet" else ""
-        return "Hlas ${index + 1} ($quality$network)"
+        val network = if (voice.isNetworkConnectionRequired) getString(R.string.voice_needs_internet) else ""
+        return getString(R.string.voice_label, index + 1, quality, network)
     }
 
     /**
@@ -873,14 +870,14 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
     override fun onStateChanged(isSpeaking: Boolean, isPaused: Boolean) {
         runOnUiThread {
             if (isSpeaking) {
-                binding.btnPlayPause.text = "Pauza"
+                binding.btnPlayPause.text = getString(R.string.btn_pause)
                 binding.btnPlayPause.setIconResource(R.drawable.ic_pause)
                 binding.btnPlayPause.backgroundTintList =
                     android.content.res.ColorStateList.valueOf(
                         ContextCompat.getColor(this, R.color.brand_pause)
                     )
             } else {
-                binding.btnPlayPause.text = "Přehrát"
+                binding.btnPlayPause.text = getString(R.string.btn_play)
                 binding.btnPlayPause.setIconResource(R.drawable.ic_play)
                 binding.btnPlayPause.backgroundTintList =
                     android.content.res.ColorStateList.valueOf(
@@ -981,16 +978,16 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
     /** Otevře dialog pro ruční zadání odkazu na článek, který se má stáhnout a přečíst. */
     private fun showLinkInputDialog() {
         val input = android.widget.EditText(this).apply {
-            hint = "https://…"
+            hint = getString(R.string.hint_link_input)
             inputType = android.text.InputType.TYPE_TEXT_VARIATION_URI or android.text.InputType.TYPE_CLASS_TEXT
             setSingleLine(true)
             val pad = (16 * resources.displayMetrics.density).toInt()
             setPadding(pad, pad, pad, pad)
         }
         AlertDialog.Builder(this)
-            .setTitle("Načíst text z odkazu")
+            .setTitle(getString(R.string.dialog_title_link_input))
             .setView(input)
-            .setPositiveButton("Stáhnout") { _, _ ->
+            .setPositiveButton(getString(R.string.btn_download)) { _, _ ->
                 var url = input.text.toString().trim()
                 if (url.isNotBlank()) {
                     if (!url.startsWith("http://") && !url.startsWith("https://")) {
@@ -1000,15 +997,15 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                     loadFromUrl(url)
                 }
             }
-            .setNegativeButton("Zrušit", null)
+            .setNegativeButton(getString(R.string.btn_cancel), null)
             .show()
     }
 
     /** Otevře dialog pro výběr, odkud vzít obrázek k rozpoznání textu (OCR). */
     private fun showImageSourceDialog() {
-        val options = arrayOf("Vybrat z galerie", "Vyfotit fotoaparátem")
+        val options = arrayOf(getString(R.string.option_pick_gallery), getString(R.string.option_take_photo))
         AlertDialog.Builder(this)
-            .setTitle("Rozpoznat text z obrázku")
+            .setTitle(getString(R.string.dialog_title_image_source))
             .setItems(options) { _, which ->
                 when (which) {
                     0 -> pickImageLauncher.launch(
@@ -1051,7 +1048,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             if (recognized.isNullOrBlank()) {
                 Toast.makeText(
                     this@MainActivity,
-                    "V obrázku se nepodařilo najít žádný text. Zkus ostřejší nebo lépe osvětlenou fotku.",
+                    getString(R.string.toast_ocr_no_text_found),
                     Toast.LENGTH_LONG
                 ).show()
             } else {
@@ -1060,7 +1057,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                 binding.etContent.setSelection(0)
                 Toast.makeText(
                     this@MainActivity,
-                    "Text rozpoznán (${recognized.length} znaků)",
+                    getString(R.string.toast_ocr_recognized_chars, recognized.length),
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -1069,7 +1066,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
 
     private fun loadFromUrl(url: String) {
         binding.progress.visibility = View.VISIBLE
-        binding.etContent.setText("Stahuji text ze stránky…")
+        binding.etContent.setText(getString(R.string.toast_stahuji_stranku))
         lifecycleScope.launch {
             val extracted = withContext(Dispatchers.IO) { WebArticleExtractor.extractText(url) }
             binding.progress.visibility = View.GONE
@@ -1077,7 +1074,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                 binding.etContent.setText("")
                 Toast.makeText(
                     this@MainActivity,
-                    "Nepodařilo se z odkazu vytáhnout text (u Facebooku/Instagramu to kvůli JavaScriptu často nejde). Zkus text v dané appce označit a použít \"Chytrá čtečka textu\" z nabídky, nebo ho zkopíruj a vlož ručně.",
+                    getString(R.string.toast_url_extract_failed, getString(R.string.app_name)),
                     Toast.LENGTH_LONG
                 ).show()
             } else {

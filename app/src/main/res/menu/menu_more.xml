@@ -2,20 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/menuSettings"
-        android:title="Nastavení" />
+        android:title="@string/menu_settings" />
     <item
         android:id="@+id/menuHelp"
-        android:title="Nápověda a tipy" />
+        android:title="@string/menu_help" />
     <item
         android:id="@+id/menuClearLibrary"
-        android:title="Vymazat celou knihovnu" />
+        android:title="@string/menu_clear_library" />
     <item
         android:id="@+id/menuShareApp"
-        android:title="Sdílet appku" />
+        android:title="@string/menu_share_app" />
     <item
         android:id="@+id/menuCheckUpdates"
-        android:title="Zkontrolovat aktualizace" />
+        android:title="@string/menu_check_updates" />
     <item
         android:id="@+id/menuAbout"
-        android:title="O aplikaci" />
+        android:title="@string/menu_about" />
 </menu>

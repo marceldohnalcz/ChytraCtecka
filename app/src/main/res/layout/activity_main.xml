@@ -21,7 +21,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:src="@drawable/ic_app_logo"
-            android:contentDescription="Logo" />
+            android:contentDescription="@string/content_desc_logo" />
 
         <TextView
             android:layout_width="0dp"
@@ -40,7 +40,7 @@
             android:layout_height="36dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_more"
-            android:contentDescription="Další možnosti"
+            android:contentDescription="@string/content_desc_more_options"
             android:padding="6dp"
             android:scaleType="fitCenter" />
     </LinearLayout>
@@ -78,7 +78,7 @@
                 android:textSize="17sp"
                 android:textColor="@color/text_primary"
                 android:textColorHint="@color/text_secondary"
-                android:hint="Sem vlož nebo napiš text ke čtení…"
+                android:hint="@string/hint_content_text"
                 android:scrollbars="vertical"
                 android:scrollbarStyle="outsideOverlay"
                 android:fadeScrollbars="false"
@@ -110,7 +110,7 @@
                 android:layout_weight="1"
                 android:minWidth="0dp"
                 android:layout_marginEnd="6dp"
-                android:text="Vložit"
+                android:text="@string/btn_paste"
                 android:textAllCaps="false"
                 app:icon="@drawable/ic_paste"
                 app:iconGravity="textStart"
@@ -125,7 +125,7 @@
                 android:layout_weight="1"
                 android:minWidth="0dp"
                 android:layout_marginStart="6dp"
-                android:text="Vymazat"
+                android:text="@string/btn_clear"
                 android:textAllCaps="false"
                 app:icon="@drawable/ic_clear"
                 app:iconGravity="textStart"
@@ -151,7 +151,7 @@
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_image"
                 android:tint="@color/brand_accent"
-                android:contentDescription="Rozpoznat text z obrázku"
+                android:contentDescription="@string/content_desc_image"
                 android:padding="9dp"
                 android:scaleType="fitCenter" />
 
@@ -169,7 +169,7 @@
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_link"
                 android:tint="@color/brand_accent"
-                android:contentDescription="Načíst text z odkazu"
+                android:contentDescription="@string/content_desc_link"
                 android:padding="9dp"
                 android:scaleType="fitCenter" />
 
@@ -188,7 +188,7 @@
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_save"
                 android:tint="@color/icon_secondary"
-                android:contentDescription="Uložit do knihovny"
+                android:contentDescription="@string/content_desc_save"
                 android:padding="9dp"
                 android:scaleType="fitCenter" />
 
@@ -206,7 +206,7 @@
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_library"
                 android:tint="@color/icon_secondary"
-                android:contentDescription="Otevřít knihovnu textů"
+                android:contentDescription="@string/content_desc_library"
                 android:padding="9dp"
                 android:scaleType="fitCenter" />
 
@@ -224,7 +224,7 @@
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_history"
                 android:tint="@color/icon_secondary"
-                android:contentDescription="Historie čtení"
+                android:contentDescription="@string/content_desc_history"
                 android:padding="9dp"
                 android:scaleType="fitCenter" />
         </LinearLayout>
@@ -244,7 +244,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Rychlost"
+                android:text="@string/label_speed"
                 android:textSize="13sp"
                 android:textColor="@color/text_secondary"
                 android:layout_marginEnd="6dp" />
@@ -256,7 +256,7 @@
                 android:layout_marginEnd="6dp"
                 android:background="@drawable/bg_circle_button"
                 android:src="@drawable/ic_minus"
-                android:contentDescription="Zpomalit"
+                android:contentDescription="@string/content_desc_speed_minus"
                 android:padding="7dp"
                 android:scaleType="fitCenter" />
 
@@ -276,7 +276,7 @@
                 android:layout_marginEnd="6dp"
                 android:background="@drawable/bg_circle_button"
                 android:src="@drawable/ic_plus"
-                android:contentDescription="Zrychlit"
+                android:contentDescription="@string/content_desc_speed_plus"
                 android:padding="7dp"
                 android:scaleType="fitCenter" />
 
@@ -312,7 +312,7 @@
                     android:insetRight="0dp"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
-                    android:text="Přehrát"
+                    android:text="@string/btn_play"
                     android:textAllCaps="false"
                     android:textSize="15sp"
                     app:icon="@drawable/ic_play"
@@ -329,7 +329,7 @@
                 android:layout_marginEnd="6dp"
                 android:background="@drawable/bg_circle_button"
                 android:src="@drawable/ic_skip_prev"
-                android:contentDescription="Předchozí odstavec"
+                android:contentDescription="@string/content_desc_skip_prev"
                 android:padding="10dp"
                 android:scaleType="fitCenter" />
 
@@ -340,7 +340,7 @@
                 android:layout_marginEnd="6dp"
                 android:background="@drawable/bg_circle_button"
                 android:src="@drawable/ic_skip_next"
-                android:contentDescription="Další odstavec"
+                android:contentDescription="@string/content_desc_skip_next"
                 android:padding="10dp"
                 android:scaleType="fitCenter" />
 
@@ -358,7 +358,7 @@
                     android:insetRight="0dp"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
-                    android:text="Stop"
+                    android:text="@string/btn_stop"
                     android:textAllCaps="false"
                     android:textSize="15sp"
                     app:icon="@drawable/ic_stop"
