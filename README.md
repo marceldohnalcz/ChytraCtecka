@@ -66,6 +66,17 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.15)
+
+- **Chytré čtení teď funguje ve všech 9 podporovaných jazycích**, ne jen
+  v češtině. Appka rozpozná běžné zkratky podle aktuálního jazyka zařízení
+  a rozepíše je na plné znění, ať TTS nedělá zbytečnou pauzu uprostřed
+  věty - anglicky "e.g." → "for example", německy "z.B." → "zum Beispiel",
+  francouzsky "c.-à-d." → "c'est-à-dire", a podobně pro španělštinu,
+  italštinu, portugalštinu, polštinu a ruštinu. Zkratky byly vybírány
+  konzervativně (jen ty nejběžnější a jednoznačné), ať nehrozí, že se
+  omylem rozepíše něco jiného.
+
 ## Nové v této verzi (2.14)
 
 - **Kompletní lokalizace appky do 9 jazyků**: čeština, angličtina

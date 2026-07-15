@@ -1,11 +1,18 @@
 package io.github.marciano.smartreader
 
+import java.util.Locale
 import java.util.regex.Pattern
 
 /**
  * Čistí text před předáním do TTS – odstraňuje odkazy, čísla účtů,
  * podtržítka, emoji a další prvky, které nedávají smysl při poslechu.
  * Jednotlivá pravidla lze podle potřeby vypnout přes [Options].
+ *
+ * Rozepisování zkratek (viz [ABBREVIATIONS_BY_LANGUAGE]) je jazykově
+ * specifické - appka si podle aktuálního jazyka zařízení ([Locale.getDefault])
+ * vybere odpovídající slovník. Pro jazyky, které nemáme podchycené, se tenhle
+ * krok jednoduše přeskočí (zbytek čištění - odkazy, čísla, interpunkce -
+ * funguje pro všechny jazyky stejně, není jazykově specifický).
  */
 object TextPreprocessor {
 
@@ -26,9 +33,10 @@ object TextPreprocessor {
     // Dlouhé čistě číselné sekvence (7+ číslic) - telefony, variabilní symboly apod.
     private val LONG_DIGIT_PATTERN: Pattern = Pattern.compile("\\b\\d{7,}\\b")
 
-    // Český zápis velkých čísel s tečkou jako oddělovačem tisíců, např. "220.000" nebo "1.234.567".
-    // Bez tohoto by TTS četlo číslice jednu po druhé místo "dvěstědvacet tisíc".
-    private val CZECH_THOUSANDS_PATTERN: Pattern = Pattern.compile("\\b\\d{1,3}(?:\\.\\d{3})+\\b")
+    // Zápis velkých čísel s tečkou jako oddělovačem tisíců, např. "220.000" nebo
+    // "1.234.567" - běžné ve většině evropských jazyků (cs, de, es, fr, it, pt,
+    // pl, ru). Bez tohoto by TTS četlo číslice jednu po druhé místo "220 tisíc".
+    private val THOUSANDS_SEPARATOR_PATTERN: Pattern = Pattern.compile("\\b\\d{1,3}(?:\\.\\d{3})+\\b")
 
     // Nejběžnější emoji bloky
     private val EMOJI_PATTERN: Pattern = Pattern.compile(
@@ -53,21 +61,95 @@ object TextPreprocessor {
         "[()\\[\\]{}\"„“«»‘’']"
     )
 
-    // Časté české zkratky s tečkou - TTS engine bere tečku jako konec věty a udělá
-    // pauzu i uprostřed souvětí. Rozepsáním na plné znění pauza zmizí a čte se to
-    // navíc srozumitelněji.
-    private val ABBREVIATIONS: Map<String, String> = mapOf(
-        "např" to "například",
-        "tzn" to "to znamená",
-        "atd" to "a tak dále",
-        "atp" to "a tak podobně",
-        "apod" to "a podobně",
-        "tj" to "to jest",
-        "resp" to "respektive",
-        "popř" to "popřípadě",
-        "mj" to "mimo jiné",
-        "tzv" to "takzvaný",
-        "str" to "strana"
+    /**
+     * Slovníky zkratek podle jazyka (klíč = ISO kód jazyka, stejný jako
+     * Locale.getDefault().language). Každý klíč ve vnitřní mapě obsahuje
+     * zkratku PŘESNĚ tak, jak se píše (včetně vlastních teček) - díky tomu
+     * jde stejným mechanismem zapsat jak jednoduché "atd." (jedna tečka na
+     * konci), tak třeba anglické "e.g." (tečka za každým písmenem).
+     *
+     * Zkratky byly vybírány konzervativně - jen ty nejběžnější a
+     * jednoznačné, ať nehrozí, že se omylem rozepíše něco, co zkratkou
+     * vůbec nebylo (proto např. nejsou zahrnuté jednopísmenné zkratky typu
+     * "S." nebo tituly jako "Dr.", kde je riziko chyby vyšší a TTS si s
+     * nimi navíc obvykle poradí samo).
+     */
+    private val ABBREVIATIONS_BY_LANGUAGE: Map<String, Map<String, String>> = mapOf(
+        "cs" to mapOf(
+            "např." to "například",
+            "tzn." to "to znamená",
+            "atd." to "a tak dále",
+            "atp." to "a tak podobně",
+            "apod." to "a podobně",
+            "tj." to "to jest",
+            "resp." to "respektive",
+            "popř." to "popřípadě",
+            "mj." to "mimo jiné",
+            "tzv." to "takzvaný",
+            "str." to "strana"
+        ),
+        "en" to mapOf(
+            "e.g." to "for example",
+            "i.e." to "that is",
+            "etc." to "and so on",
+            "approx." to "approximately",
+            "vs." to "versus",
+            "dept." to "department",
+            "govt." to "government"
+        ),
+        "de" to mapOf(
+            "z.B." to "zum Beispiel",
+            "d.h." to "das heißt",
+            "usw." to "und so weiter",
+            "bzw." to "beziehungsweise",
+            "ca." to "circa",
+            "ggf." to "gegebenenfalls",
+            "z.T." to "zum Teil",
+            "Nr." to "Nummer"
+        ),
+        "es" to mapOf(
+            "p.ej." to "por ejemplo",
+            "etc." to "etcétera",
+            "aprox." to "aproximadamente",
+            "núm." to "número",
+            "pág." to "página"
+        ),
+        "fr" to mapOf(
+            "p.ex." to "par exemple",
+            "c.-à-d." to "c'est-à-dire",
+            "etc." to "et cetera",
+            "env." to "environ",
+            "n°" to "numéro"
+        ),
+        "it" to mapOf(
+            "ad es." to "ad esempio",
+            "ecc." to "eccetera",
+            "pag." to "pagina",
+            "n." to "numero"
+        ),
+        "pt" to mapOf(
+            "p.ex." to "por exemplo",
+            "etc." to "etcétera",
+            "aprox." to "aproximadamente",
+            "pág." to "página",
+            "n.º" to "número"
+        ),
+        "pl" to mapOf(
+            "np." to "na przykład",
+            "tzn." to "to znaczy",
+            "itd." to "i tak dalej",
+            "itp." to "i tym podobne",
+            "ok." to "około",
+            "str." to "strona"
+        ),
+        "ru" to mapOf(
+            "напр." to "например",
+            "т.е." to "то есть",
+            "и т.д." to "и так далее",
+            "и т.п." to "и тому подобное",
+            "прибл." to "приблизительно",
+            "стр." to "страница"
+        )
     )
 
     data class Options(
@@ -127,7 +209,7 @@ object TextPreprocessor {
 
     /** Sloučí "220.000" na "220000", ať to TTS přečte jako číslo, ne po číslicích. */
     private fun normalizeThousandsSeparators(text: String): String {
-        val matcher = CZECH_THOUSANDS_PATTERN.matcher(text)
+        val matcher = THOUSANDS_SEPARATOR_PATTERN.matcher(text)
         val sb = StringBuffer()
         while (matcher.find()) {
             val replacement = matcher.group().replace(".", "")
@@ -137,21 +219,36 @@ object TextPreprocessor {
         return sb.toString()
     }
 
-    /** Rozepíše časté zkratky ("např." -> "například"), ať TTS nedělá pauzu uprostřed věty. */
+    /**
+     * Rozepíše časté zkratky podle AKTUÁLNÍHO jazyka zařízení (např. česky
+     * "např." -> "například", anglicky "e.g." -> "for example"), ať TTS
+     * nedělá pauzu uprostřed věty. Pro jazyky bez podchyceného slovníku text
+     * beze změny vrátí.
+     */
     private fun expandAbbreviations(text: String): String {
+        val language = Locale.getDefault().language
+        val abbreviations = ABBREVIATIONS_BY_LANGUAGE[language] ?: return text
+
         var result = text
-        for ((abbr, full) in ABBREVIATIONS) {
-            val pattern = Pattern.compile("\\b(${Pattern.quote(abbr)})\\.", Pattern.CASE_INSENSITIVE)
+        for ((abbr, full) in abbreviations) {
+            // Zkratka musí být ohraničená mezerou/začátkem textu vlevo (zachyceno
+            // do skupiny 1, ať ji můžeme zachovat) a mezerou/koncem/interpunkcí
+            // vpravo - ne uprostřed jiného slova.
+            val pattern = Pattern.compile(
+                "(^|\\s)" + Pattern.quote(abbr) + "(?=\\s|$|[,.!?;:])",
+                Pattern.CASE_INSENSITIVE
+            )
             val matcher = pattern.matcher(result)
             val sb = StringBuffer()
             while (matcher.find()) {
-                val matchedAbbr = matcher.group(1)
-                val replacement = if (matchedAbbr.firstOrNull()?.isUpperCase() == true) {
+                val leading = matcher.group(1)
+                val abbrPart = matcher.group().substring(leading.length)
+                val replacement = if (abbrPart.firstOrNull()?.isUpperCase() == true) {
                     full.replaceFirstChar { it.uppercase() }
                 } else {
                     full
                 }
-                matcher.appendReplacement(sb, java.util.regex.Matcher.quoteReplacement(replacement))
+                matcher.appendReplacement(sb, java.util.regex.Matcher.quoteReplacement(leading + replacement))
             }
             matcher.appendTail(sb)
             result = sb.toString()

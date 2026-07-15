@@ -331,14 +331,10 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         }
         val cursor = binding.etContent.selectionStart.coerceIn(0, liveText.length)
         val remaining = liveText.substring(cursor)
-        // Rozepisování zkratek ("např." -> "například") je specifické pro češtinu -
-        // aplikuje se jen když appka zrovna čte v češtině, jinak by mohlo nesmyslně
-        // zasahovat do textu v jiném jazyce.
-        val isCzech = Locale.getDefault().language == "cs"
-        val cleaned = TextPreprocessor.clean(
-            remaining,
-            TextPreprocessor.Options(expandAbbreviations = isCzech)
-        )
+        // Rozepisování zkratek si TextPreprocessor teď řeší sám podle aktuálního
+        // jazyka zařízení (viz ABBREVIATIONS_BY_LANGUAGE) - žádné ruční omezení
+        // na konkrétní jazyk už tady není potřeba.
+        val cleaned = TextPreprocessor.clean(remaining)
 
         if (cleaned.isBlank()) {
             Toast.makeText(this, getString(R.string.toast_nothing_to_read_from_cursor), Toast.LENGTH_SHORT).show()
