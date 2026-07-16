@@ -907,17 +907,21 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
     }
 
     /**
-     * Posune textové pole tak, aby byl začátek právě čteného ODSTAVCE vždy
-     * v horní třetině viditelné oblasti - ne jen poslední řádek na spodním okraji.
-     * Posouvá se jen tehdy, když aktuální pozice čtení už není pohodlně vidět,
-     * ať text neposkakuje při každé větě uvnitř stejného odstavce.
+     * Posune textové pole tak, aby čtená pozice zůstala vždy vidět - sleduje
+     * přímo řádek, který se právě čte, ne začátek odstavce (to byl starý
+     * přístup, který se u dlouhého textu BEZ odstavců vůbec neposouval, protože
+     * "začátek odstavce" u textu bez prázdných řádků vždy vyšel jako úplný
+     * začátek celého textu).
+     *
+     * Scrolluje jen tehdy, když čtená pozice vylezla z pohodlně viditelné horní
+     * části obrazovky (ne až na úplném spodním okraji) - ať text plynule
+     * postupuje i uvnitř jednoho dlouhého odstavce, místo aby čekal na další.
      */
     private fun autoScrollToPosition(position: Int) {
         if (isUserDraggingScroll) return
         val editText = binding.etContent
         val layout = editText.layout ?: return
-        val fullText = editText.text?.toString() ?: return
-        val len = fullText.length
+        val len = editText.text?.length ?: return
         if (len == 0) return
         val pos = position.coerceIn(0, len)
 
@@ -929,17 +933,15 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         val posBottom = layout.getLineBottom(posLine)
         val scrollY = editText.scrollY
 
-        val isComfortablyVisible = posTop >= scrollY && posBottom <= scrollY + visibleHeight
+        // "Pohodlně vidět" = v horních dvou třetinách viditelné oblasti - ať se
+        // scrolluje o kousek dřív, než čtení dorazí na úplný spodní okraj, a
+        // text tak plyne bez trhání i v rámci jednoho dlouhého odstavce.
+        val comfortableBottom = scrollY + (visibleHeight * 2 / 3)
+        val isComfortablyVisible = posTop >= scrollY && posBottom <= comfortableBottom
         if (isComfortablyVisible) return
 
-        // Najdi začátek aktuálního odstavce (poslední prázdný řádek před pozicí, nebo začátek textu)
-        val paragraphStartIndex = fullText.lastIndexOf("\n\n", (pos - 1).coerceAtLeast(0))
-            .let { if (it == -1) 0 else it + 2 }
-        val paragraphLine = layout.getLineForOffset(paragraphStartIndex.coerceIn(0, len))
-        val paragraphTop = layout.getLineTop(paragraphLine)
-
         val maxScroll = (layout.height - visibleHeight).coerceAtLeast(0)
-        val targetScrollY = (paragraphTop - visibleHeight / 3).coerceIn(0, maxScroll)
+        val targetScrollY = (posTop - visibleHeight / 3).coerceIn(0, maxScroll)
         editText.scrollTo(0, targetScrollY)
     }
 

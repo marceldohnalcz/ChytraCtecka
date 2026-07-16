@@ -66,6 +66,16 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.17)
+
+- **Oprava**: u dlouhého textu BEZ odstavců (jeden velký blok textu) se
+  posouvání při čtení vůbec nehýbalo - appka totiž hledala "začátek
+  aktuálního odstavce", a bez prázdných řádků to vždy vyšlo jako úplný
+  začátek textu, takže se pohled pořád vracel tam. Teď auto-scroll
+  sleduje přímo řádek, který se právě čte (ne odstavec), takže postupuje
+  plynule i v rámci jednoho dlouhého odstavce - text, co se právě čte,
+  je vždy vidět.
+
 ## Nové v této verzi (2.16)
 
 - **Oprava nalezená při důkladném auditu před vydáním**: rozepisování
