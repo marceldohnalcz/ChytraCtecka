@@ -91,19 +91,7 @@
     <string name="option_pick_gallery">Aus Galerie wählen</string>
     <string name="option_take_photo">Foto aufnehmen</string>
     <string name="dialog_title_help">Hilfe &amp; Tipps</string>
-    <string name="help_message"><![CDATA[
-• Text kann aus anderen Apps direkt hierher geteilt werden (Teilen-Schaltfläche in der jeweiligen App).
-
-• Wähle Text in einer beliebigen App aus und wähle "Intelligenter Textleser" aus dem Menü - er liest genau das vor, was du ausgewählt hast.
-
-• Die Bild-Schaltfläche erkennt Text aus einem Foto oder Screenshot, funktioniert auch offline.
-
-• Die Link-Schaltfläche lädt Text von einer Webseite und liest ihn vor. Bei Facebook und Instagram funktioniert das wegen technischer Einschränkungen dieser Plattformen meist nicht - wähle dort den Text direkt in der App aus.
-
-• Ein Antippen an beliebiger Stelle im Text startet das Vorlesen genau ab dieser Position.
-
-• In den Einstellungen kannst du Stimme, Lautstärke und Geschwindigkeit ändern.
-]]></string>
+    <string name="help_message">• Text kann aus anderen Apps direkt hierher geteilt werden (Teilen-Schaltfläche in der jeweiligen App).\n\n• Wähle Text in einer beliebigen App aus und wähle "Intelligenter Textleser" aus dem Menü - er liest genau das vor, was du ausgewählt hast.\n\n• Die Bild-Schaltfläche erkennt Text aus einem Foto oder Screenshot, funktioniert auch offline.\n\n• Die Link-Schaltfläche lädt Text von einer Webseite und liest ihn vor. Bei Facebook und Instagram funktioniert das wegen technischer Einschränkungen dieser Plattformen meist nicht - wähle dort den Text direkt in der App aus.\n\n• Ein Antippen an beliebiger Stelle im Text startet das Vorlesen genau ab dieser Position.\n\n• In den Einstellungen kannst du Stimme, Lautstärke und Geschwindigkeit ändern.</string>
     <string name="dialog_title_about">Über die App</string>
     <string name="about_message">Version %1$s\n\nQuellcode und neueste Version:\ngithub.com/marceldohnalcz/ChytraCtecka</string>
     <string name="btn_open_github">GitHub öffnen</string>

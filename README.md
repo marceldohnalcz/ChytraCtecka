@@ -66,6 +66,18 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.18)
+
+- **Oprava formátování Nápovědy ve všech 9 jazycích** - text byl slitý do
+  jednoho nekonečného odstavce. Příčina: CDATA v strings.xml nechrání
+  odřádkování tak, jak by se čekalo - Android při kompilaci zdrojů
+  doslovné řádky sloučí do jednoho. Opraveno použitím stejného
+  `\n` zápisu, jaký už správně fungoval jinde v appce.
+- **Rozestup tlačítek Zrušit/Potvrdit i u zbylých dialogů** - mazání
+  jednotlivé položky v knihovně a zadání odkazu teď mají stejný vzhled
+  (Zrušit vlevo, potvrzení vpravo s rozestupem) jako dialogy pro hromadné
+  mazání, opravené dřív.
+
 ## Nové v této verzi (2.17)
 
 - **Oprava**: u dlouhého textu BEZ odstavců (jeden velký blok textu) se

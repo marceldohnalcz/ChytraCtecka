@@ -91,19 +91,7 @@
     <string name="option_pick_gallery">Elegir de la galería</string>
     <string name="option_take_photo">Tomar una foto</string>
     <string name="dialog_title_help">Ayuda y consejos</string>
-    <string name="help_message"><![CDATA[
-• El texto se puede compartir desde otras apps directamente aquí (botón Compartir en esa app).
-
-• Selecciona texto en cualquier app y elige "Lector de Texto Inteligente" en el menú - leerá exactamente lo que seleccionaste.
-
-• El botón Imagen reconoce texto de una foto o captura de pantalla, funciona incluso sin conexión.
-
-• El botón Enlace descarga y lee el texto de una página web. Normalmente no funciona con Facebook e Instagram por limitaciones técnicas de esas plataformas - selecciona el texto directamente en la app en ese caso.
-
-• Al tocar cualquier parte del texto, la lectura empieza justo desde esa posición.
-
-• En Ajustes puedes cambiar la voz, el volumen de lectura y la velocidad.
-]]></string>
+    <string name="help_message">• El texto se puede compartir desde otras apps directamente aquí (botón Compartir en esa app).\n\n• Selecciona texto en cualquier app y elige "Lector de Texto Inteligente" en el menú - leerá exactamente lo que seleccionaste.\n\n• El botón Imagen reconoce texto de una foto o captura de pantalla, funciona incluso sin conexión.\n\n• El botón Enlace descarga y lee el texto de una página web. Normalmente no funciona con Facebook e Instagram por limitaciones técnicas de esas plataformas - selecciona el texto directamente en la app en ese caso.\n\n• Al tocar cualquier parte del texto, la lectura empieza justo desde esa posición.\n\n• En Ajustes puedes cambiar la voz, el volumen de lectura y la velocidad.</string>
     <string name="dialog_title_about">Acerca de</string>
     <string name="about_message">Versión %1$s\n\nCódigo fuente y última versión:\ngithub.com/marceldohnalcz/ChytraCtecka</string>
     <string name="btn_open_github">Abrir GitHub</string>

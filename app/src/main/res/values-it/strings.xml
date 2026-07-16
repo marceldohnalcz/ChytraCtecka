@@ -91,19 +91,7 @@
     <string name="option_pick_gallery">Scegli dalla galleria</string>
     <string name="option_take_photo">Scatta una foto</string>
     <string name="dialog_title_help">Guida e suggerimenti</string>
-    <string name="help_message"><![CDATA[
-• Il testo può essere condiviso qui direttamente da altre app (pulsante Condividi nell\'app in questione).
-
-• Seleziona del testo in qualsiasi app e scegli "Lettore di Testo Intelligente" dal menu - leggerà esattamente ciò che hai selezionato.
-
-• Il pulsante Immagine riconosce il testo da una foto o screenshot, funziona anche offline.
-
-• Il pulsante Link scarica e legge il testo da una pagina web. Di solito non funziona con Facebook e Instagram per limitazioni tecniche di quelle piattaforme - in quel caso seleziona il testo direttamente nell\'app.
-
-• Toccando un punto qualsiasi del testo la lettura parte esattamente da quella posizione.
-
-• Nelle Impostazioni puoi cambiare voce, volume di lettura e velocità.
-]]></string>
+    <string name="help_message">• Il testo può essere condiviso qui direttamente da altre app (pulsante Condividi nell\'app in questione).\n\n• Seleziona del testo in qualsiasi app e scegli "Lettore di Testo Intelligente" dal menu - leggerà esattamente ciò che hai selezionato.\n\n• Il pulsante Immagine riconosce il testo da una foto o screenshot, funziona anche offline.\n\n• Il pulsante Link scarica e legge il testo da una pagina web. Di solito non funziona con Facebook e Instagram per limitazioni tecniche di quelle piattaforme - in quel caso seleziona il testo direttamente nell\'app.\n\n• Toccando un punto qualsiasi del testo la lettura parte esattamente da quella posizione.\n\n• Nelle Impostazioni puoi cambiare voce, volume di lettura e velocità.</string>
     <string name="dialog_title_about">Informazioni</string>
     <string name="about_message">Versione %1$s\n\nCodice sorgente e ultima versione:\ngithub.com/marceldohnalcz/ChytraCtecka</string>
     <string name="btn_open_github">Apri GitHub</string>

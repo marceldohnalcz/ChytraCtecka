@@ -91,19 +91,7 @@
     <string name="option_pick_gallery">Wybierz z galerii</string>
     <string name="option_take_photo">Zrób zdjęcie</string>
     <string name="dialog_title_help">Pomoc i wskazówki</string>
-    <string name="help_message"><![CDATA[
-• Tekst można udostępnić bezpośrednio tutaj z innych aplikacji (przycisk Udostępnij w danej aplikacji).
-
-• Zaznacz tekst w dowolnej aplikacji i wybierz "Inteligentny Czytnik Tekstu" z menu - przeczyta dokładnie to, co zaznaczyłeś.
-
-• Przycisk Obraz rozpoznaje tekst ze zdjęcia lub zrzutu ekranu, działa też offline.
-
-• Przycisk Link pobiera i czyta tekst ze strony internetowej. Zwykle nie działa z Facebookiem i Instagramem z powodu technicznych ograniczeń tych platform - w takim przypadku zaznacz tekst bezpośrednio w aplikacji.
-
-• Dotknięcie dowolnego miejsca w tekście rozpoczyna czytanie dokładnie od tej pozycji.
-
-• W Ustawieniach możesz zmienić głos, głośność czytania i szybkość.
-]]></string>
+    <string name="help_message">• Tekst można udostępnić bezpośrednio tutaj z innych aplikacji (przycisk Udostępnij w danej aplikacji).\n\n• Zaznacz tekst w dowolnej aplikacji i wybierz "Inteligentny Czytnik Tekstu" z menu - przeczyta dokładnie to, co zaznaczyłeś.\n\n• Przycisk Obraz rozpoznaje tekst ze zdjęcia lub zrzutu ekranu, działa też offline.\n\n• Przycisk Link pobiera i czyta tekst ze strony internetowej. Zwykle nie działa z Facebookiem i Instagramem z powodu technicznych ograniczeń tych platform - w takim przypadku zaznacz tekst bezpośrednio w aplikacji.\n\n• Dotknięcie dowolnego miejsca w tekście rozpoczyna czytanie dokładnie od tej pozycji.\n\n• W Ustawieniach możesz zmienić głos, głośność czytania i szybkość.</string>
     <string name="dialog_title_about">O aplikacji</string>
     <string name="about_message">Wersja %1$s\n\nKod źródłowy i najnowsza wersja:\ngithub.com/marceldohnalcz/ChytraCtecka</string>
     <string name="btn_open_github">Otwórz GitHub</string>

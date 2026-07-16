@@ -91,19 +91,7 @@
     <string name="option_pick_gallery">Vybrat z galerie</string>
     <string name="option_take_photo">Vyfotit fotoaparátem</string>
     <string name="dialog_title_help">Nápověda a tipy</string>
-    <string name="help_message"><![CDATA[
-• Text jde sdílet z jiných appek přímo sem (tlačítko Sdílet v dané appce).
-
-• Označ text v libovolné appce a v nabídce vyber "Chytrá čtečka textu" - přečte přesně to, co jsi vybral.
-
-• Tlačítko Obrázek rozpozná text z fotky nebo screenshotu, funguje i offline.
-
-• Tlačítko Odkaz stáhne a přečte text z webové stránky. U Facebooku a Instagramu to kvůli technickým omezením těchto platforem obvykle nefunguje - tam radši označ text přímo v appce.
-
-• Klepnutím kamkoli do textu spustíš čtení přesně od té pozice.
-
-• V Nastavení jde změnit hlas, hlasitost čtení a rychlost.
-]]></string>
+    <string name="help_message">• Text jde sdílet z jiných appek přímo sem (tlačítko Sdílet v dané appce).\n\n• Označ text v libovolné appce a v nabídce vyber "Chytrá čtečka textu" - přečte přesně to, co jsi vybral.\n\n• Tlačítko Obrázek rozpozná text z fotky nebo screenshotu, funguje i offline.\n\n• Tlačítko Odkaz stáhne a přečte text z webové stránky. U Facebooku a Instagramu to kvůli technickým omezením těchto platforem obvykle nefunguje - tam radši označ text přímo v appce.\n\n• Klepnutím kamkoli do textu spustíš čtení přesně od té pozice.\n\n• V Nastavení jde změnit hlas, hlasitost čtení a rychlost.</string>
     <string name="dialog_title_about">O aplikaci</string>
     <string name="about_message">Verze %1$s\n\nZdrojový kód a nejnovější verze:\ngithub.com/marceldohnalcz/ChytraCtecka</string>
     <string name="btn_open_github">Otevřít GitHub</string>

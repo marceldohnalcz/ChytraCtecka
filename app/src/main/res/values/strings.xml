@@ -99,19 +99,7 @@
     <string name="option_pick_gallery">Choose from gallery</string>
     <string name="option_take_photo">Take a photo</string>
     <string name="dialog_title_help">Help &amp; Tips</string>
-    <string name="help_message"><![CDATA[
-• Text can be shared from other apps directly here (Share button in that app).
-
-• Select text in any app and choose "Smart Text Reader" from the menu - it reads exactly what you selected.
-
-• The Image button recognizes text from a photo or screenshot, it also works offline.
-
-• The Link button downloads and reads text from a web page. It usually doesn\'t work for Facebook and Instagram due to technical limitations of those platforms - select the text directly in the app instead.
-
-• Tapping anywhere in the text starts reading from exactly that position.
-
-• In Settings you can change the voice, reading volume, and speed.
-]]></string>
+    <string name="help_message">• Text can be shared from other apps directly here (Share button in that app).\n\n• Select text in any app and choose "Smart Text Reader" from the menu - it reads exactly what you selected.\n\n• The Image button recognizes text from a photo or screenshot, it also works offline.\n\n• The Link button downloads and reads text from a web page. It usually doesn\'t work for Facebook and Instagram due to technical limitations of those platforms - select the text directly in the app instead.\n\n• Tapping anywhere in the text starts reading from exactly that position.\n\n• In Settings you can change the voice, reading volume, and speed.</string>
     <string name="dialog_title_about">About</string>
     <string name="about_message">Version %1$s\n\nSource code and latest version:\ngithub.com/marceldohnalcz/ChytraCtecka</string>
     <string name="btn_open_github">Open GitHub</string>

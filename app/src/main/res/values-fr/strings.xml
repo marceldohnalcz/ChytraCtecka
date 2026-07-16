@@ -91,19 +91,7 @@
     <string name="option_pick_gallery">Choisir dans la galerie</string>
     <string name="option_take_photo">Prendre une photo</string>
     <string name="dialog_title_help">Aide et astuces</string>
-    <string name="help_message"><![CDATA[
-• Le texte peut être partagé directement ici depuis d\'autres applications (bouton Partager dans l\'application concernée).
-
-• Sélectionnez du texte dans n\'importe quelle application et choisissez "Lecteur de Texte Intelligent" dans le menu - il lira exactement ce que vous avez sélectionné.
-
-• Le bouton Image reconnaît le texte d\'une photo ou d\'une capture d\'écran, fonctionne même hors ligne.
-
-• Le bouton Lien télécharge et lit le texte d\'une page web. Cela ne fonctionne généralement pas avec Facebook et Instagram en raison de limitations techniques de ces plateformes - sélectionnez plutôt le texte directement dans l\'application.
-
-• Toucher n\'importe où dans le texte démarre la lecture exactement à cette position.
-
-• Dans les paramètres, vous pouvez changer la voix, le volume de lecture et la vitesse.
-]]></string>
+    <string name="help_message">• Le texte peut être partagé directement ici depuis d\'autres applications (bouton Partager dans l\'application concernée).\n\n• Sélectionnez du texte dans n\'importe quelle application et choisissez "Lecteur de Texte Intelligent" dans le menu - il lira exactement ce que vous avez sélectionné.\n\n• Le bouton Image reconnaît le texte d\'une photo ou d\'une capture d\'écran, fonctionne même hors ligne.\n\n• Le bouton Lien télécharge et lit le texte d\'une page web. Cela ne fonctionne généralement pas avec Facebook et Instagram en raison de limitations techniques de ces plateformes - sélectionnez plutôt le texte directement dans l\'application.\n\n• Toucher n\'importe où dans le texte démarre la lecture exactement à cette position.\n\n• Dans les paramètres, vous pouvez changer la voix, le volume de lecture et la vitesse.</string>
     <string name="dialog_title_about">À propos</string>
     <string name="about_message">Version %1$s\n\nCode source et dernière version :\ngithub.com/marceldohnalcz/ChytraCtecka</string>
     <string name="btn_open_github">Ouvrir GitHub</string>

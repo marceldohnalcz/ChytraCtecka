@@ -502,16 +502,15 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                 dialog.dismiss()
             },
             onDeleteClick = { item ->
-                AlertDialog.Builder(this)
-                    .setTitle(getString(R.string.dialog_title_delete_text))
-                    .setMessage(getString(R.string.dialog_msg_delete_text, item.title))
-                    .setPositiveButton(getString(R.string.btn_delete)) { _, _ ->
-                        TextLibraryStore.removeFromLibrary(this, item.id)
-                        if (currentLibraryItemId == item.id) currentLibraryItemId = null
-                        refresh()
-                    }
-                    .setNegativeButton(getString(R.string.btn_cancel), null)
-                    .show()
+                showConfirmDialog(
+                    title = getString(R.string.dialog_title_delete_text),
+                    message = getString(R.string.dialog_msg_delete_text, item.title),
+                    confirmText = getString(R.string.btn_delete)
+                ) {
+                    TextLibraryStore.removeFromLibrary(this, item.id)
+                    if (currentLibraryItemId == item.id) currentLibraryItemId = null
+                    refresh()
+                }
             },
             onSelectionChanged = { refreshPlayButton() }
         )
@@ -690,7 +689,13 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
      */
     /** Jednoduché potvrzení nevratné akce tlačítkem Ano/Zrušit. */
     /** Potvrzení nevratné akce - Zrušit vlevo, Ano/vymazat vpravo s rozestupem mezi nimi. */
-    private fun showConfirmDialog(title: String, message: String, onConfirmed: () -> Unit) {
+    /** Potvrzení nevratné akce - Zrušit vlevo, potvrzovací tlačítko vpravo s rozestupem mezi nimi. */
+    private fun showConfirmDialog(
+        title: String,
+        message: String,
+        confirmText: String = getString(R.string.btn_confirm_delete),
+        onConfirmed: () -> Unit
+    ) {
         val view = layoutInflater.inflate(R.layout.dialog_confirm_action, null)
         view.findViewById<TextView>(R.id.tvConfirmTitle).text = title
         view.findViewById<TextView>(R.id.tvConfirmMessage).text = message
@@ -701,11 +706,13 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
 
         view.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnConfirmCancel)
             .setOnClickListener { dialog.dismiss() }
-        view.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnConfirmOk)
-            .setOnClickListener {
+        view.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnConfirmOk).apply {
+            text = confirmText
+            setOnClickListener {
                 onConfirmed()
                 dialog.dismiss()
             }
+        }
         dialog.show()
     }
 
@@ -975,17 +982,19 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
 
     /** Otevře dialog pro ruční zadání odkazu na článek, který se má stáhnout a přečíst. */
     private fun showLinkInputDialog() {
-        val input = android.widget.EditText(this).apply {
-            hint = getString(R.string.hint_link_input)
-            inputType = android.text.InputType.TYPE_TEXT_VARIATION_URI or android.text.InputType.TYPE_CLASS_TEXT
-            setSingleLine(true)
-            val pad = (16 * resources.displayMetrics.density).toInt()
-            setPadding(pad, pad, pad, pad)
-        }
-        AlertDialog.Builder(this)
-            .setTitle(getString(R.string.dialog_title_link_input))
-            .setView(input)
-            .setPositiveButton(getString(R.string.btn_download)) { _, _ ->
+        val view = layoutInflater.inflate(R.layout.dialog_link_input, null)
+        view.findViewById<TextView>(R.id.tvLinkInputTitle).text = getString(R.string.dialog_title_link_input)
+        val input = view.findViewById<android.widget.EditText>(R.id.etLinkInput)
+        input.hint = getString(R.string.hint_link_input)
+
+        val dialog = AlertDialog.Builder(this)
+            .setView(view)
+            .create()
+
+        view.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnLinkInputCancel)
+            .setOnClickListener { dialog.dismiss() }
+        view.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnLinkInputDownload)
+            .setOnClickListener {
                 var url = input.text.toString().trim()
                 if (url.isNotBlank()) {
                     if (!url.startsWith("http://") && !url.startsWith("https://")) {
@@ -994,9 +1003,9 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                     currentLibraryItemId = null
                     loadFromUrl(url)
                 }
+                dialog.dismiss()
             }
-            .setNegativeButton(getString(R.string.btn_cancel), null)
-            .show()
+        dialog.show()
     }
 
     /** Otevře dialog pro výběr, odkud vzít obrázek k rozpoznání textu (OCR). */
