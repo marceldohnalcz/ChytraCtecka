@@ -14,8 +14,8 @@ android {
         // Verzování: dvě desetinná místa, prosté postupné číslování
         // (2.11 -> 2.12 -> 2.13...). Celé číslo před tečkou (2.x -> 3.0) se mění
         // jen u zásadní změny, a to vždy po výslovné dohodě předem.
-        versionCode = 38
-        versionName = "2.19"
+        versionCode = 39
+        versionName = "2.20"
     }
 
     signingConfigs {

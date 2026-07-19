@@ -66,6 +66,18 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.20)
+
+- **Oprava ikony Sledovaných profilů** - postavička byla posunutá dolů a
+  vypadala oproti ostatním ikonám v řádku níž/menší. Přepočítal jsem
+  souřadnice, ať je vystředěná stejně jako ostatní ikony (podle vzoru
+  ikony Historie).
+- **Oprava falešné nabídky "Uložit heslo"** - telefon (hlavně Samsung)
+  se ptal, jestli uložit heslo, i když appka žádné heslo vůbec nemá.
+  Způsobil to systém automatického vyplňování, který si dvě textová pole
+  vedle sebe (jméno + odkaz) mylně vyložil jako přihlašovací formulář.
+  Appka teď textovým polím výslovně řekne, že nejde o přihlašovací údaje.
+
 ## Nové v této verzi (2.19)
 
 - **Nová funkce: Sledované profily** - nové tlačítko v řádku ikon vedle
