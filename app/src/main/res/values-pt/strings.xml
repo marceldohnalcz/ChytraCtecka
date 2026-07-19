@@ -63,6 +63,21 @@
     <string name="menu_check_updates">Verificar atualizações</string>
     <string name="menu_about">Sobre</string>
 
+    <!-- Perfis acompanhados -->
+    <string name="content_desc_tracked_profiles">Perfis acompanhados</string>
+    <string name="title_tracked_profiles">Perfis acompanhados</string>
+    <string name="msg_tracked_profiles_empty">Ainda não há perfis acompanhados. Adicione o primeiro abaixo.</string>
+    <string name="btn_add_profile">Adicionar perfil</string>
+    <string name="hint_profile_name">Nome (ex. João Silva)</string>
+    <string name="hint_profile_url">Link do perfil</string>
+    <string name="btn_save">Salvar</string>
+    <string name="content_desc_open_profile">Abrir perfil</string>
+    <string name="label_last_checked">Última verificação: %1$s</string>
+    <string name="label_never_checked">Ainda não verificado</string>
+    <string name="dialog_title_delete_profile">Remover perfil?</string>
+    <string name="dialog_msg_delete_profile">"%1$s" será removido dos perfis acompanhados.</string>
+    <string name="toast_profile_fields_required">Digite o nome e o link</string>
+
     <string name="toast_no_camera_access">Não é possível tirar fotos sem acesso à câmera</string>
     <string name="toast_clipboard_empty">A área de transferência está vazia</string>
     <string name="toast_nothing_to_read_from_cursor">Não há mais nada a ler a partir da posição do cursor</string>

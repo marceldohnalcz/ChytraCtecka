@@ -63,6 +63,21 @@
     <string name="menu_check_updates">Controlla aggiornamenti</string>
     <string name="menu_about">Informazioni</string>
 
+    <!-- Profili seguiti -->
+    <string name="content_desc_tracked_profiles">Profili seguiti</string>
+    <string name="title_tracked_profiles">Profili seguiti</string>
+    <string name="msg_tracked_profiles_empty">Nessun profilo seguito ancora. Aggiungi il primo qui sotto.</string>
+    <string name="btn_add_profile">Aggiungi profilo</string>
+    <string name="hint_profile_name">Nome (es. Mario Rossi)</string>
+    <string name="hint_profile_url">Link del profilo</string>
+    <string name="btn_save">Salva</string>
+    <string name="content_desc_open_profile">Apri profilo</string>
+    <string name="label_last_checked">Ultimo controllo: %1$s</string>
+    <string name="label_never_checked">Non ancora controllato</string>
+    <string name="dialog_title_delete_profile">Rimuovere il profilo?</string>
+    <string name="dialog_msg_delete_profile">«%1$s» verrà rimosso dai profili seguiti.</string>
+    <string name="toast_profile_fields_required">Inserisci nome e link</string>
+
     <string name="toast_no_camera_access">Impossibile scattare foto senza accesso alla fotocamera</string>
     <string name="toast_clipboard_empty">Gli appunti sono vuoti</string>
     <string name="toast_nothing_to_read_from_cursor">Non c\'è altro da leggere dalla posizione del cursore</string>

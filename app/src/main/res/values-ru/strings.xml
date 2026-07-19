@@ -63,6 +63,21 @@
     <string name="menu_check_updates">Проверить обновления</string>
     <string name="menu_about">О приложении</string>
 
+    <!-- Отслеживаемые профили -->
+    <string name="content_desc_tracked_profiles">Отслеживаемые профили</string>
+    <string name="title_tracked_profiles">Отслеживаемые профили</string>
+    <string name="msg_tracked_profiles_empty">Пока нет отслеживаемых профилей. Добавьте первый ниже.</string>
+    <string name="btn_add_profile">Добавить профиль</string>
+    <string name="hint_profile_name">Имя (напр. Иван Иванов)</string>
+    <string name="hint_profile_url">Ссылка на профиль</string>
+    <string name="btn_save">Сохранить</string>
+    <string name="content_desc_open_profile">Открыть профиль</string>
+    <string name="label_last_checked">Последняя проверка: %1$s</string>
+    <string name="label_never_checked">Ещё не проверено</string>
+    <string name="dialog_title_delete_profile">Удалить профиль?</string>
+    <string name="dialog_msg_delete_profile">«%1$s» будет удалён из отслеживаемых профилей.</string>
+    <string name="toast_profile_fields_required">Введите имя и ссылку</string>
+
     <string name="toast_no_camera_access">Без доступа к камере фотографировать нельзя</string>
     <string name="toast_clipboard_empty">Буфер обмена пуст</string>
     <string name="toast_nothing_to_read_from_cursor">От позиции курсора больше нечего читать</string>

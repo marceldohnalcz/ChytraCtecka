@@ -227,6 +227,24 @@
                 android:contentDescription="@string/content_desc_history"
                 android:padding="9dp"
                 android:scaleType="fitCenter" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="1dp"
+                android:layout_marginEnd="1dp"
+                android:background="@color/border" />
+
+            <ImageButton
+                android:id="@+id/btnTrackedProfiles"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_tracked_profiles"
+                android:tint="@color/icon_secondary"
+                android:contentDescription="@string/content_desc_tracked_profiles"
+                android:padding="9dp"
+                android:scaleType="fitCenter" />
         </LinearLayout>
 
         <LinearLayout

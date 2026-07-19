@@ -63,6 +63,21 @@
     <string name="menu_check_updates">Vérifier les mises à jour</string>
     <string name="menu_about">À propos</string>
 
+    <!-- Profils suivis -->
+    <string name="content_desc_tracked_profiles">Profils suivis</string>
+    <string name="title_tracked_profiles">Profils suivis</string>
+    <string name="msg_tracked_profiles_empty">Aucun profil suivi pour le moment. Ajoutez le premier ci-dessous.</string>
+    <string name="btn_add_profile">Ajouter un profil</string>
+    <string name="hint_profile_name">Nom (ex. Jean Dupont)</string>
+    <string name="hint_profile_url">Lien du profil</string>
+    <string name="btn_save">Enregistrer</string>
+    <string name="content_desc_open_profile">Ouvrir le profil</string>
+    <string name="label_last_checked">Dernière vérification : %1$s</string>
+    <string name="label_never_checked">Pas encore vérifié</string>
+    <string name="dialog_title_delete_profile">Supprimer le profil ?</string>
+    <string name="dialog_msg_delete_profile">« %1$s » sera supprimé des profils suivis.</string>
+    <string name="toast_profile_fields_required">Entrez un nom et un lien</string>
+
     <string name="toast_no_camera_access">Impossible de prendre des photos sans accès à la caméra</string>
     <string name="toast_clipboard_empty">Le presse-papiers est vide</string>
     <string name="toast_nothing_to_read_from_cursor">Plus rien à lire depuis la position du curseur</string>

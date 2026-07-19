@@ -66,6 +66,19 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.19)
+
+- **Nová funkce: Sledované profily** - nové tlačítko v řádku ikon vedle
+  Historie. Přidáš si jméno + odkaz na profil (typicky FB/IG), appka si
+  pamatuje, kdy jsi ho naposledy zkontroloval. Klepnutím profil otevřeš
+  v prohlížeči/appce, ručně zkontroluješ nové příspěvky a text pošleš
+  appce přes Sdílet nebo výběr textu (to appka umí už dřív).
+  **Důležité:** appka nic sama automaticky nestahuje ani nescrapuje - to
+  by porušovalo podmínky Facebooku/Instagramu a riskovalo schválení na
+  Google Play i tvůj vlastní účet. Tohle je bezpečná, ručně řízená
+  varianta, akorát rychlejší.
+- Dostupné ve všech 9 jazycích.
+
 ## Nové v této verzi (2.18)
 
 - **Oprava formátování Nápovědy ve všech 9 jazycích** - text byl slitý do

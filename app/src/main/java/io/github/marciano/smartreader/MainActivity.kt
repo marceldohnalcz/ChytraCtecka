@@ -156,6 +156,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         binding.btnSave.setOnClickListener { saveCurrentTextToLibrary() }
         binding.btnLibrary.setOnClickListener { showLibraryDialog() }
         binding.btnHistory.setOnClickListener { showHistoryDialog() }
+        binding.btnTrackedProfiles.setOnClickListener { showTrackedProfilesDialog() }
         binding.btnLink.setOnClickListener { showLinkInputDialog() }
         binding.btnImage.setOnClickListener { showImageSourceDialog() }
     }
@@ -617,6 +618,86 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             .create()
 
         btnCloseHistory.setOnClickListener { dialog.dismiss() }
+        dialog.show()
+    }
+
+    // --- Sledované profily (FB/IG apod.) ---
+
+    private fun showTrackedProfilesDialog() {
+        val view = layoutInflater.inflate(R.layout.dialog_tracked_profiles, null)
+        val recycler = view.findViewById<RecyclerView>(R.id.recyclerTrackedProfiles)
+        val empty = view.findViewById<TextView>(R.id.tvTrackedProfilesEmpty)
+        val btnAdd = view.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnAddTrackedProfile)
+        val btnClose = view.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnCloseTrackedProfiles)
+        recycler.layoutManager = LinearLayoutManager(this)
+
+        lateinit var adapter: TrackedProfilesAdapter
+
+        fun refresh() {
+            val items = TrackedProfilesStore.getProfiles(this)
+            empty.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
+            recycler.visibility = if (items.isEmpty()) View.GONE else View.VISIBLE
+            adapter.updateItems(items)
+        }
+
+        adapter = TrackedProfilesAdapter(
+            items = TrackedProfilesStore.getProfiles(this),
+            onOpenClick = { profile ->
+                TrackedProfilesStore.markChecked(this, profile.id)
+                openUrlInBrowser(profile.url)
+                refresh()
+            },
+            onDeleteClick = { profile ->
+                showConfirmDialog(
+                    title = getString(R.string.dialog_title_delete_profile),
+                    message = getString(R.string.dialog_msg_delete_profile, profile.name),
+                    confirmText = getString(R.string.btn_delete)
+                ) {
+                    TrackedProfilesStore.removeProfile(this, profile.id)
+                    refresh()
+                }
+            }
+        )
+        recycler.adapter = adapter
+        refresh()
+
+        val dialog = AlertDialog.Builder(this)
+            .setView(view)
+            .create()
+
+        btnAdd.setOnClickListener {
+            showAddTrackedProfileDialog { refresh() }
+        }
+        btnClose.setOnClickListener { dialog.dismiss() }
+        dialog.show()
+    }
+
+    private fun showAddTrackedProfileDialog(onAdded: () -> Unit) {
+        val view = layoutInflater.inflate(R.layout.dialog_add_tracked_profile, null)
+        val nameInput = view.findViewById<android.widget.EditText>(R.id.etProfileName)
+        val urlInput = view.findViewById<android.widget.EditText>(R.id.etProfileUrl)
+
+        val dialog = AlertDialog.Builder(this)
+            .setView(view)
+            .create()
+
+        view.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnAddProfileCancel)
+            .setOnClickListener { dialog.dismiss() }
+        view.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnAddProfileSave)
+            .setOnClickListener {
+                val name = nameInput.text.toString().trim()
+                var url = urlInput.text.toString().trim()
+                if (name.isBlank() || url.isBlank()) {
+                    Toast.makeText(this, getString(R.string.toast_profile_fields_required), Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+                if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                    url = "https://$url"
+                }
+                TrackedProfilesStore.addProfile(this, name, url)
+                onAdded()
+                dialog.dismiss()
+            }
         dialog.show()
     }
 
