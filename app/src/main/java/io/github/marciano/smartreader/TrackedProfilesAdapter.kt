@@ -11,14 +11,14 @@ import androidx.recyclerview.widget.RecyclerView
 class TrackedProfilesAdapter(
     private var items: List<TrackedProfile>,
     private val onOpenClick: (TrackedProfile) -> Unit,
-    private val onDeleteClick: (TrackedProfile) -> Unit
+    private val onMenuClick: (TrackedProfile, View) -> Unit
 ) : RecyclerView.Adapter<TrackedProfilesAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.tvProfileName)
         val lastChecked: TextView = view.findViewById(R.id.tvProfileLastChecked)
         val open: ImageButton = view.findViewById(R.id.btnProfileOpen)
-        val delete: ImageButton = view.findViewById(R.id.btnProfileDelete)
+        val menu: ImageButton = view.findViewById(R.id.btnProfileMenu)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -40,7 +40,7 @@ class TrackedProfilesAdapter(
             context.getString(R.string.label_never_checked)
         }
         holder.open.setOnClickListener { onOpenClick(item) }
-        holder.delete.setOnClickListener { onDeleteClick(item) }
+        holder.menu.setOnClickListener { onMenuClick(item, holder.menu) }
     }
 
     override fun getItemCount(): Int = items.size

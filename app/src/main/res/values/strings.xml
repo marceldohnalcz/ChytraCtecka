@@ -83,6 +83,8 @@
     <string name="dialog_title_delete_profile">Remove profile?</string>
     <string name="dialog_msg_delete_profile">\"%1$s\" will be removed from tracked profiles.</string>
     <string name="toast_profile_fields_required">Enter both a name and a link</string>
+    <string name="btn_edit">Edit</string>
+    <string name="dialog_title_edit_profile">Edit Profile</string>
 
     <!-- Toasts -->
     <string name="toast_no_camera_access">Can\'t take photos without camera access</string>

@@ -63,6 +63,17 @@ object TrackedProfilesStore {
         persist(context, list)
     }
 
+    /** Upraví jméno a odkaz existujícího profilu (čas poslední kontroly zůstává zachovaný). */
+    fun updateProfile(context: Context, id: String, name: String, url: String) {
+        val trimmedName = name.trim()
+        val trimmedUrl = url.trim()
+        if (trimmedName.isBlank() || trimmedUrl.isBlank()) return
+        val list = getProfiles(context).map {
+            if (it.id == id) it.copy(name = trimmedName, url = trimmedUrl) else it
+        }
+        persist(context, list)
+    }
+
     /** Zavolat v okamžiku, kdy appka profil otevře - aktualizuje čas poslední kontroly. */
     fun markChecked(context: Context, id: String) {
         val list = getProfiles(context).map {

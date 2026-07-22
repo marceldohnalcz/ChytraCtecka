@@ -1,7 +1,6 @@
 package io.github.marciano.smartreader
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.ClipboardManager
 import android.content.ComponentName
@@ -14,7 +13,9 @@ import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.speech.tts.Voice
+import android.text.Editable
 import android.text.Spannable
+import android.text.TextWatcher
 import android.text.style.BackgroundColorSpan
 import android.view.View
 import android.widget.RadioButton
@@ -162,63 +163,26 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
     }
 
     /**
-     * Neviditelná dotyková vrstva přes pravý okraj textového pole. Na rozdíl od
-     * systémového scrollbaru (jen vizuální indikátor, nejde chytit prstem) tohle
-     * skutečně reaguje na dotek - kdekoli v pruhu dotkneš/táhneš prstem, text se
-     * posune na odpovídající pozici (poměr pozice prstu v pruhu = poměr pozice
-     * v textu).
+     * Vlastní posuvník (viz [InteractiveScrollThumbView]) - propojí ho s
+     * textovým polem a zajistí, že se auto-scroll při čtení vypne, dokud
+     * uživatel posuvník drží (ať si obě věci nekonkurují).
      */
-    @SuppressLint("ClickableViewAccessibility")
-    // Kolikrát rychleji se text posune oproti tomu, o kolik se posune prst -
-    // čisté 1:1 mapování bylo na dlouhé texty vnímané jako pomalé.
-    private val SCROLL_DRAG_SPEED_MULTIPLIER = 3.5f
-    private var lastScrollDragY = 0f
     private var isUserDraggingScroll = false
 
     private fun setupScrollDragHandle() {
-        binding.scrollDragHandle.setOnTouchListener { view, event ->
-            when (event.action) {
-                android.view.MotionEvent.ACTION_DOWN -> {
-                    isUserDraggingScroll = true
-                    lastScrollDragY = event.y
-                    // Rovnou skoč zhruba na odpovídající místo podle pozice doteku
-                    scrollTextToTouchRatio(event.y / view.height.toFloat())
-                    true
-                }
-                android.view.MotionEvent.ACTION_MOVE -> {
-                    val deltaY = event.y - lastScrollDragY
-                    lastScrollDragY = event.y
-                    scrollTextByDelta(deltaY * SCROLL_DRAG_SPEED_MULTIPLIER)
-                    true
-                }
-                android.view.MotionEvent.ACTION_UP,
-                android.view.MotionEvent.ACTION_CANCEL -> {
-                    isUserDraggingScroll = false
-                    true
-                }
-                else -> false
-            }
+        binding.scrollThumb.targetEditText = binding.etContent
+        binding.scrollThumb.setOnDragStateChanged { isDragging ->
+            isUserDraggingScroll = isDragging
         }
-    }
-
-    private fun scrollTextToTouchRatio(rawRatio: Float) {
-        val editText = binding.etContent
-        val layout = editText.layout ?: return
-        val visibleHeight = editText.height - editText.paddingTop - editText.paddingBottom
-        val maxScroll = (layout.height - visibleHeight).coerceAtLeast(0)
-        if (maxScroll <= 0) return
-        val ratio = rawRatio.coerceIn(0f, 1f)
-        editText.scrollTo(0, (ratio * maxScroll).toInt())
-    }
-
-    private fun scrollTextByDelta(deltaY: Float) {
-        val editText = binding.etContent
-        val layout = editText.layout ?: return
-        val visibleHeight = editText.height - editText.paddingTop - editText.paddingBottom
-        val maxScroll = (layout.height - visibleHeight).coerceAtLeast(0)
-        if (maxScroll <= 0) return
-        val newScroll = (editText.scrollY + deltaY.toInt()).coerceIn(0, maxScroll)
-        editText.scrollTo(0, newScroll)
+        // Ať se posuvník hned správně zobrazí i po vložení nového textu
+        // (jinak by se aktualizoval až při prvním scrollu).
+        binding.etContent.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                binding.scrollThumb.refresh()
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
     }
 
     private fun setupSpeedSlider() {
@@ -647,15 +611,30 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                 openUrlInBrowser(profile.url)
                 refresh()
             },
-            onDeleteClick = { profile ->
-                showConfirmDialog(
-                    title = getString(R.string.dialog_title_delete_profile),
-                    message = getString(R.string.dialog_msg_delete_profile, profile.name),
-                    confirmText = getString(R.string.btn_delete)
-                ) {
-                    TrackedProfilesStore.removeProfile(this, profile.id)
-                    refresh()
+            onMenuClick = { profile, anchor ->
+                val popup = android.widget.PopupMenu(this, anchor)
+                popup.menuInflater.inflate(R.menu.menu_profile_actions, popup.menu)
+                popup.setOnMenuItemClickListener { item ->
+                    when (item.itemId) {
+                        R.id.menuEditProfile -> {
+                            showAddTrackedProfileDialog(existingProfile = profile) { refresh() }
+                            true
+                        }
+                        R.id.menuDeleteProfile -> {
+                            showConfirmDialog(
+                                title = getString(R.string.dialog_title_delete_profile),
+                                message = getString(R.string.dialog_msg_delete_profile, profile.name),
+                                confirmText = getString(R.string.btn_delete)
+                            ) {
+                                TrackedProfilesStore.removeProfile(this, profile.id)
+                                refresh()
+                            }
+                            true
+                        }
+                        else -> false
+                    }
                 }
+                popup.show()
             }
         )
         recycler.adapter = adapter
@@ -672,10 +651,16 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         dialog.show()
     }
 
-    private fun showAddTrackedProfileDialog(onAdded: () -> Unit) {
+    private fun showAddTrackedProfileDialog(existingProfile: TrackedProfile? = null, onAdded: () -> Unit) {
         val view = layoutInflater.inflate(R.layout.dialog_add_tracked_profile, null)
         val nameInput = view.findViewById<android.widget.EditText>(R.id.etProfileName)
         val urlInput = view.findViewById<android.widget.EditText>(R.id.etProfileUrl)
+
+        if (existingProfile != null) {
+            nameInput.setText(existingProfile.name)
+            urlInput.setText(existingProfile.url)
+            view.findViewById<TextView>(R.id.tvAddProfileTitle).text = getString(R.string.dialog_title_edit_profile)
+        }
 
         val dialog = AlertDialog.Builder(this)
             .setView(view)
@@ -694,7 +679,11 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                 if (!url.startsWith("http://") && !url.startsWith("https://")) {
                     url = "https://$url"
                 }
-                TrackedProfilesStore.addProfile(this, name, url)
+                if (existingProfile != null) {
+                    TrackedProfilesStore.updateProfile(this, existingProfile.id, name, url)
+                } else {
+                    TrackedProfilesStore.addProfile(this, name, url)
+                }
                 onAdded()
                 dialog.dismiss()
             }
@@ -1031,6 +1020,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         val maxScroll = (layout.height - visibleHeight).coerceAtLeast(0)
         val targetScrollY = (posTop - visibleHeight / 3).coerceIn(0, maxScroll)
         editText.scrollTo(0, targetScrollY)
+        binding.scrollThumb.refresh()
     }
 
     private fun clearHighlight() {

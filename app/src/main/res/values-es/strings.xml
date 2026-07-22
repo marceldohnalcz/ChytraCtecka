@@ -77,6 +77,8 @@
     <string name="dialog_title_delete_profile">¿Eliminar perfil?</string>
     <string name="dialog_msg_delete_profile">«%1$s» se eliminará de los perfiles seguidos.</string>
     <string name="toast_profile_fields_required">Introduce el nombre y el enlace</string>
+    <string name="btn_edit">Editar</string>
+    <string name="dialog_title_edit_profile">Editar perfil</string>
 
     <string name="toast_no_camera_access">No se puede tomar fotos sin acceso a la cámara</string>
     <string name="toast_clipboard_empty">El portapapeles está vacío</string>

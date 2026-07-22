@@ -77,6 +77,8 @@
     <string name="dialog_title_delete_profile">Удалить профиль?</string>
     <string name="dialog_msg_delete_profile">«%1$s» будет удалён из отслеживаемых профилей.</string>
     <string name="toast_profile_fields_required">Введите имя и ссылку</string>
+    <string name="btn_edit">Изменить</string>
+    <string name="dialog_title_edit_profile">Изменить профиль</string>
 
     <string name="toast_no_camera_access">Без доступа к камере фотографировать нельзя</string>
     <string name="toast_clipboard_empty">Буфер обмена пуст</string>

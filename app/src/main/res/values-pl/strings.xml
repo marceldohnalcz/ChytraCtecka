@@ -77,6 +77,8 @@
     <string name="dialog_title_delete_profile">Usunąć profil?</string>
     <string name="dialog_msg_delete_profile">„%1$s” zostanie usunięty z obserwowanych profili.</string>
     <string name="toast_profile_fields_required">Podaj imię i link</string>
+    <string name="btn_edit">Edytuj</string>
+    <string name="dialog_title_edit_profile">Edytuj profil</string>
 
     <string name="toast_no_camera_access">Nie można robić zdjęć bez dostępu do aparatu</string>
     <string name="toast_clipboard_empty">Schowek jest pusty</string>

@@ -77,6 +77,8 @@
     <string name="dialog_title_delete_profile">Odebrat profil?</string>
     <string name="dialog_msg_delete_profile">„%1$s“ bude odebrán ze sledovaných profilů.</string>
     <string name="toast_profile_fields_required">Zadej jméno i odkaz</string>
+    <string name="btn_edit">Upravit</string>
+    <string name="dialog_title_edit_profile">Upravit profil</string>
 
     <string name="toast_no_camera_access">Bez přístupu ke kameře nejde fotit</string>
     <string name="toast_clipboard_empty">Schránka je prázdná</string>

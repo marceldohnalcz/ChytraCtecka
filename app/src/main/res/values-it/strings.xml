@@ -77,6 +77,8 @@
     <string name="dialog_title_delete_profile">Rimuovere il profilo?</string>
     <string name="dialog_msg_delete_profile">«%1$s» verrà rimosso dai profili seguiti.</string>
     <string name="toast_profile_fields_required">Inserisci nome e link</string>
+    <string name="btn_edit">Modifica</string>
+    <string name="dialog_title_edit_profile">Modifica profilo</string>
 
     <string name="toast_no_camera_access">Impossibile scattare foto senza accesso alla fotocamera</string>
     <string name="toast_clipboard_empty">Gli appunti sono vuoti</string>

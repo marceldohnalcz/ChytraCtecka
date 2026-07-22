@@ -66,6 +66,18 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.21)
+
+- **Interaktivní posuvník**: nový vlastní posuvník u textového pole -
+  v klidu je úzký, jakmile ho podržíš prstem, plynule se roztáhne, a po
+  puštění se zase zúží. Nahradil kombinaci systémového scrollbaru a
+  neviditelné dotykové vrstvy jedním vlastním prvkem, který si sám kreslí
+  pozici i výšku podle skutečné délky textu.
+- **Úprava sledovaného profilu**: velké červené tlačítko Smazat u
+  sledovaných profilů nahradily tři tečky (⋮) - otevřou menu s Upravit a
+  Smazat. Upravit umožní opravit jméno nebo odkaz u už přidaného profilu.
+  Dostupné ve všech 9 jazycích.
+
 ## Nové v této verzi (2.20)
 
 - **Oprava ikony Sledovaných profilů** - postavička byla posunutá dolů a

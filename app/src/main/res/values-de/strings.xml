@@ -77,6 +77,8 @@
     <string name="dialog_title_delete_profile">Profil entfernen?</string>
     <string name="dialog_msg_delete_profile">„%1$s“ wird aus den verfolgten Profilen entfernt.</string>
     <string name="toast_profile_fields_required">Gib Name und Link ein</string>
+    <string name="btn_edit">Bearbeiten</string>
+    <string name="dialog_title_edit_profile">Profil bearbeiten</string>
 
     <string name="toast_no_camera_access">Ohne Kamerazugriff kann nicht fotografiert werden</string>
     <string name="toast_clipboard_empty">Zwischenablage ist leer</string>
