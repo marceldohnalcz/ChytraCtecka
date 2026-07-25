@@ -40,6 +40,8 @@ class TrackedProfilesAdapter(
             context.getString(R.string.label_never_checked)
         }
         holder.open.setOnClickListener { onOpenClick(item) }
+        holder.name.setOnClickListener { onOpenClick(item) }
+        holder.lastChecked.setOnClickListener { onOpenClick(item) }
         holder.menu.setOnClickListener { onMenuClick(item, holder.menu) }
     }
 

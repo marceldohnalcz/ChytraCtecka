@@ -66,6 +66,14 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.23)
+
+- **Přidat profil přesunuto** vedle tlačítka Zavřít (dialog Sledované
+  profily) - oba na jednom řádku, stejný vzor jako u Historie.
+- **Klepnutí na název sledovaného profilu** teď rovnou otevře odkaz -
+  stejná akce jako klepnutí na ikonu s odkazem, jen pohodlnější (větší
+  klikací plocha).
+
 ## Nové v této verzi (2.22)
 
 - **Důkladnější oprava falešné nabídky "Uložit heslo"** - dřívější
