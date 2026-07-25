@@ -19,6 +19,19 @@
   postavičky) a je široké přes celý dialog; při zúžení na `wrap_content`
   zkontrolovat, že text s ikonou nebude action-button příliš stěsnaný.
 
+## 2. Klepnutí na název sledovaného profilu = rovnou otevřít odkaz
+
+- **Požadavek**: v `item_tracked_profile.xml` teď jde otevřít profil jen
+  přes ikonu odkazu (`btnProfileOpen`). Klepnutí přímo na jméno/text
+  položky (`tvProfileName`/celý řádek) by mělo dělat to samé - rovnou
+  otevřít profil (stejná logika jako `onOpenClick` v
+  `TrackedProfilesAdapter.kt` - `TrackedProfilesStore.markChecked()` +
+  `openUrlInBrowser()`).
+- **Jak na to**: přidat `setOnClickListener` na `holder.itemView` (nebo
+  na celou levou textovou část), který zavolá stejný `onOpenClick`
+  callback jako tlačítko s ikonou odkazu. Netřeba nová logika, jen další
+  místo, odkud se ta stejná akce spustí.
+
 ---
 
 Až budeme příště na appce pracovat, stačí napsat "pokračuj v TODO" nebo

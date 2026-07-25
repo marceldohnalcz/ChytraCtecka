@@ -66,6 +66,15 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.22)
+
+- **Důkladnější oprava falešné nabídky "Uložit heslo"** - dřívější
+  oprava (vypnutí autofill jen na konkrétních textových polích) nestačila
+  a chyba se pořád objevovala. Teď je autofill vypnutý pro **celou
+  appku** na úrovni manifestu (appka žádné přihlašování nikde nemá, takže
+  to nevadí) - silnější a trvalejší řešení, které by mělo pokrýt i
+  budoucí textová pole bez nutnosti to řešit zvlášť pokaždé.
+
 ## Nové v této verzi (2.21)
 
 - **Interaktivní posuvník**: nový vlastní posuvník u textového pole -
