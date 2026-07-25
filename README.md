@@ -66,6 +66,12 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.24)
+
+- **Výrazný oddělovač mezi Knihovnou a Historií** v prostředním řádku
+  ikon - stejný styl, jaký už odděloval skupinu Obrázek/Odkaz od
+  Uložit/Knihovna vlevo.
+
 ## Nové v této verzi (2.23)
 
 - **Přidat profil přesunuto** vedle tlačítka Zavřít (dialog Sledované

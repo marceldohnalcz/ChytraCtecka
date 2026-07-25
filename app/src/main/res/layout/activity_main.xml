@@ -207,12 +207,13 @@
                 android:padding="9dp"
                 android:scaleType="fitCenter" />
 
+            <!-- Výraznější oddělovač mezi skupinou "knihovna" a "historie/sledování" -->
             <View
-                android:layout_width="1dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="1dp"
-                android:layout_marginEnd="1dp"
-                android:background="@color/border" />
+                android:layout_width="1.5dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="9dp"
+                android:layout_marginEnd="9dp"
+                android:background="@color/text_secondary" />
 
             <ImageButton
                 android:id="@+id/btnHistory"
