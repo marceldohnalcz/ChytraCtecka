@@ -66,6 +66,14 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.25)
+
+- **Oprava**: klepnutí na slovo v textu (start čtení od té pozice) mazalo
+  mezeru před daným slovem v textovém poli - vypadalo to divně, i když to
+  na čtení nemělo žádný vliv. Příčina: čisticí krok před čtením na konci
+  volal `.trim()`, což se nechtěně promítlo i do viditelného textu.
+  Odstraněno, mezera TTS nijak nevadí.
+
 ## Nové v této verzi (2.24)
 
 - **Výrazný oddělovač mezi Knihovnou a Historií** v prostředním řádku

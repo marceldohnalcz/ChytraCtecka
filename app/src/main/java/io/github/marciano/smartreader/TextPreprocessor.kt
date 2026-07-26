@@ -193,10 +193,12 @@ object TextPreprocessor {
         if (options.stripHashSymbol) text = HASHTAG_SYMBOL.matcher(text).replaceAll("")
         if (options.stripMentionSymbol) text = MENTION_SYMBOL.matcher(text).replaceAll("")
 
-        // Normalizace bílých znaků, ať čtení plyne přirozeně
+        // Normalizace bílých znaků, ať čtení plyne přirozeně. Záměrně BEZ trim()
+        // na začátku/konci - tenhle text se totiž zpětně zapisuje do textového
+        // pole, a osekání mezery na začátku by smazalo mezeru před slovem, na
+        // které uživatel klepl (TTS mezera na začátku/konci vůbec nevadí).
         text = text.replace(Regex("[ \\t]{2,}"), " ")
         text = text.replace(Regex("\\n{3,}"), "\n\n")
-        text = text.trim()
 
         return text
     }
