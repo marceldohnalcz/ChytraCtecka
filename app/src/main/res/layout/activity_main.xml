@@ -73,7 +73,7 @@
                 android:layout_height="match_parent"
                 android:importantForAutofill="no"
                 android:gravity="top|start"
-                android:inputType="textMultiLine"
+                android:inputType="textMultiLine|textNoSuggestions"
                 android:background="@drawable/bg_edittext_rounded"
                 android:padding="14dp"
                 android:paddingEnd="26dp"

@@ -66,6 +66,21 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.26)
+
+- **Klávesnice teď nezakrývá ovládání Přehrát/Pauza** - appka dřív
+  neříkala systému, jak se má obsah zmenšit, když klávesnice vyjede,
+  takže mohla ovládání dole schovat. Teď se textové pole zmenší a
+  tlačítka zůstanou vidět nad klávesnicí.
+- **Další pokus o opravu mizející mezery při klepnutí do textu** -
+  minulá oprava (odstranění `.trim()`) byla ověřená a v kódu skutečně
+  je, ale chyba přetrvávala, takže šlo nejspíš o klávesnici samotnou
+  (automatické opravy/návrhy), ne o appku. Vypnul jsem u textového pole
+  automatické návrhy klávesnice (`textNoSuggestions`), což by mělo
+  zabránit klávesnici v úpravách textu jen kvůli umístění kurzoru.
+  Pokud se to objeví znovu, dej vědět - bude to znamenat, že příčina je
+  jinde, než jsem čekal.
+
 ## Nové v této verzi (2.25)
 
 - **Oprava**: klepnutí na slovo v textu (start čtení od té pozice) mazalo
