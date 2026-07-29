@@ -107,6 +107,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         setupButtons()
         setupSpeedSlider()
         setupScrollDragHandle()
+        setupKeyboardVisibilityToggle()
         restoreDraftOrHandleIntent(intent)
     }
 
@@ -183,6 +184,40 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
+    }
+
+    private var isKeyboardCurrentlyVisible = false
+
+    /**
+     * Když vyjede klávesnice, schová všechno kromě Přehrát/Pauza (odemyká
+     * místo, které jinak klávesnice zabere) - ostatní ovládání se vrátí zpět,
+     * jakmile se klávesnice schová. Detekce funguje díky
+     * `windowSoftInputMode="adjustResize"` v manifestu - okno se opravdu
+     * zmenší, takže jde poznat rozdíl výšky viditelné oblasti.
+     */
+    private fun setupKeyboardVisibilityToggle() {
+        val rootView = binding.root
+        rootView.viewTreeObserver.addOnGlobalLayoutListener {
+            val rect = android.graphics.Rect()
+            rootView.getWindowVisibleDisplayFrame(rect)
+            val screenHeight = rootView.height
+            if (screenHeight <= 0) return@addOnGlobalLayoutListener
+            val keypadHeight = screenHeight - rect.bottom
+            // Klávesnice zabírá typicky přes 15 % výšky obrazovky - menší
+            // rozdíly (systémové lišty apod.) neberme jako klávesnici.
+            val isKeyboardVisible = keypadHeight > screenHeight * 0.15
+
+            if (isKeyboardVisible != isKeyboardCurrentlyVisible) {
+                isKeyboardCurrentlyVisible = isKeyboardVisible
+                val visibility = if (isKeyboardVisible) View.GONE else View.VISIBLE
+                binding.rowPasteClear.visibility = visibility
+                binding.rowToolbarIcons.visibility = visibility
+                binding.rowSpeedSlider.visibility = visibility
+                binding.btnSkipPrev.visibility = visibility
+                binding.btnSkipNext.visibility = visibility
+                binding.stopButtonWrapper.visibility = visibility
+            }
+        }
     }
 
     private fun setupSpeedSlider() {

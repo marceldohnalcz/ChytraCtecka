@@ -66,6 +66,15 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.27)
+
+- **Zjednodušené ovládání při vyjeté klávesnici** - appka teď pozná, kdy
+  je klávesnice aktivní, a automaticky schová Vložit/Vymazat, řádek ikon
+  (Obrázek/Odkaz/Uložit/Knihovna/Historie/Sledované), posuvník rychlosti
+  a tlačítka Zpět/Vpřed/Stop. Zůstane jen Přehrát/Pauza, ať zbyde víc
+  místa a ovládání je vždy po ruce. Jakmile klávesnici schováš, všechno
+  se vrátí zpět.
+
 ## Nové v této verzi (2.26)
 
 - **Klávesnice teď nezakrývá ovládání Přehrát/Pauza** - appka dřív

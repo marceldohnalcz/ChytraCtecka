@@ -94,6 +94,7 @@
         </FrameLayout>
 
         <LinearLayout
+            android:id="@+id/rowPasteClear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -131,6 +132,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/rowToolbarIcons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -246,6 +248,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/rowSpeedSlider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -361,6 +364,7 @@
                 android:scaleType="fitCenter" />
 
             <LinearLayout
+                android:id="@+id/stopButtonWrapper"
                 android:layout_width="0dp"
                 android:layout_height="52dp"
                 android:layout_weight="1">
