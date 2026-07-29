@@ -198,14 +198,18 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
     private fun setupKeyboardVisibilityToggle() {
         val rootView = binding.root
         rootView.viewTreeObserver.addOnGlobalLayoutListener {
-            val rect = android.graphics.Rect()
-            rootView.getWindowVisibleDisplayFrame(rect)
-            val screenHeight = rootView.height
-            if (screenHeight <= 0) return@addOnGlobalLayoutListener
-            val keypadHeight = screenHeight - rect.bottom
+            // S "adjustResize" (nastaveno kvůli tomu, ať klávesnice nezakrývá
+            // ovládání) se samotný kořenový View zmenší, když klávesnice vyjede -
+            // proto se musí porovnávat s CELKOVOU výškou obrazovky, ne s
+            // getWindowVisibleDisplayFrame() (ten by se zmenšil úplně stejně,
+            // takže by rozdíl vyšel skoro nulový a klávesnice by se nepoznala).
+            val screenHeight = resources.displayMetrics.heightPixels
+            val currentHeight = rootView.height
+            if (currentHeight <= 0) return@addOnGlobalLayoutListener
+            val heightDiff = screenHeight - currentHeight
             // Klávesnice zabírá typicky přes 15 % výšky obrazovky - menší
-            // rozdíly (systémové lišty apod.) neberme jako klávesnici.
-            val isKeyboardVisible = keypadHeight > screenHeight * 0.15
+            // rozdíly (stavový řádek, navigační lišta apod.) neberme jako klávesnici.
+            val isKeyboardVisible = heightDiff > screenHeight * 0.15
 
             if (isKeyboardVisible != isKeyboardCurrentlyVisible) {
                 isKeyboardCurrentlyVisible = isKeyboardVisible

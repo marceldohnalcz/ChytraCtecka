@@ -66,6 +66,15 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.28)
+
+- **Oprava**: schovávání ovládání při vyjeté klávesnici (přidáno v 2.27)
+  vůbec nefungovalo. Příčina: appka porovnávala výšku okna sama se sebou
+  - kvůli `adjustResize` (nastaveno kvůli tomu, ať klávesnice nezakrývá
+  ovládání) se totiž zmenší úplně stejně obě porovnávané hodnoty, takže
+  rozdíl vyšel skoro nulový a klávesnice se nikdy nepoznala. Teď se
+  porovnává proti skutečné celkové výšce obrazovky.
+
 ## Nové v této verzi (2.27)
 
 - **Zjednodušené ovládání při vyjeté klávesnici** - appka teď pozná, kdy
