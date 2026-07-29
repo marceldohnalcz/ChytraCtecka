@@ -66,6 +66,15 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.30)
+
+- **Oprava**: appka po každém otevření sama vysunula klávesnici -
+  vedlejší efekt nastavení `adjustResize` z verze 2.27 (řešilo, ať
+  klávesnice nezakrývá ovládání), které samo o sobě neurčuje, zda se má
+  klávesnice zobrazit i bez toho, aby ses do textu klepnutím sám
+  přihlásil. Přidáno explicitní `stateHidden` - klávesnice se teď ukáže
+  jen když na text skutečně klepneš.
+
 ## Nové v této verzi (2.29)
 
 - **Jemnější krok rychlosti čtení**: posuvník i tlačítka +/- teď mění

@@ -28,7 +28,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="stateHidden|adjustResize">
 
             <!-- Spuštění appky z plochy -->
             <intent-filter>
