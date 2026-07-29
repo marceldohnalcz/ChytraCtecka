@@ -66,6 +66,17 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.31)
+
+- **Nové rozložení pro režim na šířku (landscape)**: veškeré ovládání
+  (Vložit/Vymazat, ikony Obrázek/Odkaz/Uložit/Knihovna/Historie/Sledované,
+  posuvník rychlosti, Přehrát/Zpět/Vpřed/Stop) je sloučené do jednoho
+  řádku dole - menší ikony, kompaktnější posuvník rychlosti. Textové pole
+  tak dostane naprostou většinu obrazovky. Pokud by se na některém
+  telefonu přece jen všechno nevešlo najednou, řádek jde doscrollovat
+  vodorovně místo aby se něco neviditelně oříznulo. V režimu na výšku se
+  appka chová jako doteď, beze změny.
+
 ## Nové v této verzi (2.30)
 
 - **Oprava**: appka po každém otevření sama vysunula klávesnici -
