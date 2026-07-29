@@ -66,6 +66,13 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.29)
+
+- **Jemnější krok rychlosti čtení**: posuvník i tlačítka +/- teď mění
+  rychlost po 0,05x místo po 0,1x (rozsah zůstal stejný, 0,5x-3,0x, jen
+  s dvojnásobným počtem kroků). Zobrazení rychlosti teď ukazuje dvě
+  desetinná místa (např. "1,05x"), ať je ten jemnější krok vidět.
+
 ## Nové v této verzi (2.28)
 
 - **Oprava**: schovávání ovládání při vyjeté klávesnici (přidáno v 2.27)

@@ -225,29 +225,29 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
     }
 
     private fun setupSpeedSlider() {
-        binding.seekSpeed.max = 25
-        val initialProgress = ((currentSpeedRate - 0.5f) * 10).toInt().coerceIn(0, 25)
+        binding.seekSpeed.max = 50
+        val initialProgress = ((currentSpeedRate - 0.5f) / 0.05f).toInt().coerceIn(0, 50)
         binding.seekSpeed.progress = initialProgress
         updateSpeedLabel(currentSpeedRate)
 
         binding.seekSpeed.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                updateSpeedLabel(0.5f + progress / 10f)
+                updateSpeedLabel(0.5f + progress * 0.05f)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                applySpeedChange(0.5f + (seekBar?.progress ?: 5) / 10f)
+                applySpeedChange(0.5f + (seekBar?.progress ?: 10) * 0.05f)
             }
         })
     }
 
-    /** Tlačítka +/- posunou jezdec o jeden krok (0.1x) a rovnou aplikují novou rychlost. */
+    /** Tlačítka +/- posunou jezdec o jeden krok (0.05x) a rovnou aplikují novou rychlost. */
     private fun changeSpeedStep(deltaSteps: Int) {
         val newProgress = (binding.seekSpeed.progress + deltaSteps).coerceIn(0, binding.seekSpeed.max)
         binding.seekSpeed.progress = newProgress
-        applySpeedChange(0.5f + newProgress / 10f)
+        applySpeedChange(0.5f + newProgress * 0.05f)
     }
 
     /**
@@ -269,7 +269,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
     }
 
     private fun updateSpeedLabel(rate: Float) {
-        binding.tvSpeedValue.text = String.format(Locale.getDefault(), "%.1fx", rate)
+        binding.tvSpeedValue.text = String.format(Locale.getDefault(), "%.2fx", rate)
     }
 
     private fun pasteFromClipboard() {

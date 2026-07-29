@@ -301,13 +301,13 @@
 
             <TextView
                 android:id="@+id/tvSpeedValue"
-                android:layout_width="46dp"
+                android:layout_width="54dp"
                 android:layout_height="wrap_content"
                 android:gravity="end"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:textColor="@color/brand_primary"
-                android:text="1.0x" />
+                android:text="1.00x" />
         </LinearLayout>
 
         <LinearLayout
