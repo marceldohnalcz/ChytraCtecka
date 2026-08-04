@@ -47,6 +47,14 @@ object TextPreprocessor {
     // kde jde jen o oddělovač.
     private val DASH_BETWEEN_DIGITS_PATTERN: Pattern = Pattern.compile("(?<=\\d)-(?=\\d)")
 
+    // Dvě a víc pomlček za sebou (s mezerami mezi nimi nebo bez) - typicky
+    // vizuální oddělovač sekcí ("---" na vlastním řádku), ne text ke čtení. Na
+    // rozdíl od opakovaných teček/vykřičníků se tu nenechává ani jedna pomlčka,
+    // protože samotná pomlčka nemá pro TTS žádný přirozený prozodický význam a
+    // četla by se doslova jako "spojovník". Jedna pomlčka mezi slovy (spojení
+    // slov, e-mail apod.) zůstává nedotčená.
+    private val REPEATED_DASH_PATTERN: Pattern = Pattern.compile("-(?:\\s*-){1,}")
+
     // Nejběžnější emoji bloky
     private val EMOJI_PATTERN: Pattern = Pattern.compile(
         "[\\uD83C\\uDF00-\\uD83D\\uDDFF]|[\\uD83D\\uDE00-\\uD83D\\uDE4F]|" +
@@ -172,6 +180,7 @@ object TextPreprocessor {
         val skipLongNumbers: Boolean = true,
         val normalizeThousands: Boolean = true,
         val normalizeDashBetweenDigits: Boolean = true,
+        val stripRepeatedDashes: Boolean = true,
         val expandAbbreviations: Boolean = true,
         val simplifyRepeatedPunctuation: Boolean = true,
         val stripBracketsAndQuotes: Boolean = true,
@@ -196,6 +205,7 @@ object TextPreprocessor {
         // částky jako "1.234.567" po sloučení mylně chytily do stejného filtru.
         if (options.skipLongNumbers) text = LONG_DIGIT_PATTERN.matcher(text).replaceAll(" ")
         if (options.normalizeThousands) text = normalizeThousandsSeparators(text)
+        if (options.stripRepeatedDashes) text = REPEATED_DASH_PATTERN.matcher(text).replaceAll("")
         if (options.normalizeDashBetweenDigits) {
             text = DASH_BETWEEN_DIGITS_PATTERN.matcher(text).replaceAll(" ")
         }

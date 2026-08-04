@@ -66,6 +66,13 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.34)
+
+- **Oprava**: opakované pomlčky za sebou ("---", typicky vizuální
+  oddělovač sekcí na vlastním řádku) se četly jako "spojovník, spojovník,
+  spojovník". Teď se takové oddělovače úplně odstraní - jedna pomlčka
+  mezi slovy (spojení slov, e-mail apod.) zůstává beze změny.
+
 ## Nové v této verzi (2.33)
 
 - **Oprava**: pomlčka přímo mezi dvěma čísly (bez mezer) se dřív četla
