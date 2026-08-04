@@ -45,8 +45,13 @@ object TextPreprocessor {
             "[\\uD83E\\uDD00-\\uD83E\\uDDFF]"
     )
 
-    private val HASHTAG_SYMBOL: Pattern = Pattern.compile("#(?=\\S)")
+    // Křížek se má smazat vždy, ne jen když je nalepený na slovo (hashtag) -
+    // TTS by ho jinak četlo jako "křížek" i samostatně nebo v nadpisu (# Nadpis).
+    private val HASHTAG_SYMBOL: Pattern = Pattern.compile("#")
     private val MENTION_SYMBOL: Pattern = Pattern.compile("@(?=\\S)")
+    // Markdown zvýraznění (*kurzíva*, **tučně**, i odrážky "* položka") - bez
+    // téhle úpravy TTS čte hvězdičky doslova ("hvězdička hvězdička").
+    private val ASTERISK_SYMBOL: Pattern = Pattern.compile("\\*+")
 
     // Opakovaná interpunkce za sebou (elipsa "...", "!!!", "???") - některé TTS
     // enginy je čtou doslova jako "tečka tečka tečka" místo přirozené pauzy.
@@ -163,7 +168,8 @@ object TextPreprocessor {
         val stripUnderscores: Boolean = true,
         val stripEmoji: Boolean = true,
         val stripHashSymbol: Boolean = true,
-        val stripMentionSymbol: Boolean = true
+        val stripMentionSymbol: Boolean = true,
+        val stripAsteriskSymbol: Boolean = true
     )
 
     fun clean(input: String, options: Options = Options()): String {
@@ -192,6 +198,7 @@ object TextPreprocessor {
         if (options.stripUnderscores) text = text.replace('_', ' ')
         if (options.stripHashSymbol) text = HASHTAG_SYMBOL.matcher(text).replaceAll("")
         if (options.stripMentionSymbol) text = MENTION_SYMBOL.matcher(text).replaceAll("")
+        if (options.stripAsteriskSymbol) text = ASTERISK_SYMBOL.matcher(text).replaceAll("")
 
         // Normalizace bílých znaků, ať čtení plyne přirozeně. Záměrně BEZ trim()
         // na začátku/konci - tenhle text se totiž zpětně zapisuje do textového

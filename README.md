@@ -66,6 +66,16 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.32)
+
+- **Oprava**: znak "#" se dřív mazal jen když byl nalepený na slovo (jako
+  hashtag "#příklad"), ne když stál samostatně nebo třeba v nadpisu
+  ("# Nadpis") - appka ho pak četla nahlas jako "křížek". Teď se maže
+  vždy.
+- **Nové**: markdown zvýraznění hvězdičkami (`*kurzíva*`, `**tučně**`,
+  odrážky "* položka") se teď taky odstraňuje - dřív appka hvězdičky
+  četla doslova ("hvězdička hvězdička").
+
 ## Nové v této verzi (2.31)
 
 - **Nové rozložení pro režim na šířku (landscape)**: veškeré ovládání
