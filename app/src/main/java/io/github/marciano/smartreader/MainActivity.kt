@@ -44,6 +44,15 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
     private var service: ReadingService? = null
     private var isServiceBound = false
     private var highlightSpan: BackgroundColorSpan? = null
+
+    // Appka NEUPRAVUJE viditelný text (viz TextPreprocessor.clean) - tyhle dvě
+    // proměnné drží "překladovou tabulku" mezi pozicí ve ČTENÉM (vyčištěném)
+    // textu a pozicí ve VIDITELNÉM (původním) textu pro aktuální čtecí session.
+    // Aktualizují se jen při čerstvém startu čtení (startReadingFromCursor) a
+    // zůstávají platné i přes pauzu/pokračování/přeskočení, protože ty vnitřně
+    // používají STEJNÝ už jednou vyčištěný text.
+    private var currentReadingCursor: Int = 0
+    private var currentReadingPositionMap: IntArray = IntArray(0)
     private var currentSpeedRate = 1.0f
     private var currentVolume = 1.0f
 
@@ -261,7 +270,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         val svc = service ?: return
         svc.setSpeed(rate)
         if (svc.isSpeaking()) {
-            val pos = svc.currentAbsolutePosition()
+            val pos = currentReadingPositionInOriginalText()
             svc.pause()
             placeCursorAt(pos)
             startReadingFromCursor()
@@ -338,16 +347,18 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         // Rozepisování zkratek si TextPreprocessor teď řeší sám podle aktuálního
         // jazyka zařízení (viz ABBREVIATIONS_BY_LANGUAGE) - žádné ruční omezení
         // na konkrétní jazyk už tady není potřeba.
-        val cleaned = TextPreprocessor.clean(remaining)
+        val cleanResult = TextPreprocessor.clean(remaining)
 
-        if (cleaned.isBlank()) {
+        if (cleanResult.text.isBlank()) {
             Toast.makeText(this, getString(R.string.toast_nothing_to_read_from_cursor), Toast.LENGTH_SHORT).show()
             return
         }
 
-        if (cleaned != remaining) {
-            binding.etContent.text?.replace(cursor, liveText.length, cleaned)
-        }
+        // Viditelný text zůstává PŘESNĚ takový, jaký ho uživatel vložil - appka
+        // ho už nepřepisuje vyčištěnou verzí. Uložit si jen mapování pozic, ať
+        // umí zvýraznění/kurzor správně přeložit z čteného textu na viditelný.
+        currentReadingCursor = cursor
+        currentReadingPositionMap = cleanResult.originalPositions
         placeCursorAt(cursor)
 
         // Zaznamenat do historie hned v okamžiku spuštění čtení (klepnutí na Přehrát),
@@ -357,7 +368,31 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         ensureServiceStarted()
         service?.setSpeed(currentSpeedRate)
         service?.setVolume(currentVolume)
-        service?.speak(cleaned, cursor)
+        service?.speak(cleanResult.text, cursor)
+    }
+
+    /**
+     * Převede absolutní pozici v ČTENÉM (appkou vyčištěném) textu na
+     * odpovídající pozici ve VIDITELNÉM (původním, nezměněném) textu - pomocí
+     * mapování uloženého při posledním čerstvém startu čtení.
+     */
+    private fun mapToOriginalPosition(cleanedAbsolutePos: Int): Int {
+        val map = currentReadingPositionMap
+        val originalLen = binding.etContent.text?.length ?: 0
+        if (map.isEmpty()) return cleanedAbsolutePos.coerceIn(0, originalLen)
+        val relativePos = cleanedAbsolutePos - currentReadingCursor
+        val mapped = when {
+            relativePos < 0 -> map[0]
+            relativePos < map.size -> map[relativePos]
+            else -> map[map.size - 1] + 1
+        }
+        return (currentReadingCursor + mapped).coerceIn(0, originalLen)
+    }
+
+    /** Aktuální pozice čtení převedená na souřadnice viditelného (původního) textu. */
+    private fun currentReadingPositionInOriginalText(): Int {
+        val svc = service ?: return binding.etContent.selectionStart
+        return mapToOriginalPosition(svc.currentAbsolutePosition())
     }
 
     private fun ensureServiceStarted() {
@@ -384,7 +419,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
 
         val wasSpeaking = svc.isSpeaking()
         val currentPos = if (svc.isSpeaking() || svc.isPaused()) {
-            svc.currentAbsolutePosition()
+            currentReadingPositionInOriginalText()
         } else {
             binding.etContent.selectionStart
         }
@@ -452,7 +487,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
     private fun saveDraftState() {
         val text = binding.etContent.text?.toString().orEmpty()
         val position = service?.let {
-            if (it.isSpeaking() || it.isPaused()) it.currentAbsolutePosition() else binding.etContent.selectionStart
+            if (it.isSpeaking() || it.isPaused()) currentReadingPositionInOriginalText() else binding.etContent.selectionStart
         } ?: binding.etContent.selectionStart
         TextLibraryStore.saveDraft(this, text, position)
         currentLibraryItemId?.let { id -> TextLibraryStore.updateCursorPosition(this, id, position) }
@@ -963,7 +998,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
     private fun applyVoiceChange(voice: Voice) {
         val svc = service ?: return
         if (svc.isSpeaking()) {
-            val pos = svc.currentAbsolutePosition()
+            val pos = currentReadingPositionInOriginalText()
             svc.pause()
             svc.setVoice(voice)
             placeCursorAt(pos)
@@ -997,7 +1032,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                     )
             }
             if (isPaused) {
-                val pos = service?.currentAbsolutePosition() ?: 0
+                val pos = currentReadingPositionInOriginalText()
                 placeCursorAt(pos)
             }
             if (!isSpeaking && !isPaused) {
@@ -1012,8 +1047,10 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
 
     // --- Zvýrazňování a auto-scroll čteného textu ---
 
-    private fun highlightRange(start: Int, end: Int) {
+    private fun highlightRange(cleanedStart: Int, cleanedEnd: Int) {
         val text = binding.etContent.text ?: return
+        val start = mapToOriginalPosition(cleanedStart)
+        val end = mapToOriginalPosition(cleanedEnd)
         if (start < 0 || end > text.length || start >= end) return
         clearHighlight()
         val span = BackgroundColorSpan(0xFFFFF176.toInt())

@@ -66,6 +66,21 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.35)
+
+- **Zásadní změna: viditelný text se už vůbec nemění.** Appka dřív při
+  spuštění čtení fyzicky přepisovala text v poli na "vyčištěnou" verzi
+  (bez odkazů, křížků, hvězdiček, opakovaných pomlček apod.) - proto se
+  postupně honila spousta drobných chyb kolem toho (mizející mezera aj.).
+  Teď appka vidí a čte dvě oddělené věci: TO, CO VIDÍŠ (beze změny,
+  přesně jak jsi to vložil) a TO, CO SE ČTE (interně vyčištěná verze jen
+  pro TTS). Appka si mezi nimi pamatuje mapování pozic, takže zvýrazňování
+  čteného slova i posouvání textu při čtení pořád přesně sedí na viditelný
+  text - jen ho appka už nikdy neupravuje.
+- Praktický důsledek: odkazy, #, *, opakované pomlčky a podobné znaky
+  zůstanou v textu vidět přesně tak, jak je vložíš, ale appka je nikdy
+  nepřečte nahlas.
+
 ## Nové v této verzi (2.34)
 
 - **Oprava**: opakované pomlčky za sebou ("---", typicky vizuální

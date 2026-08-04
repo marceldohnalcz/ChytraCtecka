@@ -1,12 +1,20 @@
 package io.github.marciano.smartreader
 
 import java.util.Locale
+import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 /**
- * Čistí text před předáním do TTS – odstraňuje odkazy, čísla účtů,
- * podtržítka, emoji a další prvky, které nedávají smysl při poslechu.
- * Jednotlivá pravidla lze podle potřeby vypnout přes [Options].
+ * Připraví text pro TTS – odstraňuje odkazy, čísla účtů, podtržítka, emoji a
+ * další prvky, které nedávají smysl při poslechu (např. "#", "*", opakovaná
+ * interpunkce). Jednotlivá pravidla lze podle potřeby vypnout přes [Options].
+ *
+ * DŮLEŽITÉ: appka NEUPRAVUJE viditelný text - [clean] vrací kromě vyčištěného
+ * textu (pro TTS) i [CleanResult.originalPositions], což je mapování "pozice
+ * ve vyčištěném textu -> odpovídající pozice v PŮVODNÍM (viditelném) textu".
+ * Díky tomu appka pozná, kterou část PŮVODNÍHO textu právě čte, i když TTS
+ * dostává jinak upravenou verzi - viditelný text tak zůstává přesně takový,
+ * jaký ho uživatel vložil.
  *
  * Rozepisování zkratek (viz [ABBREVIATIONS_BY_LANGUAGE]) je jazykově
  * specifické - appka si podle aktuálního jazyka zařízení ([Locale.getDefault])
@@ -15,6 +23,10 @@ import java.util.regex.Pattern
  * funguje pro všechny jazyky stejně, není jazykově specifický).
  */
 object TextPreprocessor {
+
+    /** [text] = to, co se skutečně přečte. [originalPositions] má stejnou délku jako
+     *  [text] a pro každý jeho znak udává index odpovídajícího znaku v PŮVODNÍM textu. */
+    data class CleanResult(val text: String, val originalPositions: IntArray)
 
     private val URL_PATTERN: Pattern = Pattern.compile(
         "(https?://\\S+)|(www\\.\\S+)", Pattern.CASE_INSENSITIVE
@@ -70,6 +82,11 @@ object TextPreprocessor {
     // téhle úpravy TTS čte hvězdičky doslova ("hvězdička hvězdička").
     private val ASTERISK_SYMBOL: Pattern = Pattern.compile("\\*+")
 
+    // Unicode znak elipsy "…" (U+2026) - jeden znak, co vypadá jako tři tečky.
+    private val ELLIPSIS_CHAR_PATTERN: Pattern = Pattern.compile("\u2026")
+    // Podtržítko nahrazujeme mezerou (např. nazvy_souboru_takhle).
+    private val UNDERSCORE_PATTERN: Pattern = Pattern.compile("_")
+
     // Opakovaná interpunkce za sebou (elipsa "...", "!!!", "???") - některé TTS
     // enginy je čtou doslova jako "tečka tečka tečka" místo přirozené pauzy.
     // Zachytí i variantu oddělenou mezerami (". . . . ."), což je časté např.
@@ -82,6 +99,9 @@ object TextPreprocessor {
     private val BRACKETS_AND_QUOTES_PATTERN: Pattern = Pattern.compile(
         "[()\\[\\]{}\"„“«»‘’']"
     )
+
+    private val MULTI_SPACE_PATTERN: Pattern = Pattern.compile("[ \\t]{2,}")
+    private val MULTI_NEWLINE_PATTERN: Pattern = Pattern.compile("\\n{3,}")
 
     /**
      * Slovníky zkratek podle jazyka (klíč = ISO kód jazyka, stejný jako
@@ -191,46 +211,51 @@ object TextPreprocessor {
         val stripAsteriskSymbol: Boolean = true
     )
 
-    fun clean(input: String, options: Options = Options()): String {
+    fun clean(input: String, options: Options = Options()): CleanResult {
         var text = input
+        var positions = IntArray(input.length) { it }
 
-        if (options.expandAbbreviations) text = expandAbbreviations(text)
-        if (options.skipUrls) text = URL_PATTERN.matcher(text).replaceAll(" ")
+        fun apply(pattern: Pattern, replacer: (Matcher) -> String) {
+            val (t, p) = replaceTracked(text, positions, pattern, replacer)
+            text = t
+            positions = p
+        }
+
+        if (options.expandAbbreviations) {
+            val (t, p) = expandAbbreviationsTracked(text, positions)
+            text = t
+            positions = p
+        }
+        if (options.skipUrls) apply(URL_PATTERN) { " " }
         if (options.skipBankAccounts) {
-            text = IBAN_PATTERN.matcher(text).replaceAll(" ")
-            text = BANK_ACCOUNT_PATTERN.matcher(text).replaceAll(" ")
+            apply(IBAN_PATTERN) { " " }
+            apply(BANK_ACCOUNT_PATTERN) { " " }
         }
         // Nejdřív odfiltrovat telefony/variabilní symboly (dokud jsou to "čisté" dlouhé
         // sekvence číslic), teprve pak sloučit tečkované tisíce - jinak by se velké
         // částky jako "1.234.567" po sloučení mylně chytily do stejného filtru.
-        if (options.skipLongNumbers) text = LONG_DIGIT_PATTERN.matcher(text).replaceAll(" ")
-        if (options.normalizeThousands) text = normalizeThousandsSeparators(text)
-        if (options.stripRepeatedDashes) text = REPEATED_DASH_PATTERN.matcher(text).replaceAll("")
-        if (options.normalizeDashBetweenDigits) {
-            text = DASH_BETWEEN_DIGITS_PATTERN.matcher(text).replaceAll(" ")
-        }
-        // Unicode znak elipsy "…" (U+2026) je JEDEN znak, co vypadá jako tři tečky -
-        // TTS ho čte doslova jako "tři tečky". Převedeme na obyčejnou tečku, ať ho
-        // pak zachytí i sloučení opakované interpunkce níž (u víc elips za sebou).
-        if (options.simplifyRepeatedPunctuation) text = text.replace('\u2026', '.')
+        if (options.skipLongNumbers) apply(LONG_DIGIT_PATTERN) { " " }
+        if (options.normalizeThousands) apply(THOUSANDS_SEPARATOR_PATTERN) { m -> m.group().replace(".", "") }
+        if (options.stripRepeatedDashes) apply(REPEATED_DASH_PATTERN) { "" }
+        if (options.normalizeDashBetweenDigits) apply(DASH_BETWEEN_DIGITS_PATTERN) { " " }
+        // Unicode elipsa "…" na obyčejnou tečku, ať ji pak zachytí i sloučení
+        // opakované interpunkce níž (u víc elips za sebou).
         if (options.simplifyRepeatedPunctuation) {
-            text = REPEATED_PUNCTUATION_PATTERN.matcher(text).replaceAll("$1")
+            apply(ELLIPSIS_CHAR_PATTERN) { "." }
+            apply(REPEATED_PUNCTUATION_PATTERN) { m -> m.group(1) }
         }
-        if (options.stripBracketsAndQuotes) text = BRACKETS_AND_QUOTES_PATTERN.matcher(text).replaceAll(" ")
-        if (options.stripEmoji) text = EMOJI_PATTERN.matcher(text).replaceAll("")
-        if (options.stripUnderscores) text = text.replace('_', ' ')
-        if (options.stripHashSymbol) text = HASHTAG_SYMBOL.matcher(text).replaceAll("")
-        if (options.stripMentionSymbol) text = MENTION_SYMBOL.matcher(text).replaceAll("")
-        if (options.stripAsteriskSymbol) text = ASTERISK_SYMBOL.matcher(text).replaceAll("")
+        if (options.stripBracketsAndQuotes) apply(BRACKETS_AND_QUOTES_PATTERN) { " " }
+        if (options.stripEmoji) apply(EMOJI_PATTERN) { "" }
+        if (options.stripUnderscores) apply(UNDERSCORE_PATTERN) { " " }
+        if (options.stripHashSymbol) apply(HASHTAG_SYMBOL) { "" }
+        if (options.stripMentionSymbol) apply(MENTION_SYMBOL) { "" }
+        if (options.stripAsteriskSymbol) apply(ASTERISK_SYMBOL) { "" }
 
-        // Normalizace bílých znaků, ať čtení plyne přirozeně. Záměrně BEZ trim()
-        // na začátku/konci - tenhle text se totiž zpětně zapisuje do textového
-        // pole, a osekání mezery na začátku by smazalo mezeru před slovem, na
-        // které uživatel klepl (TTS mezera na začátku/konci vůbec nevadí).
-        text = text.replace(Regex("[ \\t]{2,}"), " ")
-        text = text.replace(Regex("\\n{3,}"), "\n\n")
+        // Normalizace bílých znaků, ať čtení plyne přirozeně.
+        apply(MULTI_SPACE_PATTERN) { " " }
+        apply(MULTI_NEWLINE_PATTERN) { "\n\n" }
 
-        return text
+        return CleanResult(text, positions)
     }
 
     /** Vrátí první nalezený odkaz v textu, nebo null. */
@@ -239,16 +264,46 @@ object TextPreprocessor {
         return if (m.find()) m.group() else null
     }
 
-    /** Sloučí "220.000" na "220000", ať to TTS přečte jako číslo, ne po číslicích. */
-    private fun normalizeThousandsSeparators(text: String): String {
-        val matcher = THOUSANDS_SEPARATOR_PATTERN.matcher(text)
-        val sb = StringBuffer()
+    /**
+     * Aplikuje regex náhradu a ZÁROVEŇ přepočítá pole "kde v původním textu byl
+     * každý znak výsledku" - nezasažené znaky si nesou svou dosavadní mapovanou
+     * pozici dál, znaky vzniklé náhradou (např. rozepsaná zkratka) se namapují
+     * na pozici začátku shody v původním textu - pro účely zvýrazňování při
+     * čtení to naprosto stačí (nejde o úpravu jednotlivých písmen, ale o to,
+     * aby appka poznala, KTEROU část původního textu zrovna čte).
+     */
+    private fun replaceTracked(
+        text: String,
+        positions: IntArray,
+        pattern: Pattern,
+        replacer: (Matcher) -> String
+    ): Pair<String, IntArray> {
+        val matcher = pattern.matcher(text)
+        val sb = StringBuilder()
+        val newPositions = ArrayList<Int>(text.length)
+        var lastEnd = 0
         while (matcher.find()) {
-            val replacement = matcher.group().replace(".", "")
-            matcher.appendReplacement(sb, java.util.regex.Matcher.quoteReplacement(replacement))
+            for (i in lastEnd until matcher.start()) {
+                sb.append(text[i])
+                newPositions.add(positions[i])
+            }
+            val replacement = replacer(matcher)
+            val anchor = when {
+                matcher.start() < positions.size -> positions[matcher.start()]
+                positions.isNotEmpty() -> positions[positions.size - 1] + 1
+                else -> 0
+            }
+            for (ch in replacement) {
+                sb.append(ch)
+                newPositions.add(anchor)
+            }
+            lastEnd = matcher.end()
         }
-        matcher.appendTail(sb)
-        return sb.toString()
+        for (i in lastEnd until text.length) {
+            sb.append(text[i])
+            newPositions.add(positions[i])
+        }
+        return sb.toString() to newPositions.toIntArray()
     }
 
     /**
@@ -257,11 +312,12 @@ object TextPreprocessor {
      * nedělá pauzu uprostřed věty. Pro jazyky bez podchyceného slovníku text
      * beze změny vrátí.
      */
-    private fun expandAbbreviations(text: String): String {
+    private fun expandAbbreviationsTracked(text: String, positions: IntArray): Pair<String, IntArray> {
         val language = Locale.getDefault().language
-        val abbreviations = ABBREVIATIONS_BY_LANGUAGE[language] ?: return text
+        val abbreviations = ABBREVIATIONS_BY_LANGUAGE[language] ?: return text to positions
 
         var result = text
+        var pos = positions
         for ((abbr, full) in abbreviations) {
             // Zkratka musí být ohraničená mezerou/začátkem textu/závorkou/uvozovkou
             // vlevo (zachyceno do skupiny 1, ať ji můžeme zachovat) a mezerou,
@@ -272,21 +328,19 @@ object TextPreprocessor {
                 "(^|[\\s(\\[{\"'„«])" + Pattern.quote(abbr) + "(?=[\\s,.!?;:)\\]}\"'„»]|$)",
                 Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE
             )
-            val matcher = pattern.matcher(result)
-            val sb = StringBuffer()
-            while (matcher.find()) {
-                val leading = matcher.group(1)
-                val abbrPart = matcher.group().substring(leading.length)
+            val (t, p) = replaceTracked(result, pos, pattern) { m ->
+                val leading = m.group(1)
+                val abbrPart = m.group().substring(leading.length)
                 val replacement = if (abbrPart.firstOrNull()?.isUpperCase() == true) {
                     full.replaceFirstChar { it.uppercase() }
                 } else {
                     full
                 }
-                matcher.appendReplacement(sb, java.util.regex.Matcher.quoteReplacement(leading + replacement))
+                leading + replacement
             }
-            matcher.appendTail(sb)
-            result = sb.toString()
+            result = t
+            pos = p
         }
-        return result
+        return result to pos
     }
 }
