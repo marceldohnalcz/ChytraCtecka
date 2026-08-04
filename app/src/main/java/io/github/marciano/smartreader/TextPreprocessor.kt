@@ -38,6 +38,15 @@ object TextPreprocessor {
     // pl, ru). Bez tohoto by TTS četlo číslice jednu po druhé místo "220 tisíc".
     private val THOUSANDS_SEPARATOR_PATTERN: Pattern = Pattern.compile("\\b\\d{1,3}(?:\\.\\d{3})+\\b")
 
+    // Pomlčka přímo mezi dvěma číslicemi (bez mezer) - typicky číslo jednací,
+    // spisová značka, rozsah stránek nebo telefon ("2024-67", "12-15",
+    // "777-123-456"), ne matematické minus. Skutečné odečítání/záporné číslo se
+    // v běžném textu píše buď s mezerami kolem pomlčky ("5 - 3"), nebo má
+    // pomlčku přímo před číslicí bez PŘEDCHOZÍ číslice ("-5 stupňů") - ani jeden
+    // z těchto případů tenhle vzor nezasáhne, TTS by jinak četlo "mínus" i tam,
+    // kde jde jen o oddělovač.
+    private val DASH_BETWEEN_DIGITS_PATTERN: Pattern = Pattern.compile("(?<=\\d)-(?=\\d)")
+
     // Nejběžnější emoji bloky
     private val EMOJI_PATTERN: Pattern = Pattern.compile(
         "[\\uD83C\\uDF00-\\uD83D\\uDDFF]|[\\uD83D\\uDE00-\\uD83D\\uDE4F]|" +
@@ -162,6 +171,7 @@ object TextPreprocessor {
         val skipBankAccounts: Boolean = true,
         val skipLongNumbers: Boolean = true,
         val normalizeThousands: Boolean = true,
+        val normalizeDashBetweenDigits: Boolean = true,
         val expandAbbreviations: Boolean = true,
         val simplifyRepeatedPunctuation: Boolean = true,
         val stripBracketsAndQuotes: Boolean = true,
@@ -186,6 +196,9 @@ object TextPreprocessor {
         // částky jako "1.234.567" po sloučení mylně chytily do stejného filtru.
         if (options.skipLongNumbers) text = LONG_DIGIT_PATTERN.matcher(text).replaceAll(" ")
         if (options.normalizeThousands) text = normalizeThousandsSeparators(text)
+        if (options.normalizeDashBetweenDigits) {
+            text = DASH_BETWEEN_DIGITS_PATTERN.matcher(text).replaceAll(" ")
+        }
         // Unicode znak elipsy "…" (U+2026) je JEDEN znak, co vypadá jako tři tečky -
         // TTS ho čte doslova jako "tři tečky". Převedeme na obyčejnou tečku, ať ho
         // pak zachytí i sloučení opakované interpunkce níž (u víc elips za sebou).

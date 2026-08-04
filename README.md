@@ -66,6 +66,16 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.33)
+
+- **Oprava**: pomlčka přímo mezi dvěma čísly (bez mezer) se dřív četla
+  jako "mínus", i když šlo jen o oddělovač - typicky u čísla jednacího
+  nebo spisové značky ("15 C 123/2024-67"), rozsahu stránek ("12-15")
+  nebo telefonu ("777-123-456"). Skutečné odečítání nebo záporné číslo
+  se v textu skoro vždy píše s mezerami kolem pomlčky ("5 - 3") nebo bez
+  předchozí číslice ("-5 stupňů") - tyhle případy zůstávají beze změny,
+  opravuje se jen ten typický vzor "číslo-číslo" bez mezer.
+
 ## Nové v této verzi (2.32)
 
 - **Oprava**: znak "#" se dřív mazal jen když byl nalepený na slovo (jako
