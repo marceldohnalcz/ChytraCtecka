@@ -95,6 +95,7 @@
     <string name="toast_saved_to_library">Saved to library</string>
     <string name="toast_loaded_named">Loaded: %1$s</string>
     <string name="toast_history_already_empty">History is already empty</string>
+    <string name="msg_history_limit_reached">Showing the most recent %1$d entries - older ones are automatically removed so history doesn\'t grow forever.</string>
     <string name="toast_library_already_empty">Library is already empty</string>
     <string name="toast_library_cleared">Library cleared</string>
     <string name="toast_failed_open_browser">Couldn\'t open the browser</string>

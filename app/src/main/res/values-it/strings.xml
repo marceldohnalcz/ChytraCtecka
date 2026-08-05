@@ -88,6 +88,7 @@
     <string name="toast_saved_to_library">Salvato nella libreria</string>
     <string name="toast_loaded_named">Caricato: %1$s</string>
     <string name="toast_history_already_empty">La cronologia è già vuota</string>
+    <string name="msg_history_limit_reached">Vengono mostrate le ultime %1$d voci - quelle più vecchie vengono rimosse automaticamente per evitare che la cronologia cresca all\'infinito.</string>
     <string name="toast_library_already_empty">La libreria è già vuota</string>
     <string name="toast_library_cleared">Libreria cancellata</string>
     <string name="toast_failed_open_browser">Impossibile aprire il browser</string>

@@ -95,6 +95,17 @@
         android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
         android:scrollbarSize="6dp" />
 
+    <TextView
+        android:id="@+id/tvHistoryLimitNote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="8dp"
+        android:textSize="12sp"
+        android:textColor="@color/text_secondary"
+        android:visibility="gone" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

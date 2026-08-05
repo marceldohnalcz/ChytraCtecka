@@ -66,6 +66,15 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.37)
+
+- **Vysvětlení "zaseklého počítadla" v historii**: appka nebyla rozbitá -
+  historie má schválně limit na počet záznamů, ať neroste donekonečna, a
+  po dosažení limitu se nejstarší záznamy automaticky mažou. Problém byl,
+  že appka o tom nikde neřekla, takže to vypadalo jako chyba. Teď se
+  v dialogu Historie objeví vysvětlující poznámka, jakmile je limit
+  dosažený. Zároveň jsem limit zvedl ze 100 na 300 záznamů.
+
 ## Nové v této verzi (2.36)
 
 - **Oprava**: když jinou appku (Facebook, Instagram apod.) přehrávání

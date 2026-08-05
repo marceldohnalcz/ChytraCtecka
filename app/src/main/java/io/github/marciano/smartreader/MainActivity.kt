@@ -600,6 +600,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         val view = layoutInflater.inflate(R.layout.dialog_history, null)
         val recycler = view.findViewById<RecyclerView>(R.id.recyclerHistory)
         val empty = view.findViewById<TextView>(R.id.tvHistoryEmpty)
+        val limitNote = view.findViewById<TextView>(R.id.tvHistoryLimitNote)
         val switchEnabled = view.findViewById<android.widget.Switch>(R.id.switchHistoryEnabledInDialog)
         val btnClearHistory = view.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnClearHistory)
         val btnCloseHistory = view.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnCloseHistory)
@@ -617,6 +618,8 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             val items = ReadingHistoryStore.getHistory(this)
             empty.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
             recycler.visibility = if (items.isEmpty()) View.GONE else View.VISIBLE
+            limitNote.visibility = if (items.size >= ReadingHistoryStore.MAX_ENTRIES) View.VISIBLE else View.GONE
+            limitNote.text = getString(R.string.msg_history_limit_reached, ReadingHistoryStore.MAX_ENTRIES)
             adapter.updateItems(items)
         }
 

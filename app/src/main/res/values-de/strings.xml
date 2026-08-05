@@ -88,6 +88,7 @@
     <string name="toast_saved_to_library">In Bibliothek gespeichert</string>
     <string name="toast_loaded_named">Geladen: %1$s</string>
     <string name="toast_history_already_empty">Verlauf ist bereits leer</string>
+    <string name="msg_history_limit_reached">Die letzten %1$d Einträge werden angezeigt - ältere werden automatisch entfernt, damit der Verlauf nicht endlos wächst.</string>
     <string name="toast_library_already_empty">Bibliothek ist bereits leer</string>
     <string name="toast_library_cleared">Bibliothek gelöscht</string>
     <string name="toast_failed_open_browser">Browser konnte nicht geöffnet werden</string>

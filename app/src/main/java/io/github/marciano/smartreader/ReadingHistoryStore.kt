@@ -21,7 +21,7 @@ data class HistoryEntry(
 object ReadingHistoryStore {
     private const val PREFS = "smartreader_prefs"
     private const val KEY_HISTORY = "history_json"
-    private const val MAX_ENTRIES = 100
+    const val MAX_ENTRIES = 300
 
     fun getHistory(context: Context): List<HistoryEntry> {
         val json = prefs(context).getString(KEY_HISTORY, "[]") ?: "[]"

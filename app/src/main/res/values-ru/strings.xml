@@ -88,6 +88,7 @@
     <string name="toast_saved_to_library">Сохранено в библиотеку</string>
     <string name="toast_loaded_named">Загружено: %1$s</string>
     <string name="toast_history_already_empty">История уже пуста</string>
+    <string name="msg_history_limit_reached">Показаны последние %1$d записей - более старые удаляются автоматически, чтобы история не росла бесконечно.</string>
     <string name="toast_library_already_empty">Библиотека уже пуста</string>
     <string name="toast_library_cleared">Библиотека очищена</string>
     <string name="toast_failed_open_browser">Не удалось открыть браузер</string>

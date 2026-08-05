@@ -88,6 +88,7 @@
     <string name="toast_saved_to_library">Uloženo do knihovny</string>
     <string name="toast_loaded_named">Načteno: %1$s</string>
     <string name="toast_history_already_empty">Historie je už prázdná</string>
+    <string name="msg_history_limit_reached">Zobrazeno posledních %1$d záznamů - starší se automaticky mažou, aby historie nerostla donekonečna.</string>
     <string name="toast_library_already_empty">Knihovna je už prázdná</string>
     <string name="toast_library_cleared">Knihovna vymazána</string>
     <string name="toast_failed_open_browser">Nepodařilo se otevřít prohlížeč</string>

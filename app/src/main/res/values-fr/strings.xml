@@ -88,6 +88,7 @@
     <string name="toast_saved_to_library">Enregistré dans la bibliothèque</string>
     <string name="toast_loaded_named">Chargé : %1$s</string>
     <string name="toast_history_already_empty">L\'historique est déjà vide</string>
+    <string name="msg_history_limit_reached">Les %1$d entrées les plus récentes sont affichées - les plus anciennes sont supprimées automatiquement pour que l\'historique ne grandisse pas indéfiniment.</string>
     <string name="toast_library_already_empty">La bibliothèque est déjà vide</string>
     <string name="toast_library_cleared">Bibliothèque vidée</string>
     <string name="toast_failed_open_browser">Impossible d\'ouvrir le navigateur</string>
