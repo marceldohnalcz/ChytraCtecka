@@ -218,8 +218,17 @@ class ReadingService : Service() {
 
     // --- Audio focus (zastavení jiných přehrávačů) ---
 
-    private fun requestAudioFocus() {
-        val am = audioManager ?: return
+    /**
+     * AudioFocusRequest se vytváří JEDNOU a dál se opakovaně používá pro
+     * všechny další žádosti/vzdání se focusu - to je doporučený postup od
+     * Googlu. Dřív appka vytvářela úplně nový objekt při každém volání
+     * requestAudioFocus(), což u některých výrobců (zaznamenáno hlavně po
+     * přerušení jinou appkou jako Facebook/Instagram) mohlo appku dostat do
+     * stavu, kdy si po přerušení nešlo znovu vzít focus zpátky a přehrávání
+     * se už nedalo spustit, dokud appku někdo ručně nevynutil zavřít.
+     */
+    private fun getOrCreateFocusRequest(): AudioFocusRequest {
+        focusRequest?.let { return it }
         val attrs = AudioAttributes.Builder()
             .setUsage(AudioAttributes.USAGE_ASSISTANCE_NAVIGATION_GUIDANCE)
             .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
@@ -230,35 +239,49 @@ class ReadingService : Service() {
         // pustí zpátky, protože si pamatují, že předtím hrály.
         val request = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
             .setAudioAttributes(attrs)
-            .setOnAudioFocusChangeListener { focusChange ->
-                when (focusChange) {
-                    AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
-                        // Typicky telefonát - dočasné přerušení, focus si necháme "podaný",
-                        // ať víme, až se nám vrátí (AUDIOFOCUS_GAIN).
-                        if (ttsManager.isSpeaking) {
-                            pauseForInterruption()
-                        }
-                    }
-                    AudioManager.AUDIOFOCUS_LOSS -> {
-                        // Trvalá ztráta (jiná appka převzala přehrávání natrvalo) - klasická pauza.
-                        pausedDueToInterruption = false
-                        pause()
-                    }
-                    AudioManager.AUDIOFOCUS_GAIN -> {
-                        if (pausedDueToInterruption) {
-                            pausedDueToInterruption = false
-                            if (autoResumeAfterInterruption && ttsManager.isPaused) {
-                                resumeFromPause()
-                            } else {
-                                abandonAudioFocus()
-                            }
-                        }
+            .setOnAudioFocusChangeListener { focusChange -> handleAudioFocusChange(focusChange) }
+            .build()
+        focusRequest = request
+        return request
+    }
+
+    private fun handleAudioFocusChange(focusChange: Int) {
+        when (focusChange) {
+            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
+                // Typicky telefonát - dočasné přerušení, focus si necháme "podaný",
+                // ať víme, až se nám vrátí (AUDIOFOCUS_GAIN).
+                if (ttsManager.isSpeaking) {
+                    pauseForInterruption()
+                }
+            }
+            AudioManager.AUDIOFOCUS_LOSS -> {
+                // Trvalá ztráta (jiná appka - třeba Facebook/Instagram - převzala
+                // přehrávání natrvalo). Systém nám focus už sám odebral, takže
+                // NEvoláme abandonAudioFocus() znovu (zbytečné volání uvnitř
+                // tohohle callbacku dřív mohlo appku dostat do stavu, kdy si
+                // focus nešlo vzít zpátky) - jen zastavíme čtení a aktualizujeme stav.
+                pausedDueToInterruption = false
+                ttsManager.pause()
+                updatePlaybackState(PlaybackStateCompat.STATE_PAUSED)
+                listener?.onStateChanged(false, true)
+                updateNotification()
+            }
+            AudioManager.AUDIOFOCUS_GAIN -> {
+                if (pausedDueToInterruption) {
+                    pausedDueToInterruption = false
+                    if (autoResumeAfterInterruption && ttsManager.isPaused) {
+                        resumeFromPause()
+                    } else {
+                        abandonAudioFocus()
                     }
                 }
             }
-            .build()
-        focusRequest = request
-        am.requestAudioFocus(request)
+        }
+    }
+
+    private fun requestAudioFocus() {
+        val am = audioManager ?: return
+        am.requestAudioFocus(getOrCreateFocusRequest())
     }
 
     private fun abandonAudioFocus() {

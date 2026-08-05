@@ -66,6 +66,17 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.36)
+
+- **Oprava**: když jinou appku (Facebook, Instagram apod.) přehrávání
+  přerušilo natrvalo, appka pak nešla znovu spustit - pomohlo jen vynucené
+  zavření appky v nastavení telefonu. Příčina: appka si při každé žádosti
+  o "audio focus" (právo hrát zvuk) vytvářela úplně nový objekt požadavku
+  místo toho, aby - jak doporučuje Android - použila pořád ten stejný.
+  U některých telefonů to po přerušení mohlo appku dostat do stavu, kdy
+  si focus nešlo vzít zpátky. Teď appka požadavek vytvoří jen jednou a
+  dál ho opakovaně používá.
+
 ## Nové v této verzi (2.35)
 
 - **Zásadní změna: viditelný text se už vůbec nemění.** Appka dřív při
