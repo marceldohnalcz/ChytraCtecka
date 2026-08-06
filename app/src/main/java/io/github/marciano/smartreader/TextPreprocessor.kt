@@ -82,6 +82,20 @@ object TextPreprocessor {
     // téhle úpravy TTS čte hvězdičky doslova ("hvězdička hvězdička").
     private val ASTERISK_SYMBOL: Pattern = Pattern.compile("\\*+")
 
+    // Svislá čára - skoro vždy ohraničuje buňky markdown tabulky
+    // ("| Sloupec 1 | Sloupec 2 |"), TTS by ji jinak četla jako "svislá čára".
+    // Odstraňuje se PŘED pravidlem pro opakované pomlčky výše, ať po
+    // odstranění čar zbydou z oddělovacího řádku tabulky ("|---|---|") jen
+    // pomlčky, které to pravidlo správně smaže taky.
+    private val PIPE_SYMBOL: Pattern = Pattern.compile("\\|")
+    // Zpětné apostrofy - markdown kód (`kód` i celé bloky kódu ```...```).
+    private val BACKTICK_SYMBOL: Pattern = Pattern.compile("`+")
+    // Vlnovky - markdown přeškrtnutý text (~~takhle~~).
+    private val TILDE_SYMBOL: Pattern = Pattern.compile("~+")
+    // Markdown citace (řádek začínající ">") - jen na začátku řádku, ať se
+    // nedotkne skutečného "větší než" uprostřed věty ("5 > 3").
+    private val BLOCKQUOTE_MARKER_PATTERN: Pattern = Pattern.compile("^>\\s*", Pattern.MULTILINE)
+
     // Unicode znak elipsy "…" (U+2026) - jeden znak, co vypadá jako tři tečky.
     private val ELLIPSIS_CHAR_PATTERN: Pattern = Pattern.compile("\u2026")
     // Podtržítko nahrazujeme mezerou (např. nazvy_souboru_takhle).
@@ -208,7 +222,11 @@ object TextPreprocessor {
         val stripEmoji: Boolean = true,
         val stripHashSymbol: Boolean = true,
         val stripMentionSymbol: Boolean = true,
-        val stripAsteriskSymbol: Boolean = true
+        val stripAsteriskSymbol: Boolean = true,
+        val stripPipeSymbol: Boolean = true,
+        val stripBacktickSymbol: Boolean = true,
+        val stripTildeSymbol: Boolean = true,
+        val stripBlockquoteMarker: Boolean = true
     )
 
     fun clean(input: String, options: Options = Options()): CleanResult {
@@ -236,6 +254,13 @@ object TextPreprocessor {
         // částky jako "1.234.567" po sloučení mylně chytily do stejného filtru.
         if (options.skipLongNumbers) apply(LONG_DIGIT_PATTERN) { " " }
         if (options.normalizeThousands) apply(THOUSANDS_SEPARATOR_PATTERN) { m -> m.group().replace(".", "") }
+        // Markdown artefakty (tabulky, kód, citace) se čistí PŘED sloučením
+        // opakovaných pomlček, ať po odstranění čar zbydou z oddělovacího
+        // řádku tabulky ("|---|---|") jen pomlčky, které se pak správně smažou.
+        if (options.stripPipeSymbol) apply(PIPE_SYMBOL) { "" }
+        if (options.stripBacktickSymbol) apply(BACKTICK_SYMBOL) { "" }
+        if (options.stripTildeSymbol) apply(TILDE_SYMBOL) { "" }
+        if (options.stripBlockquoteMarker) apply(BLOCKQUOTE_MARKER_PATTERN) { "" }
         if (options.stripRepeatedDashes) apply(REPEATED_DASH_PATTERN) { "" }
         if (options.normalizeDashBetweenDigits) apply(DASH_BETWEEN_DIGITS_PATTERN) { " " }
         // Unicode elipsa "…" na obyčejnou tečku, ať ji pak zachytí i sloučení

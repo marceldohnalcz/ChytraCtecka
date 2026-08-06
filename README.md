@@ -66,6 +66,20 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.38)
+
+- **Oprava**: appka nespolehlivě četla svislou čáru "|" (typicky ohraničení
+  buněk markdown tabulky, např. "|---|---|---|") - podle konkrétního hlasu
+  buď mlčela, nebo ji četla nahlas jako "svislá čára", i opakovaně.
+  Teď se maže vždy spolehlivě stejně.
+- **Další markdown znaky, co appka nikdy nemá číst nahlas**: zpětné
+  apostrofy (kód: `` `kód` ``), vlnovky (přeškrtnutý text: `~~takhle~~`) a
+  značka citace na začátku řádku ("> citace"). Skutečné "větší než"
+  uprostřed věty (např. "5 > 3") zůstává beze změny - maže se jen značka
+  citace na začátku řádku.
+- Řádek oddělující záhlaví tabulky ("|---|---|---|") díky kombinaci s už
+  existujícím pravidlem pro opakované pomlčky zmizí úplně celý.
+
 ## Nové v této verzi (2.37)
 
 - **Vysvětlení "zaseklého počítadla" v historii**: appka nebyla rozbitá -
