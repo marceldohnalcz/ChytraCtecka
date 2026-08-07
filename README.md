@@ -66,6 +66,17 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.39)
+
+- **Oprava pádu appky při otočení na šířku během čtení.** Příčina:
+  tlačítka Vložit a Vymazat měla v rozložení na výšku typ "tlačítko s
+  textem", ale ve zvláštním rozložení pro režim na šířku (přidáno v 2.31)
+  jsem je omylem předělal na typ "jen ikona" - se stejným ID, ale jiným
+  typem. Android při otočení obrazovky appku zničí a znovu postaví podle
+  nového rozložení, a tenhle nesoulad typů appku shodil. Opraveno - obě
+  tlačítka mají teď v obou rozloženích stejný typ, jen v režimu na šířku
+  zůstávají kompaktnější (menší text).
+
 ## Nové v této verzi (2.38)
 
 - **Oprava**: appka nespolehlivě četla svislou čáru "|" (typicky ohraničení
