@@ -479,6 +479,16 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         val draftText = TextLibraryStore.loadDraftText(this)
         if (draftText.isNotBlank()) {
             binding.etContent.setText(draftText)
+            // Pro jistotu smazat i případné zbylé zvýrazňovací pruhy, kdyby je
+            // systém (i přes android:saveEnabled="false" u etContent) přece jen
+            // odněkud obnovil - jinak by mohlo zůstat "zaseklé" žluté podbarvení
+            // slova z doby před otočením obrazovky.
+            (binding.etContent.text as? Spannable)?.let { spannable ->
+                for (span in spannable.getSpans(0, spannable.length, BackgroundColorSpan::class.java)) {
+                    spannable.removeSpan(span)
+                }
+            }
+            highlightSpan = null
             val pos = TextLibraryStore.loadDraftPosition(this).coerceIn(0, draftText.length)
             binding.etContent.setSelection(pos)
         }

@@ -66,6 +66,18 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.40)
+
+- **Oprava**: po otočení telefonu (na šířku a zpět) během čtení zůstávalo
+  žluté podbarvení u slova, u kterého appka byla v okamžiku otočení -
+  i po pokračování čtení dál. Příčina: Android má vlastní automatický
+  mechanismus pro zachování obsahu textových polí při otočení obrazovky,
+  nezávislý na appce - a protože appka má svůj vlastní systém pro
+  obnovení rozepsaného textu, tyhle dva mechanismy se navzájem přepisovaly
+  a to systémové obnovilo i starý zvýrazňovací pruh, o kterém appka
+  nevěděla. Appka teď Androidu řekne, ať se do textového pole při otočení
+  nepřidává - obnovení textu si řídí sama.
+
 ## Nové v této verzi (2.39)
 
 - **Oprava pádu appky při otočení na šířku během čtení.** Příčina:

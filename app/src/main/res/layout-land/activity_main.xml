@@ -73,6 +73,7 @@
                 android:id="@+id/etContent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:saveEnabled="false"
                 android:importantForAutofill="no"
                 android:gravity="top|start"
                 android:inputType="textMultiLine|textNoSuggestions"
