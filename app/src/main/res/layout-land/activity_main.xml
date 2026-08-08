@@ -153,6 +153,7 @@
                 </LinearLayout>
 
                 <View
+                    android:visibility="gone"
                     android:layout_width="1.5dp"
                     android:layout_height="28dp"
                     android:layout_marginStart="10dp"
@@ -163,6 +164,7 @@
                     android:id="@+id/rowToolbarIcons"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     android:background="@drawable/bg_toolbar_pill"
@@ -251,6 +253,7 @@
                 </LinearLayout>
 
                 <View
+                    android:visibility="gone"
                     android:layout_width="1.5dp"
                     android:layout_height="28dp"
                     android:layout_marginStart="10dp"
@@ -261,6 +264,7 @@
                     android:id="@+id/rowSpeedSlider"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     android:background="@drawable/bg_edittext_rounded"

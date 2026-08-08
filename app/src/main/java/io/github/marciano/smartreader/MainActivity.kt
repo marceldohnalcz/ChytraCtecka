@@ -224,8 +224,14 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                 isKeyboardCurrentlyVisible = isKeyboardVisible
                 val visibility = if (isKeyboardVisible) View.GONE else View.VISIBLE
                 binding.rowPasteClear.visibility = visibility
-                binding.rowToolbarIcons.visibility = visibility
-                binding.rowSpeedSlider.visibility = visibility
+                // V režimu na šířku jsou řádek ikon a rychlosti trvale schované
+                // (zjednodušené ovládání, viz layout-land/activity_main.xml) - tohle
+                // přepínání se jich netýká, ať appka při schování klávesnice
+                // nechtěně "neprobudí" něco, co má v landscape zůstat pryč natrvalo.
+                if (resources.configuration.orientation != android.content.res.Configuration.ORIENTATION_LANDSCAPE) {
+                    binding.rowToolbarIcons.visibility = visibility
+                    binding.rowSpeedSlider.visibility = visibility
+                }
                 binding.btnSkipPrev.visibility = visibility
                 binding.btnSkipNext.visibility = visibility
                 binding.stopButtonWrapper.visibility = visibility

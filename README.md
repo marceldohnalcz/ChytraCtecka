@@ -66,6 +66,16 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.41)
+
+- **Dokončeno zjednodušené rozložení na šířku**: v režimu na šířku jsou
+  teď vidět jen tlačítka Vložit/Vymazat a ovládání přehrávání
+  (Přehrát/Pauza, Zpět, Vpřed, Stop) - řádek ikon (Obrázek, Odkaz, Uložit,
+  Knihovna, Historie, Sledované profily) a posuvník rychlosti jsou v
+  landscape trvale schované, ať má textové pole ještě víc místa. Samotné
+  funkce nikam nezmizely, jen nejsou v tomhle režimu na hlavní obrazovce -
+  otočením zpět na výšku budou zase všechny vidět.
+
 ## Nové v této verzi (2.40)
 
 - **Oprava**: po otočení telefonu (na šířku a zpět) během čtení zůstávalo
