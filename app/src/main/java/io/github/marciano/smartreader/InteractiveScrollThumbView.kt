@@ -34,8 +34,6 @@ class InteractiveScrollThumbView @JvmOverloads constructor(
     private val restWidthPx = 6f * density
     private val expandedWidthPx = 14f * density
     private val minThumbHeightPx = 28f * density
-    // O kolik rychleji se text posune oproti tomu, o kolik se posune prst.
-    private val dragSpeedMultiplier = 3.5f
 
     private var currentWidthPx = restWidthPx
     private var widthAnimator: ValueAnimator? = null
@@ -83,7 +81,7 @@ class InteractiveScrollThumbView @JvmOverloads constructor(
             MotionEvent.ACTION_MOVE -> {
                 val deltaY = event.y - lastTouchY
                 lastTouchY = event.y
-                scrollByDelta(editText, deltaY * dragSpeedMultiplier)
+                scrollByDelta(editText, deltaY * dynamicDragMultiplier(editText))
                 return true
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
@@ -93,6 +91,22 @@ class InteractiveScrollThumbView @JvmOverloads constructor(
             }
         }
         return false
+    }
+
+    /**
+     * Kolikrát rychleji se text posune oproti tomu, o kolik se posune prst -
+     * spočítané tak, aby JEDNO přejetí prstem od horního po dolní okraj pruhu
+     * (celá výška [height]) vždy pokrylo CELÝ rozsah scrollování, ať je text
+     * jakkoli dlouhý. Krátký text = malý násobič (jemné, přesné posouvání),
+     * dlouhý text = velký násobič (jedno přejetí stačí na doscrollování až na
+     * konec, ne potřeba to opakovat víckrát).
+     */
+    private fun dynamicDragMultiplier(editText: EditText): Float {
+        val layout = editText.layout ?: return 1f
+        val visibleHeight = editText.height - editText.paddingTop - editText.paddingBottom
+        val maxScroll = (layout.height - visibleHeight).coerceAtLeast(0)
+        if (maxScroll <= 0 || height <= 0) return 1f
+        return maxScroll.toFloat() / height.toFloat()
     }
 
     private fun animateWidthTo(target: Float) {

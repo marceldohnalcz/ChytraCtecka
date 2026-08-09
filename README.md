@@ -66,6 +66,15 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.42)
+
+- **Dynamická rychlost posuvníku podle délky textu**: dřív měl posuvník
+  pevně danou rychlost tažení, takže u hodně dlouhého textu bylo potřeba
+  přejet pruh víckrát, než se appka dostala až na konec. Teď appka
+  rychlost přepočítává podle skutečné délky aktuálního textu - jedno
+  přejetí prstem od horního po dolní okraj pruhu vždy pokryje úplně celý
+  text, ať je krátký nebo dlouhý.
+
 ## Nové v této verzi (2.41)
 
 - **Dokončeno zjednodušené rozložení na šířku**: v režimu na šířku jsou
