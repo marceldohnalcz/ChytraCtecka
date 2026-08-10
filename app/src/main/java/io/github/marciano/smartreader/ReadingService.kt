@@ -355,6 +355,17 @@ class ReadingService : Service() {
         stopSelf()
     }
 
+    /**
+     * Zavolá se, když uživatel appku smaže ze seznamu spuštěných appek
+     * (přehodí ji do koše v přehledu naposledy spuštěných appek). Appka se má
+     * v tenhle okamžik skutečně ukončit a přestat číst - ne pokračovat na
+     * pozadí, jak by to dělal třeba hudební přehrávač.
+     */
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        super.onTaskRemoved(rootIntent)
+        stopReading()
+    }
+
     override fun onDestroy() {
         ttsManager.shutdown()
         abandonAudioFocus()

@@ -66,6 +66,14 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.43)
+
+- **Appka se teď skutečně ukončí a přestane číst**, když ji smažeš ze
+  seznamu naposledy spuštěných appek (přehodíš do koše/swipnutím pryč).
+  Dřív appka v takovém případě dál běžela na pozadí a pokračovala ve
+  čtení, i když sis myslel, že jsi ji zavřel - teď ukončení appky tímhle
+  gestem přehrávání i celou službu na pozadí definitivně zastaví.
+
 ## Nové v této verzi (2.42)
 
 - **Dynamická rychlost posuvníku podle délky textu**: dřív měl posuvník
