@@ -55,6 +55,10 @@
     <string name="voice_quality_unknown">kvalita neznámá</string>
     <string name="voice_needs_internet"> • potřebuje internet</string>
     <string name="dialog_title_settings">Nastavení</string>
+    <string name="label_tts_engine">Hlasový modul</string>
+    <string name="desc_tts_engine">Která appka generuje řeč - jde díky tomu použít hlasy i z jiných nainstalovaných appek</string>
+    <string name="toast_engine_switched">Hlasový modul přepnut</string>
+    <string name="toast_engine_switch_failed">Nepodařilo se přepnout hlasový modul</string>
 
     <string name="menu_settings">Nastavení</string>
     <string name="menu_help">Nápověda a tipy</string>

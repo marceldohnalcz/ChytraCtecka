@@ -66,6 +66,16 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.44)
+
+- **Výběr hlasového modulu přímo v appce**: v Nastavení je nová sekce
+  "Hlasový modul" nad výběrem hlasu - appka vypíše všechny hlasové
+  moduly nainstalované v telefonu (Google, ale i appky třetích stran
+  jako Vocalizer TTS a podobné) a jde mezi nimi přepínat jedním klepnutím,
+  bez nutnosti chodit do nastavení telefonu. Po přepnutí modulu se
+  automaticky obnoví i seznam dostupných hlasů (každý modul má vlastní
+  sadu). Volba se ukládá a appka si ji pamatuje i po zavření.
+
 ## Nové v této verzi (2.43)
 
 - **Appka se teď skutečně ukončí a přestane číst**, když ji smažeš ze

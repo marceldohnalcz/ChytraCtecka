@@ -10,6 +10,7 @@ object AppSettings {
     private const val KEY_VOLUME = "reading_volume"
     private const val KEY_AUTO_RESUME = "auto_resume_after_call"
     private const val KEY_THEME_MODE = "theme_mode"
+    private const val KEY_TTS_ENGINE = "tts_engine_package"
     private const val KEY_HISTORY_ENABLED = "history_enabled"
 
     fun saveVoiceName(context: Context, name: String) {
@@ -47,6 +48,20 @@ object AppSettings {
 
     fun loadThemeMode(context: Context): Int =
         prefs(context).getInt(KEY_THEME_MODE, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+
+    /** null = použít systémový výchozí hlasový modul (žádný konkrétní není uložený). */
+    fun saveTtsEngine(context: Context, packageName: String?) {
+        val editor = prefs(context).edit()
+        if (packageName == null) {
+            editor.remove(KEY_TTS_ENGINE)
+        } else {
+            editor.putString(KEY_TTS_ENGINE, packageName)
+        }
+        editor.apply()
+    }
+
+    fun loadTtsEngine(context: Context): String? =
+        prefs(context).getString(KEY_TTS_ENGINE, null)
 
     fun saveHistoryEnabled(context: Context, enabled: Boolean) {
         prefs(context).edit().putBoolean(KEY_HISTORY_ENABLED, enabled).apply()

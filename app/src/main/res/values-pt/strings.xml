@@ -55,6 +55,10 @@
     <string name="voice_quality_unknown">qualidade desconhecida</string>
     <string name="voice_needs_internet"> • precisa de internet</string>
     <string name="dialog_title_settings">Configurações</string>
+    <string name="label_tts_engine">Mecanismo de voz</string>
+    <string name="desc_tts_engine">Qual app gera a voz - permite usar vozes de outros apps instalados também</string>
+    <string name="toast_engine_switched">Mecanismo de voz alterado</string>
+    <string name="toast_engine_switch_failed">Não foi possível trocar o mecanismo de voz</string>
 
     <string name="menu_settings">Configurações</string>
     <string name="menu_help">Ajuda e dicas</string>

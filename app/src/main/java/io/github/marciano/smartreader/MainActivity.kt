@@ -924,6 +924,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         val view = layoutInflater.inflate(R.layout.dialog_settings, null)
         val seekVolume = view.findViewById<SeekBar>(R.id.seekVolumeDialog)
         val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupVoices)
+        val radioGroupEngines = view.findViewById<RadioGroup>(R.id.radioGroupEngines)
         val switchAutoResume = view.findViewById<android.widget.Switch>(R.id.switchAutoResume)
         val switchHistoryEnabled = view.findViewById<android.widget.Switch>(R.id.switchHistoryEnabled)
 
@@ -970,26 +971,57 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             override fun onStopTrackingTouch(sb: SeekBar?) {}
         })
 
-        val voices = svc?.getAvailableVoicesForCurrentLanguage().orEmpty()
-        val currentVoiceName = svc?.getCurrentVoiceName()
-        if (voices.isEmpty()) {
-            val tv = TextView(this)
-            tv.text = getString(R.string.voice_none_found)
-            tv.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
-            radioGroup.addView(tv)
-        } else {
-            voices.forEachIndexed { index, voice ->
-                val radio = RadioButton(this)
-                radio.text = voiceLabel(voice, index)
-                radio.id = View.generateViewId()
-                radio.isChecked = voice.name == currentVoiceName
-                radio.setOnClickListener {
-                    AppSettings.saveVoiceName(this, voice.name)
-                    applyVoiceChange(voice)
+        fun refreshVoiceList() {
+            radioGroup.removeAllViews()
+            val voices = service?.getAvailableVoicesForCurrentLanguage().orEmpty()
+            val currentVoiceName = service?.getCurrentVoiceName()
+            if (voices.isEmpty()) {
+                val tv = TextView(this)
+                tv.text = getString(R.string.voice_none_found)
+                tv.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
+                radioGroup.addView(tv)
+            } else {
+                voices.forEachIndexed { index, voice ->
+                    val radio = RadioButton(this)
+                    radio.text = voiceLabel(voice, index)
+                    radio.id = View.generateViewId()
+                    radio.isChecked = voice.name == currentVoiceName
+                    radio.setOnClickListener {
+                        AppSettings.saveVoiceName(this, voice.name)
+                        applyVoiceChange(voice)
+                    }
+                    radioGroup.addView(radio)
                 }
-                radioGroup.addView(radio)
             }
         }
+
+        val engines = TtsManager.listInstalledEngines(this)
+        val currentEnginePackage = svc?.getCurrentEnginePackage()
+        engines.forEach { engine ->
+            val radio = RadioButton(this)
+            radio.text = engine.label
+            radio.id = View.generateViewId()
+            radio.isChecked = engine.packageName == currentEnginePackage
+            radio.setOnClickListener {
+                svc?.switchTtsEngine(
+                    packageName = engine.packageName,
+                    onReady = {
+                        runOnUiThread {
+                            Toast.makeText(this, getString(R.string.toast_engine_switched), Toast.LENGTH_SHORT).show()
+                            refreshVoiceList()
+                        }
+                    },
+                    onFailed = { msg ->
+                        runOnUiThread {
+                            Toast.makeText(this, getString(R.string.toast_engine_switch_failed), Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                )
+            }
+            radioGroupEngines.addView(radio)
+        }
+
+        refreshVoiceList()
 
         AlertDialog.Builder(this)
             .setTitle(getString(R.string.dialog_title_settings))

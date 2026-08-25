@@ -55,6 +55,10 @@
     <string name="voice_quality_unknown">qualità sconosciuta</string>
     <string name="voice_needs_internet"> • richiede internet</string>
     <string name="dialog_title_settings">Impostazioni</string>
+    <string name="label_tts_engine">Motore vocale</string>
+    <string name="desc_tts_engine">Quale app genera la voce - permette di usare voci anche da altre app installate</string>
+    <string name="toast_engine_switched">Motore vocale cambiato</string>
+    <string name="toast_engine_switch_failed">Impossibile cambiare il motore vocale</string>
 
     <string name="menu_settings">Impostazioni</string>
     <string name="menu_help">Guida e suggerimenti</string>

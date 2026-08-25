@@ -55,6 +55,10 @@
     <string name="voice_quality_unknown">качество неизвестно</string>
     <string name="voice_needs_internet"> • требуется интернет</string>
     <string name="dialog_title_settings">Настройки</string>
+    <string name="label_tts_engine">Голосовой движок</string>
+    <string name="desc_tts_engine">Какое приложение генерирует речь - позволяет использовать голоса и из других установленных приложений</string>
+    <string name="toast_engine_switched">Голосовой движок изменён</string>
+    <string name="toast_engine_switch_failed">Не удалось изменить голосовой движок</string>
 
     <string name="menu_settings">Настройки</string>
     <string name="menu_help">Справка и советы</string>

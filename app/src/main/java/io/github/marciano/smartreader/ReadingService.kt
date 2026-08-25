@@ -54,6 +54,7 @@ class ReadingService : Service() {
     private var focusRequest: AudioFocusRequest? = null
     private var autoResumeAfterInterruption = false
     private var pausedDueToInterruption = false
+    private var currentEnginePackage: String? = null
 
     inner class LocalBinder : Binder() {
         fun getService(): ReadingService = this@ReadingService
@@ -62,21 +63,25 @@ class ReadingService : Service() {
     override fun onCreate() {
         super.onCreate()
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        ttsManager = TtsManager(
-            context = this,
-            onWordRange = { s, e -> listener?.onWordRange(s, e) },
-            onDone = {
-                abandonAudioFocus()
-                updatePlaybackState(PlaybackStateCompat.STATE_STOPPED)
-                listener?.onStateChanged(false, false)
-                stopForegroundAndSelf()
-            },
-            onError = { msg -> listener?.onError(msg) },
-            onReady = {}
-        )
+        currentEnginePackage = AppSettings.loadTtsEngine(this)
+        ttsManager = createTtsManager(currentEnginePackage)
         createNotificationChannel()
         setupMediaSession()
     }
+
+    private fun createTtsManager(enginePackageName: String?, onErrorOverride: ((String) -> Unit)? = null, onReadyOverride: (() -> Unit)? = null): TtsManager = TtsManager(
+        context = this,
+        enginePackageName = enginePackageName,
+        onWordRange = { s, e -> listener?.onWordRange(s, e) },
+        onDone = {
+            abandonAudioFocus()
+            updatePlaybackState(PlaybackStateCompat.STATE_STOPPED)
+            listener?.onStateChanged(false, false)
+            stopForegroundAndSelf()
+        },
+        onError = { msg -> onErrorOverride?.invoke(msg) ?: listener?.onError(msg) },
+        onReady = { onReadyOverride?.invoke() }
+    )
 
     override fun onBind(intent: Intent?): IBinder = binder
 
@@ -100,6 +105,24 @@ class ReadingService : Service() {
     fun getAvailableVoicesForCurrentLanguage() = ttsManager.getAvailableVoicesForCurrentLanguage()
     fun getCurrentVoiceName(): String? = ttsManager.getCurrentVoiceName()
     fun setVoice(voice: android.speech.tts.Voice) = ttsManager.setVoice(voice)
+
+    fun listInstalledTtsEngines(): List<TtsManager.EngineChoice> = TtsManager.listInstalledEngines(this)
+    fun getCurrentEnginePackage(): String? = currentEnginePackage
+
+    /**
+     * Přepne appku na jiný hlasový modul (engine) - kompletně zastaví
+     * a znovu vytvoří [ttsManager] s novým modulem. Případné právě probíhající
+     * čtení se zastaví (jiný modul může mít úplně jiné hlasy/rychlost, takže
+     * nedává smysl se snažit plynule navázat) - [onReady] zavolá zpátky, až je
+     * nový modul připravený, ať appka může nabídnout jeho hlasy k výběru.
+     */
+    fun switchTtsEngine(packageName: String?, onReady: () -> Unit, onFailed: (String) -> Unit) {
+        stopReading()
+        ttsManager.shutdown()
+        currentEnginePackage = packageName
+        AppSettings.saveTtsEngine(this, packageName)
+        ttsManager = createTtsManager(packageName, onErrorOverride = onFailed, onReadyOverride = onReady)
+    }
 
     fun setAutoResumeAfterInterruption(enabled: Boolean) {
         autoResumeAfterInterruption = enabled

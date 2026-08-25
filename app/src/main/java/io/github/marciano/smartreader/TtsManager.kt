@@ -1,6 +1,7 @@
 package io.github.marciano.smartreader
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
@@ -22,11 +23,37 @@ import java.util.Locale
  */
 class TtsManager(
     context: Context,
+    enginePackageName: String? = null,
     private val onWordRange: (absoluteStart: Int, absoluteEnd: Int) -> Unit,
     private val onDone: () -> Unit,
     private val onError: (String) -> Unit,
     private val onReady: () -> Unit
 ) {
+    /** Jeden nainstalovaný hlasový modul (TTS engine) - balíček appky + název pro zobrazení. */
+    data class EngineChoice(val packageName: String, val label: String)
+
+    companion object {
+        /**
+         * Vrátí všechny hlasové moduly nainstalované v telefonu (Google, ale i
+         * appky třetích stran jako Vocalizer apod.) - appka mezi nimi jde
+         * přepínat, aniž by uživatel musel chodit do nastavení telefonu.
+         */
+        fun listInstalledEngines(context: Context): List<EngineChoice> {
+            val pm = context.packageManager
+            val intent = Intent(TextToSpeech.Engine.INTENT_ACTION_TTS_SERVICE)
+            val resolveInfos = pm.queryIntentServices(intent, 0)
+            return resolveInfos
+                .map { info ->
+                    EngineChoice(
+                        packageName = info.serviceInfo.packageName,
+                        label = info.loadLabel(pm).toString()
+                    )
+                }
+                .distinctBy { it.packageName }
+                .sortedBy { it.label.lowercase() }
+        }
+    }
+
     private val appContext = context.applicationContext
     private var tts: TextToSpeech? = null
     private var isReady = false
@@ -46,7 +73,7 @@ class TtsManager(
     private data class Chunk(val text: String, val localOffset: Int)
 
     init {
-        tts = TextToSpeech(context) { status ->
+        val initListener = TextToSpeech.OnInitListener { status ->
             if (status == TextToSpeech.SUCCESS) {
                 val result = tts?.setLanguage(Locale.getDefault())
                 isReady = result != TextToSpeech.LANG_MISSING_DATA &&
@@ -95,6 +122,11 @@ class TtsManager(
             } else {
                 onError(appContext.getString(R.string.error_tts_failed_start))
             }
+        }
+        tts = if (enginePackageName != null) {
+            TextToSpeech(context, initListener, enginePackageName)
+        } else {
+            TextToSpeech(context, initListener)
         }
     }
 

@@ -60,6 +60,10 @@
     <string name="voice_quality_unknown">unknown quality</string>
     <string name="voice_needs_internet"> • needs internet</string>
     <string name="dialog_title_settings">Settings</string>
+    <string name="label_tts_engine">Voice engine</string>
+    <string name="desc_tts_engine">Which app generates the speech - lets you use voices from other installed apps too</string>
+    <string name="toast_engine_switched">Voice engine switched</string>
+    <string name="toast_engine_switch_failed">Couldn\'t switch voice engine</string>
 
     <!-- Overflow menu -->
     <string name="menu_settings">Settings</string>
