@@ -63,6 +63,14 @@
             android:textStyle="bold"
             android:textColor="@color/text_primary"
             android:layout_marginTop="16dp"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/desc_voice_preview_hint"
+            android:textSize="12sp"
+            android:textColor="@color/text_secondary"
             android:layout_marginBottom="8dp" />
 
         <RadioGroup

@@ -66,6 +66,14 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.45)
+
+- **Ukázka hlasu v Nastavení**: podržením prstu na kterémkoli hlasu v
+  seznamu appka přehraje krátkou ukázkovou větu tím hlasem, ať slyšíš, o
+  jaký hlas jde, dřív než ho vybereš. Krátké klepnutí hlas vybere jako
+  doteď. Ukázka jede přes úplně samostatný TTS, takže nijak nenaruší
+  případné právě probíhající čtení hlavního textu.
+
 ## Nové v této verzi (2.44)
 
 - **Výběr hlasového modulu přímo v appce**: v Nastavení je nová sekce

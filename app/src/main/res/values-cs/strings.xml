@@ -54,6 +54,8 @@
     <string name="voice_quality_low">nízká kvalita</string>
     <string name="voice_quality_unknown">kvalita neznámá</string>
     <string name="voice_needs_internet"> • potřebuje internet</string>
+    <string name="desc_voice_preview_hint">Klepnutím hlas vybereš, podržením prstu na něm si přehraješ ukázku</string>
+    <string name="voice_preview_sentence">Toto je ukázka mého hlasu při čtení běžného textu.</string>
     <string name="dialog_title_settings">Nastavení</string>
     <string name="label_tts_engine">Hlasový modul</string>
     <string name="desc_tts_engine">Která appka generuje řeč - jde díky tomu použít hlasy i z jiných nainstalovaných appek</string>

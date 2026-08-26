@@ -12,6 +12,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
+import android.speech.tts.TextToSpeech
 import android.speech.tts.Voice
 import android.text.Editable
 import android.text.Spannable
@@ -55,6 +56,11 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
     private var currentReadingPositionMap: IntArray = IntArray(0)
     private var currentSpeedRate = 1.0f
     private var currentVolume = 1.0f
+
+    // Samostatný, ÚPLNĚ ODDĚLENÝ TTS jen pro ukázku hlasu v Nastavení - nesmí
+    // nijak zasahovat do hlavního čtení (přes ReadingService), kdyby appka
+    // zrovna něco četla, když si uživatel pouští ukázky jiných hlasů.
+    private var previewTts: TextToSpeech? = null
 
     /** Pokud je aktuální text načtený z knihovny, sledujeme jeho id kvůli ukládání pozice. */
     private var currentLibraryItemId: String? = null
@@ -142,6 +148,13 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             unbindService(serviceConnection)
             isServiceBound = false
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        previewTts?.stop()
+        previewTts?.shutdown()
+        previewTts = null
     }
 
     private fun requestNotificationPermissionIfNeeded() {
@@ -990,6 +1003,10 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                         AppSettings.saveVoiceName(this, voice.name)
                         applyVoiceChange(voice)
                     }
+                    radio.setOnLongClickListener {
+                        previewVoice(voice)
+                        true
+                    }
                     radioGroup.addView(radio)
                 }
             }
@@ -1023,11 +1040,34 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
 
         refreshVoiceList()
 
-        AlertDialog.Builder(this)
+        val settingsDialog = AlertDialog.Builder(this)
             .setTitle(getString(R.string.dialog_title_settings))
             .setView(view)
             .setPositiveButton(getString(R.string.btn_done), null)
-            .show()
+            .create()
+        settingsDialog.setOnDismissListener { previewTts?.stop() }
+        settingsDialog.show()
+    }
+
+    /**
+     * Přehraje krátkou ukázkovou větu vybraným hlasem - přes VLASTNÍ, oddělený
+     * TTS engine (ne přes ReadingService), ať to nijak nenaruší případné právě
+     * probíhající čtení hlavního textu.
+     */
+    private fun previewVoice(voice: Voice) {
+        val sentence = getString(R.string.voice_preview_sentence)
+        val existing = previewTts
+        if (existing != null) {
+            existing.voice = voice
+            existing.speak(sentence, TextToSpeech.QUEUE_FLUSH, null, "voice_preview")
+        } else {
+            previewTts = TextToSpeech(this) { status ->
+                if (status == TextToSpeech.SUCCESS) {
+                    previewTts?.voice = voice
+                    previewTts?.speak(sentence, TextToSpeech.QUEUE_FLUSH, null, "voice_preview")
+                }
+            }
+        }
     }
 
     private fun voiceLabel(voice: Voice, index: Int): String {

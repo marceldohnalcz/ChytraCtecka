@@ -54,6 +54,8 @@
     <string name="voice_quality_low">низкое качество</string>
     <string name="voice_quality_unknown">качество неизвестно</string>
     <string name="voice_needs_internet"> • требуется интернет</string>
+    <string name="desc_voice_preview_hint">Нажмите, чтобы выбрать голос, удерживайте, чтобы прослушать образец</string>
+    <string name="voice_preview_sentence">Это образец моего голоса при чтении обычного текста.</string>
     <string name="dialog_title_settings">Настройки</string>
     <string name="label_tts_engine">Голосовой движок</string>
     <string name="desc_tts_engine">Какое приложение генерирует речь - позволяет использовать голоса и из других установленных приложений</string>

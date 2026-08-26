@@ -54,6 +54,8 @@
     <string name="voice_quality_low">calidad baja</string>
     <string name="voice_quality_unknown">calidad desconocida</string>
     <string name="voice_needs_internet"> • necesita internet</string>
+    <string name="desc_voice_preview_hint">Toca para seleccionar una voz, mantén pulsado para escuchar una muestra</string>
+    <string name="voice_preview_sentence">Esta es una muestra de mi voz leyendo texto normal.</string>
     <string name="dialog_title_settings">Ajustes</string>
     <string name="label_tts_engine">Motor de voz</string>
     <string name="desc_tts_engine">Qué app genera la voz - permite usar voces de otras apps instaladas también</string>

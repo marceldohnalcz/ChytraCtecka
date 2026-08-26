@@ -59,6 +59,8 @@
     <string name="voice_quality_low">low quality</string>
     <string name="voice_quality_unknown">unknown quality</string>
     <string name="voice_needs_internet"> • needs internet</string>
+    <string name="desc_voice_preview_hint">Tap to select a voice, hold your finger on it to hear a sample</string>
+    <string name="voice_preview_sentence">This is a sample of my voice reading regular text.</string>
     <string name="dialog_title_settings">Settings</string>
     <string name="label_tts_engine">Voice engine</string>
     <string name="desc_tts_engine">Which app generates the speech - lets you use voices from other installed apps too</string>
