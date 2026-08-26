@@ -813,6 +813,10 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                     showSettingsDialog()
                     true
                 }
+                R.id.menuDownloadableVoices -> {
+                    showDownloadableVoicesDialog()
+                    true
+                }
                 R.id.menuHelp -> {
                     showHelpDialog()
                     true

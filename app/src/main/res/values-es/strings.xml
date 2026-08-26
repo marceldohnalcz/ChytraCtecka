@@ -72,6 +72,19 @@
     <string name="menu_check_updates">Buscar actualizaciones</string>
     <string name="menu_about">Acerca de</string>
 
+    <!-- Downloadable (Piper) voices -->
+    <string name="menu_downloadable_voices">Voces descargables</string>
+    <string name="desc_downloadable_voices">Voces neuronales adicionales que se descargan directamente en la app - después funcionan completamente sin internet, sin necesidad de otra app.</string>
+    <string name="voice_download_jirka_medium_name">Jirka (mayor calidad)</string>
+    <string name="voice_download_jirka_medium_desc">Voz masculina checa, aprox. 20 MB</string>
+    <string name="voice_download_jirka_low_name">Jirka (más rápida, menor calidad)</string>
+    <string name="voice_download_jirka_low_desc">Voz masculina checa, más pequeña y rápida, aprox. 20 MB</string>
+    <string name="btn_download">Descargar</string>
+    <string name="toast_voice_download_failed">Error al descargar: %1$s</string>
+    <string name="toast_voice_downloaded">Voz descargada</string>
+    <string name="dialog_title_delete_downloaded_voice">¿Eliminar voz?</string>
+    <string name="dialog_msg_delete_downloaded_voice">«%1$s» se eliminará del dispositivo.</string>
+
     <!-- Perfiles seguidos -->
     <string name="content_desc_tracked_profiles">Perfiles seguidos</string>
     <string name="title_tracked_profiles">Perfiles seguidos</string>

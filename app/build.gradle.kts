@@ -59,6 +59,19 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
+    // sherpa-onnx (Piper hlasy) přináší vlastní nativní (.so) knihovny -
+    // packaging pravidla zabraňují konfliktům při skládání výsledného APK.
+    packaging {
+        jniLibs {
+            pickFirsts += listOf(
+                "lib/*/libonnxruntime.so",
+                "lib/*/libsherpa-onnx-c-api.so",
+                "lib/*/libsherpa-onnx-cxx-api.so",
+                "lib/*/libsherpa-onnx-jni.so"
+            )
+        }
+    }
 }
 
 dependencies {
@@ -72,4 +85,11 @@ dependencies {
     implementation("com.google.android.gms:play-services-mlkit-text-recognition:19.0.1")
     // Jsoup - parsování HTML pro vytažení čitelného textu z odkazů (např. novinové články)
     implementation("org.jsoup:jsoup:1.17.2")
+
+    // sherpa-onnx - engine pro stažitelné neurální (Piper) hlasy, hostovaný
+    // jako lokální .aar (viz app/libs/), ne přes Maven - projekt nezveřejňuje
+    // oficiální Maven artefakt, jen předkompilované .aar u releases na GitHubu.
+    implementation(files("libs/sherpa-onnx-1.13.6.aar"))
+    // Rozbalení stažených .tar.bz2 balíčků hlasů (model + tokeny + data pro výslovnost).
+    implementation("org.apache.commons:commons-compress:1.26.2")
 }

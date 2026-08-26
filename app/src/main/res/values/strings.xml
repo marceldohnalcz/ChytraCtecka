@@ -78,6 +78,19 @@
     <string name="menu_check_updates">Check for updates</string>
     <string name="menu_about">About</string>
 
+    <!-- Downloadable (Piper) voices -->
+    <string name="menu_downloadable_voices">Downloadable voices</string>
+    <string name="desc_downloadable_voices">Extra offline neural voices you can download right in the app - work fully offline afterwards, no other app needed.</string>
+    <string name="voice_download_jirka_medium_name">Jirka (higher quality)</string>
+    <string name="voice_download_jirka_medium_desc">Czech male voice, about 20 MB</string>
+    <string name="voice_download_jirka_low_name">Jirka (faster, lower quality)</string>
+    <string name="voice_download_jirka_low_desc">Czech male voice, smaller and faster, about 20 MB</string>
+    <string name="btn_download">Download</string>
+    <string name="toast_voice_download_failed">Download failed: %1$s</string>
+    <string name="toast_voice_downloaded">Voice downloaded</string>
+    <string name="dialog_title_delete_downloaded_voice">Remove voice?</string>
+    <string name="dialog_msg_delete_downloaded_voice">\"%1$s\" will be deleted from the device.</string>
+
     <!-- Tracked profiles -->
     <string name="content_desc_tracked_profiles">Tracked profiles</string>
     <string name="title_tracked_profiles">Tracked Profiles</string>
