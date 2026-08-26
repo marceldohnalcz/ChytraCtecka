@@ -1,0 +1,44 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.7/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :app:buildKotlinToolingMetadata
+> Task :app:checkKotlinGradlePluginConfigurationErrors
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preReleaseBuild UP-TO-DATE
+> Task :app:dataBindingMergeDependencyArtifactsRelease
+> Task :app:generateReleaseResValues
+> Task :app:generateReleaseResources
+
+> Task :app:mergeReleaseResources FAILED
+ERROR: /home/runner/work/ChytraCtecka/ChytraCtecka/app/src/main/res/values-cs/strings.xml: Resource and asset merger: Found item String/btn_download more than one time
+ERROR: /home/runner/work/ChytraCtecka/ChytraCtecka/app/src/main/res/values-de/strings.xml: Resource and asset merger: Found item String/btn_download more than one time
+ERROR: /home/runner/work/ChytraCtecka/ChytraCtecka/app/src/main/res/values-es/strings.xml: Resource and asset merger: Found item String/btn_download more than one time
+ERROR: /home/runner/work/ChytraCtecka/ChytraCtecka/app/src/main/res/values-ru/strings.xml: Resource and asset merger: Found item String/btn_download more than one time
+ERROR: /home/runner/work/ChytraCtecka/ChytraCtecka/app/src/main/res/values-fr/strings.xml: Resource and asset merger: Found item String/btn_download more than one time
+ERROR: /home/runner/work/ChytraCtecka/ChytraCtecka/app/src/main/res/values-pt/strings.xml: Resource and asset merger: Found item String/btn_download more than one time
+ERROR: /home/runner/work/ChytraCtecka/ChytraCtecka/app/src/main/res/values/strings.xml: Resource and asset merger: Found item String/btn_download more than one time
+ERROR: /home/runner/work/ChytraCtecka/ChytraCtecka/app/src/main/res/values-pl/strings.xml: Resource and asset merger: Found item String/btn_download more than one time
+ERROR: /home/runner/work/ChytraCtecka/ChytraCtecka/app/src/main/res/values-it/strings.xml: Resource and asset merger: Found item String/btn_download more than one time
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1787787159283.json
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:mergeReleaseResources'.
+> /home/runner/work/ChytraCtecka/ChytraCtecka/app/src/main/res/values-cs/strings.xml: Error: Found item String/btn_download more than one time
+  /home/runner/work/ChytraCtecka/ChytraCtecka/app/src/main/res/values-de/strings.xml: Error: Found item String/btn_download more than one time
+  /home/runner/work/ChytraCtecka/ChytraCtecka/app/src/main/res/values-es/strings.xml: Error: Found item String/btn_download more than one time
+  /home/runner/work/ChytraCtecka/ChytraCtecka/app/src/main/res/values-ru/strings.xml: Error: Found item String/btn_download more than one time
+  /home/runner/work/ChytraCtecka/ChytraCtecka/app/src/main/res/values-fr/strings.xml: Error: Found item String/btn_download more than one time
+  /home/runner/work/ChytraCtecka/ChytraCtecka/app/src/main/res/values-pt/strings.xml: Error: Found item String/btn_download more than one time
+  /home/runner/work/ChytraCtecka/ChytraCtecka/app/src/main/res/values/strings.xml: Error: Found item String/btn_download more than one time
+  /home/runner/work/ChytraCtecka/ChytraCtecka/app/src/main/res/values-pl/strings.xml: Error: Found item String/btn_download more than one time
+  /home/runner/work/ChytraCtecka/ChytraCtecka/app/src/main/res/values-it/strings.xml: Error: Found item String/btn_download more than one time
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 13s
+6 actionable tasks: 6 executed
