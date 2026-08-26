@@ -19,6 +19,8 @@ import android.text.Spannable
 import android.text.TextWatcher
 import android.text.style.BackgroundColorSpan
 import android.view.View
+import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.SeekBar
@@ -56,6 +58,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
     private var currentReadingPositionMap: IntArray = IntArray(0)
     private var currentSpeedRate = 1.0f
     private var currentVolume = 1.0f
+    private var currentPitch = 1.0f
 
     // Samostatný, ÚPLNĚ ODDĚLENÝ TTS jen pro ukázku hlasu v Nastavení - nesmí
     // nijak zasahovat do hlavního čtení (přes ReadingService), kdyby appka
@@ -97,6 +100,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             service = localBinder.getService()
             service?.setListener(this@MainActivity)
             service?.setSpeed(currentSpeedRate)
+            service?.setPitch(currentPitch)
             service?.setVolume(currentVolume)
             service?.setAutoResumeAfterInterruption(AppSettings.loadAutoResumeAfterCall(this@MainActivity))
             AppSettings.loadVoiceName(this@MainActivity)?.let { name ->
@@ -116,6 +120,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         setContentView(binding.root)
 
         currentSpeedRate = AppSettings.loadSpeed(this)
+        currentPitch = AppSettings.loadPitch(this)
         currentVolume = AppSettings.loadVolume(this)
 
         requestNotificationPermissionIfNeeded()
@@ -936,7 +941,8 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         val svc = service
         val view = layoutInflater.inflate(R.layout.dialog_settings, null)
         val seekVolume = view.findViewById<SeekBar>(R.id.seekVolumeDialog)
-        val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupVoices)
+        val seekPitch = view.findViewById<SeekBar>(R.id.seekPitchDialog)
+        val radioGroup = view.findViewById<LinearLayout>(R.id.radioGroupVoices)
         val radioGroupEngines = view.findViewById<RadioGroup>(R.id.radioGroupEngines)
         val switchAutoResume = view.findViewById<android.widget.Switch>(R.id.switchAutoResume)
         val switchHistoryEnabled = view.findViewById<android.widget.Switch>(R.id.switchHistoryEnabled)
@@ -984,6 +990,21 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             override fun onStopTrackingTouch(sb: SeekBar?) {}
         })
 
+        // Rozsah 0,5 (hlubší) až 1,5 (vyšší) - uprostřed posuvníku (50) je 1.0,
+        // tedy normální neutrální výška hlasu.
+        seekPitch.progress = ((currentPitch - 0.5f) * 100).toInt().coerceIn(0, 100)
+        seekPitch.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(sb: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (fromUser) {
+                    currentPitch = 0.5f + progress / 100f
+                    service?.setPitch(currentPitch)
+                    AppSettings.savePitch(this@MainActivity, currentPitch)
+                }
+            }
+            override fun onStartTrackingTouch(sb: SeekBar?) {}
+            override fun onStopTrackingTouch(sb: SeekBar?) {}
+        })
+
         fun refreshVoiceList() {
             radioGroup.removeAllViews()
             val voices = service?.getAvailableVoicesForCurrentLanguage().orEmpty()
@@ -994,20 +1015,42 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                 tv.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
                 radioGroup.addView(tv)
             } else {
+                // Vlastní řízení výběru (ne přes RadioGroup) - potřebujeme vedle
+                // každého tlačítka ještě zelenou šipku pro přehrání ukázky, a
+                // RadioGroup umí hlídat exkluzivitu jen mezi přímými potomky.
+                val allRadios = mutableListOf<RadioButton>()
                 voices.forEachIndexed { index, voice ->
+                    val row = LinearLayout(this)
+                    row.orientation = LinearLayout.HORIZONTAL
+                    row.gravity = android.view.Gravity.CENTER_VERTICAL
+
                     val radio = RadioButton(this)
                     radio.text = voiceLabel(voice, index)
                     radio.id = View.generateViewId()
                     radio.isChecked = voice.name == currentVoiceName
+                    radio.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
                     radio.setOnClickListener {
+                        allRadios.forEach { it.isChecked = (it === radio) }
                         AppSettings.saveVoiceName(this, voice.name)
                         applyVoiceChange(voice)
                     }
-                    radio.setOnLongClickListener {
-                        previewVoice(voice)
-                        true
-                    }
-                    radioGroup.addView(radio)
+                    allRadios.add(radio)
+
+                    val previewSizePx = (40 * resources.displayMetrics.density).toInt()
+                    val previewPaddingPx = (9 * resources.displayMetrics.density).toInt()
+                    val btnPreview = ImageButton(this)
+                    btnPreview.layoutParams = LinearLayout.LayoutParams(previewSizePx, previewSizePx)
+                    btnPreview.setBackgroundResource(R.drawable.bg_circle_button)
+                    btnPreview.setImageResource(R.drawable.ic_play)
+                    btnPreview.backgroundTintList = ContextCompat.getColorStateList(this, R.color.brand_play)
+                    btnPreview.contentDescription = getString(R.string.content_desc_voice_preview)
+                    btnPreview.setPadding(previewPaddingPx, previewPaddingPx, previewPaddingPx, previewPaddingPx)
+                    btnPreview.scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
+                    btnPreview.setOnClickListener { previewVoice(voice) }
+
+                    row.addView(radio)
+                    row.addView(btnPreview)
+                    radioGroup.addView(row)
                 }
             }
         }

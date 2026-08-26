@@ -66,6 +66,14 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.46)
+
+- **Výška hlasu**: nový posuvník v Nastavení (rozsah 0,5-1,5, uprostřed
+  normální) - uloží se a zůstává i po zavření appky.
+- **Ukázka hlasu přes tlačítko**: zelená šipka vedle každého hlasu místo
+  dřívějšího podržení prstu - klepnutí na šipku přehraje ukázkovou větu,
+  klepnutí na hlas ho vybere.
+
 ## Nové v této verzi (2.45)
 
 - **Ukázka hlasu v Nastavení**: podržením prstu na kterémkoli hlasu v

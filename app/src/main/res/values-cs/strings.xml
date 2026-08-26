@@ -37,6 +37,8 @@
 
     <string name="label_reading_volume">Hlasitost čtení</string>
     <string name="desc_volume_independent">Nezávislá na systémové hlasitosti médií</string>
+    <string name="label_voice_pitch">Výška hlasu</string>
+    <string name="desc_voice_pitch">Nižší nebo vyšší tón hlasu - uprostřed je normální</string>
     <string name="label_voice">Hlas</string>
     <string name="label_auto_resume">Pokračovat po telefonátu</string>
     <string name="desc_auto_resume">Po skončení hovoru appka sama naváže tam, kde přestala</string>
@@ -54,7 +56,8 @@
     <string name="voice_quality_low">nízká kvalita</string>
     <string name="voice_quality_unknown">kvalita neznámá</string>
     <string name="voice_needs_internet"> • potřebuje internet</string>
-    <string name="desc_voice_preview_hint">Klepnutím hlas vybereš, podržením prstu na něm si přehraješ ukázku</string>
+    <string name="desc_voice_preview_hint">Klepnutím hlas vybereš, klepnutím na šipku přehraješ ukázku</string>
+    <string name="content_desc_voice_preview">Přehrát ukázku hlasu</string>
     <string name="voice_preview_sentence">Toto je ukázka mého hlasu při čtení běžného textu.</string>
     <string name="dialog_title_settings">Nastavení</string>
     <string name="label_tts_engine">Hlasový modul</string>

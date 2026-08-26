@@ -36,6 +36,31 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/label_voice_pitch"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/desc_voice_pitch"
+            android:textSize="12sp"
+            android:textColor="@color/text_secondary"
+            android:layout_marginBottom="8dp" />
+
+        <SeekBar
+            android:id="@+id/seekPitchDialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:progressTint="@color/brand_primary"
+            android:thumbTint="@color/brand_primary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/label_tts_engine"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
@@ -73,7 +98,7 @@
             android:textColor="@color/text_secondary"
             android:layout_marginBottom="8dp" />
 
-        <RadioGroup
+        <LinearLayout
             android:id="@+id/radioGroupVoices"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -37,6 +37,8 @@
 
     <string name="label_reading_volume">Громкость чтения</string>
     <string name="desc_volume_independent">Не зависит от системной громкости медиа</string>
+    <string name="label_voice_pitch">Высота голоса</string>
+    <string name="desc_voice_pitch">Более низкий или высокий тон голоса - середина обычная</string>
     <string name="label_voice">Голос</string>
     <string name="label_auto_resume">Продолжить после звонка</string>
     <string name="desc_auto_resume">После окончания звонка приложение само продолжит с того места, где остановилось</string>
@@ -54,7 +56,8 @@
     <string name="voice_quality_low">низкое качество</string>
     <string name="voice_quality_unknown">качество неизвестно</string>
     <string name="voice_needs_internet"> • требуется интернет</string>
-    <string name="desc_voice_preview_hint">Нажмите, чтобы выбрать голос, удерживайте, чтобы прослушать образец</string>
+    <string name="desc_voice_preview_hint">Нажмите, чтобы выбрать голос, нажмите на стрелку, чтобы прослушать образец</string>
+    <string name="content_desc_voice_preview">Воспроизвести образец голоса</string>
     <string name="voice_preview_sentence">Это образец моего голоса при чтении обычного текста.</string>
     <string name="dialog_title_settings">Настройки</string>
     <string name="label_tts_engine">Голосовой движок</string>

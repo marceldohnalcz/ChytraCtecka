@@ -37,6 +37,8 @@
 
     <string name="label_reading_volume">Volume di lettura</string>
     <string name="desc_volume_independent">Indipendente dal volume multimediale di sistema</string>
+    <string name="label_voice_pitch">Tono della voce</string>
+    <string name="desc_voice_pitch">Tono più basso o più alto della voce - il centro è normale</string>
     <string name="label_voice">Voce</string>
     <string name="label_auto_resume">Riprendi dopo la chiamata</string>
     <string name="desc_auto_resume">Dopo la chiamata, l\'app riprenderà automaticamente da dove si era interrotta</string>
@@ -54,7 +56,8 @@
     <string name="voice_quality_low">qualità bassa</string>
     <string name="voice_quality_unknown">qualità sconosciuta</string>
     <string name="voice_needs_internet"> • richiede internet</string>
-    <string name="desc_voice_preview_hint">Tocca per selezionare una voce, tieni premuto per ascoltare un esempio</string>
+    <string name="desc_voice_preview_hint">Tocca per selezionare una voce, tocca la freccia per ascoltare un esempio</string>
+    <string name="content_desc_voice_preview">Riproduci esempio voce</string>
     <string name="voice_preview_sentence">Questo è un esempio della mia voce che legge un testo normale.</string>
     <string name="dialog_title_settings">Impostazioni</string>
     <string name="label_tts_engine">Motore vocale</string>

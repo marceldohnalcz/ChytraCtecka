@@ -37,6 +37,8 @@
 
     <string name="label_reading_volume">Głośność czytania</string>
     <string name="desc_volume_independent">Niezależna od głośności multimediów systemu</string>
+    <string name="label_voice_pitch">Wysokość głosu</string>
+    <string name="desc_voice_pitch">Niższy lub wyższy ton głosu - środek to normalny</string>
     <string name="label_voice">Głos</string>
     <string name="label_auto_resume">Wznów po połączeniu</string>
     <string name="desc_auto_resume">Po zakończeniu połączenia aplikacja sama wznowi od miejsca, w którym skończyła</string>
@@ -54,7 +56,8 @@
     <string name="voice_quality_low">niska jakość</string>
     <string name="voice_quality_unknown">nieznana jakość</string>
     <string name="voice_needs_internet"> • wymaga internetu</string>
-    <string name="desc_voice_preview_hint">Dotknij, aby wybrać głos, przytrzymaj, aby odsłuchać próbkę</string>
+    <string name="desc_voice_preview_hint">Dotknij, aby wybrać głos, dotknij strzałki, aby odsłuchać próbkę</string>
+    <string name="content_desc_voice_preview">Odtwórz próbkę głosu</string>
     <string name="voice_preview_sentence">To jest próbka mojego głosu podczas czytania zwykłego tekstu.</string>
     <string name="dialog_title_settings">Ustawienia</string>
     <string name="label_tts_engine">Silnik głosowy</string>

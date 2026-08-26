@@ -37,6 +37,8 @@
 
     <string name="label_reading_volume">Vorlesegläutstärke</string>
     <string name="desc_volume_independent">Unabhängig von der Systemlautstärke</string>
+    <string name="label_voice_pitch">Stimmhöhe</string>
+    <string name="desc_voice_pitch">Tieferer oder höherer Ton der Stimme - Mitte ist normal</string>
     <string name="label_voice">Stimme</string>
     <string name="label_auto_resume">Nach Anruf fortsetzen</string>
     <string name="desc_auto_resume">Nach dem Anruf setzt die App automatisch dort fort, wo sie aufgehört hat</string>
@@ -54,7 +56,8 @@
     <string name="voice_quality_low">niedrige Qualität</string>
     <string name="voice_quality_unknown">Qualität unbekannt</string>
     <string name="voice_needs_internet"> • benötigt Internet</string>
-    <string name="desc_voice_preview_hint">Tippen wählt die Stimme aus, gedrückt halten spielt eine Hörprobe ab</string>
+    <string name="desc_voice_preview_hint">Tippen wählt die Stimme aus, der Pfeil spielt eine Hörprobe ab</string>
+    <string name="content_desc_voice_preview">Sprachprobe abspielen</string>
     <string name="voice_preview_sentence">Dies ist ein Beispiel meiner Stimme beim Vorlesen von normalem Text.</string>
     <string name="dialog_title_settings">Einstellungen</string>
     <string name="label_tts_engine">Sprachmodul</string>

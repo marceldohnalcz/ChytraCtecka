@@ -134,6 +134,11 @@ class TtsManager(
         tts?.setSpeechRate(rate)
     }
 
+    /** Výška hlasu - 1.0 normální, méně = hlubší, víc = vyšší. */
+    fun setPitch(pitch: Float) {
+        tts?.setPitch(pitch)
+    }
+
     /** Hlasitost čtení nezávislá na systémové hlasitosti (0.0 - 1.0, násobí ji). */
     fun setVolume(v: Float) {
         volume = v.coerceIn(0f, 1f)

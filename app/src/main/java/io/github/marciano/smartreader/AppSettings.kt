@@ -7,6 +7,7 @@ object AppSettings {
     private const val PREFS = "smartreader_settings"
     private const val KEY_VOICE_NAME = "voice_name"
     private const val KEY_SPEED = "speed_rate"
+    private const val KEY_PITCH = "voice_pitch"
     private const val KEY_VOLUME = "reading_volume"
     private const val KEY_AUTO_RESUME = "auto_resume_after_call"
     private const val KEY_THEME_MODE = "theme_mode"
@@ -26,6 +27,14 @@ object AppSettings {
 
     fun loadSpeed(context: Context): Float =
         prefs(context).getFloat(KEY_SPEED, 1.0f)
+
+    /** Výška hlasu - 1.0 = normální (neutrální výchozí hodnota). */
+    fun savePitch(context: Context, pitch: Float) {
+        prefs(context).edit().putFloat(KEY_PITCH, pitch).apply()
+    }
+
+    fun loadPitch(context: Context): Float =
+        prefs(context).getFloat(KEY_PITCH, 1.0f)
 
     fun saveVolume(context: Context, volume: Float) {
         prefs(context).edit().putFloat(KEY_VOLUME, volume).apply()

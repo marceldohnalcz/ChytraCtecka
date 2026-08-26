@@ -37,6 +37,8 @@
 
     <string name="label_reading_volume">Volume de lecture</string>
     <string name="desc_volume_independent">Indépendant du volume multimédia du système</string>
+    <string name="label_voice_pitch">Hauteur de la voix</string>
+    <string name="desc_voice_pitch">Ton plus grave ou plus aigu de la voix - le milieu est normal</string>
     <string name="label_voice">Voix</string>
     <string name="label_auto_resume">Reprendre après un appel</string>
     <string name="desc_auto_resume">Après l\'appel, l\'application reprendra automatiquement là où elle s\'est arrêtée</string>
@@ -54,7 +56,8 @@
     <string name="voice_quality_low">qualité basse</string>
     <string name="voice_quality_unknown">qualité inconnue</string>
     <string name="voice_needs_internet"> • nécessite internet</string>
-    <string name="desc_voice_preview_hint">Touchez pour sélectionner une voix, maintenez appuyé pour entendre un exemple</string>
+    <string name="desc_voice_preview_hint">Touchez pour sélectionner une voix, touchez la flèche pour entendre un exemple</string>
+    <string name="content_desc_voice_preview">Écouter un exemple de voix</string>
     <string name="voice_preview_sentence">Voici un exemple de ma voix lisant un texte normal.</string>
     <string name="dialog_title_settings">Paramètres</string>
     <string name="label_tts_engine">Moteur vocal</string>

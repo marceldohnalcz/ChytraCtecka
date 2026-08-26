@@ -101,6 +101,7 @@ class ReadingService : Service() {
     fun isPaused() = ttsManager.isPaused
     fun currentAbsolutePosition() = ttsManager.currentAbsolutePosition()
     fun setSpeed(rate: Float) = ttsManager.setSpeed(rate)
+    fun setPitch(pitch: Float) = ttsManager.setPitch(pitch)
     fun setVolume(v: Float) = ttsManager.setVolume(v)
     fun getAvailableVoicesForCurrentLanguage() = ttsManager.getAvailableVoicesForCurrentLanguage()
     fun getCurrentVoiceName(): String? = ttsManager.getCurrentVoiceName()
