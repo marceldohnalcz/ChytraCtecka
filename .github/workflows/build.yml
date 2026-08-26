@@ -35,10 +35,12 @@ jobs:
           BUILD_STATUS=$?
           set -e
           if [ $BUILD_STATUS -ne 0 ]; then
-            echo "## Chyba při buildu - posledních 200 řádků výstupu Gradle" >> "$GITHUB_STEP_SUMMARY"
-            echo '```' >> "$GITHUB_STEP_SUMMARY"
-            tail -n 200 /tmp/gradle_output.txt >> "$GITHUB_STEP_SUMMARY"
-            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            tail -n 300 /tmp/gradle_output.txt > last_build_error.txt
+            git config user.email "ci@build.local"
+            git config user.name "CI Build"
+            git add last_build_error.txt
+            git commit -m "CI: zaznam chyby buildu (automaticky)"
+            git push
             exit 1
           fi
           cat /tmp/gradle_output.txt
