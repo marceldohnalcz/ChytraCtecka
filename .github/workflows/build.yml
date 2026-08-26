@@ -28,7 +28,20 @@ jobs:
           gradle-version: '8.7'
 
       - name: Build release APK
-        run: gradle assembleRelease --no-daemon
+        id: build
+        run: |
+          set +e
+          gradle assembleRelease --no-daemon > /tmp/gradle_output.txt 2>&1
+          BUILD_STATUS=$?
+          set -e
+          if [ $BUILD_STATUS -ne 0 ]; then
+            echo "## Chyba při buildu - posledních 200 řádků výstupu Gradle" >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            tail -n 200 /tmp/gradle_output.txt >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+          cat /tmp/gradle_output.txt
 
       - name: Upload APK as artifact
         uses: actions/upload-artifact@v4

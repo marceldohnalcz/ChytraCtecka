@@ -116,7 +116,7 @@ object PiperVoiceStore {
     private fun extractTarBz2(archiveFile: File, targetDir: File) {
         BZip2CompressorInputStream(archiveFile.inputStream().buffered()).use { bzIn ->
             TarArchiveInputStream(bzIn).use { tarIn ->
-                var entry = tarIn.nextEntry
+                var entry = tarIn.nextTarEntry
                 while (entry != null) {
                     val nameAfterRoot = entry.name.substringAfter('/', "")
                     if (nameAfterRoot.isNotBlank()) {
@@ -133,7 +133,7 @@ object PiperVoiceStore {
                             outFile.outputStream().use { out -> tarIn.copyTo(out) }
                         }
                     }
-                    entry = tarIn.nextEntry
+                    entry = tarIn.nextTarEntry
                 }
             }
         }
