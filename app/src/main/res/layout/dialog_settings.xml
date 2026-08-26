@@ -98,7 +98,7 @@
             android:textColor="@color/text_secondary"
             android:layout_marginBottom="8dp" />
 
-        <LinearLayout
+        <RadioGroup
             android:id="@+id/radioGroupVoices"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -47,15 +47,11 @@
 
 ## Poznámka: rozdělaná práce na stažitelných hlasech (Piper/sherpa-onnx)
 
-Rozjeté, ale NEDOKONČENÉ - viz konverzace pro detaily. Hotovo: Gradle
-závislosti (sherpa-onnx AAR + commons-compress), DownloadableVoices.kt,
-PiperVoiceStore.kt (stahování/rozbalování), PiperVoiceEngine.kt (syntéza
-+ přehrání), položka v menu ⋮, layouty dialogu. CHYBÍ: propojovací
-funkce v MainActivity.kt (showDownloadableVoicesDialog - stahování
-s ukazatelem postupu, přehrání ukázky, smazání), první zkušební build
-přes GitHub Actions (nikdy ještě nebylo ověřeno, že se to zkompiluje -
-nativní knihovny nejde ověřit jinak). Zatím jen stažení + ukázka, NE
-plné zapojení do hlavního tlačítka Přehrát (to je další, samostatný krok).
+Základ hotový a vydaný ve verzi 2.47 - appka umí stáhnout a přehrát
+ukázku hlasu "Jirka" (menu ⋮ > Stažitelné hlasy). CHYBÍ ještě: plné
+napojení do hlavního tlačítka Přehrát (teď je to jen samostatná ukázka,
+ne skutečná volba pro čtení textu) - jiný způsob pauzy, jiný způsob
+zvýrazňování čteného slova (Piper nehlásí pozici jako systémové TTS).
 
 ---
 

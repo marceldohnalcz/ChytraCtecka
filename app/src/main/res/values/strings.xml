@@ -61,7 +61,7 @@
     <string name="voice_quality_low">low quality</string>
     <string name="voice_quality_unknown">unknown quality</string>
     <string name="voice_needs_internet"> • needs internet</string>
-    <string name="desc_voice_preview_hint">Tap a voice to select it, tap the arrow to hear a sample</string>
+    <string name="desc_voice_preview_hint">Tap a voice to select it and hear a sample</string>
     <string name="content_desc_voice_preview">Play voice sample</string>
     <string name="voice_preview_sentence">This is a sample of my voice reading regular text.</string>
     <string name="dialog_title_settings">Settings</string>

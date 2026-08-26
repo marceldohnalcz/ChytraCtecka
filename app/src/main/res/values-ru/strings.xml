@@ -56,7 +56,7 @@
     <string name="voice_quality_low">низкое качество</string>
     <string name="voice_quality_unknown">качество неизвестно</string>
     <string name="voice_needs_internet"> • требуется интернет</string>
-    <string name="desc_voice_preview_hint">Нажмите, чтобы выбрать голос, нажмите на стрелку, чтобы прослушать образец</string>
+    <string name="desc_voice_preview_hint">Нажмите на голос, чтобы выбрать его и прослушать образец</string>
     <string name="content_desc_voice_preview">Воспроизвести образец голоса</string>
     <string name="voice_preview_sentence">Это образец моего голоса при чтении обычного текста.</string>
     <string name="dialog_title_settings">Настройки</string>

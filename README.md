@@ -66,6 +66,21 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.47)
+
+- **Stažitelný offline hlas "Jirka"** (nová položka v menu ⋮ "Stažitelné
+  hlasy"): appka umí stáhnout a spustit vlastní neurální hlas (Piper,
+  přes sherpa-onnx engine) nezávisle na tom, jaký TTS modul má uživatel
+  v telefonu. Hlas se stáhne jednou (cca 20 MB), pak funguje úplně
+  offline. Zatím jde jen stáhnout a přehrát si ukázku - napojení do
+  hlavního tlačítka Přehrát je další krok.
+- **Jednodušší výběr hlasu v Nastavení**: klepnutí na hlas ho rovnou
+  vybere A přehraje ukázku (zrušeno samostatné zelené tlačítko z minulé
+  verze).
+- **Ukázka po změně výšky hlasu**: posunutí posuvníku výšky hlasu a
+  puštění prstu rovnou přehraje ukázkovou větu novou výškou, ať je
+  změna hned slyšet.
+
 ## Nové v této verzi (2.46)
 
 - **Výška hlasu**: nový posuvník v Nastavení (rozsah 0,5-1,5, uprostřed

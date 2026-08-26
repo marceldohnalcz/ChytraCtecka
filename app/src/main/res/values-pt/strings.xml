@@ -56,7 +56,7 @@
     <string name="voice_quality_low">qualidade baixa</string>
     <string name="voice_quality_unknown">qualidade desconhecida</string>
     <string name="voice_needs_internet"> • precisa de internet</string>
-    <string name="desc_voice_preview_hint">Toque para selecionar uma voz, toque na seta para ouvir uma amostra</string>
+    <string name="desc_voice_preview_hint">Toque em uma voz para selecioná-la e ouvir uma amostra</string>
     <string name="content_desc_voice_preview">Reproduzir amostra de voz</string>
     <string name="voice_preview_sentence">Esta é uma amostra da minha voz lendo texto normal.</string>
     <string name="dialog_title_settings">Configurações</string>

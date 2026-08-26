@@ -21,6 +21,7 @@ import android.text.style.BackgroundColorSpan
 import android.view.View
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.SeekBar
@@ -946,7 +947,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         val view = layoutInflater.inflate(R.layout.dialog_settings, null)
         val seekVolume = view.findViewById<SeekBar>(R.id.seekVolumeDialog)
         val seekPitch = view.findViewById<SeekBar>(R.id.seekPitchDialog)
-        val radioGroup = view.findViewById<LinearLayout>(R.id.radioGroupVoices)
+        val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupVoices)
         val radioGroupEngines = view.findViewById<RadioGroup>(R.id.radioGroupEngines)
         val switchAutoResume = view.findViewById<android.widget.Switch>(R.id.switchAutoResume)
         val switchHistoryEnabled = view.findViewById<android.widget.Switch>(R.id.switchHistoryEnabled)
@@ -1006,7 +1007,9 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                 }
             }
             override fun onStartTrackingTouch(sb: SeekBar?) {}
-            override fun onStopTrackingTouch(sb: SeekBar?) {}
+            override fun onStopTrackingTouch(sb: SeekBar?) {
+                previewCurrentVoiceWithPitch()
+            }
         })
 
         fun refreshVoiceList() {
@@ -1019,42 +1022,17 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                 tv.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
                 radioGroup.addView(tv)
             } else {
-                // Vlastní řízení výběru (ne přes RadioGroup) - potřebujeme vedle
-                // každého tlačítka ještě zelenou šipku pro přehrání ukázky, a
-                // RadioGroup umí hlídat exkluzivitu jen mezi přímými potomky.
-                val allRadios = mutableListOf<RadioButton>()
                 voices.forEachIndexed { index, voice ->
-                    val row = LinearLayout(this)
-                    row.orientation = LinearLayout.HORIZONTAL
-                    row.gravity = android.view.Gravity.CENTER_VERTICAL
-
                     val radio = RadioButton(this)
                     radio.text = voiceLabel(voice, index)
                     radio.id = View.generateViewId()
                     radio.isChecked = voice.name == currentVoiceName
-                    radio.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
                     radio.setOnClickListener {
-                        allRadios.forEach { it.isChecked = (it === radio) }
                         AppSettings.saveVoiceName(this, voice.name)
                         applyVoiceChange(voice)
+                        previewVoice(voice)
                     }
-                    allRadios.add(radio)
-
-                    val previewSizePx = (40 * resources.displayMetrics.density).toInt()
-                    val previewPaddingPx = (9 * resources.displayMetrics.density).toInt()
-                    val btnPreview = ImageButton(this)
-                    btnPreview.layoutParams = LinearLayout.LayoutParams(previewSizePx, previewSizePx)
-                    btnPreview.setBackgroundResource(R.drawable.bg_circle_button)
-                    btnPreview.setImageResource(R.drawable.ic_play)
-                    btnPreview.backgroundTintList = ContextCompat.getColorStateList(this, R.color.brand_play)
-                    btnPreview.contentDescription = getString(R.string.content_desc_voice_preview)
-                    btnPreview.setPadding(previewPaddingPx, previewPaddingPx, previewPaddingPx, previewPaddingPx)
-                    btnPreview.scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
-                    btnPreview.setOnClickListener { previewVoice(voice) }
-
-                    row.addView(radio)
-                    row.addView(btnPreview)
-                    radioGroup.addView(row)
+                    radioGroup.addView(radio)
                 }
             }
         }
@@ -1106,16 +1084,145 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         val existing = previewTts
         if (existing != null) {
             existing.voice = voice
+            existing.setPitch(currentPitch)
             existing.speak(sentence, TextToSpeech.QUEUE_FLUSH, null, "voice_preview")
         } else {
             previewTts = TextToSpeech(this) { status ->
                 if (status == TextToSpeech.SUCCESS) {
                     previewTts?.voice = voice
+                    previewTts?.setPitch(currentPitch)
                     previewTts?.speak(sentence, TextToSpeech.QUEUE_FLUSH, null, "voice_preview")
                 }
             }
         }
     }
+
+    /** Přehraje ukázku aktuálně vybraným hlasem s aktuální výškou - použije se
+     *  po změně posuvníku výšky hlasu, ať je slyšet efekt hned. */
+    private fun previewCurrentVoiceWithPitch() {
+        val voices = service?.getAvailableVoicesForCurrentLanguage().orEmpty()
+        val currentVoiceName = service?.getCurrentVoiceName()
+        val voice = voices.firstOrNull { it.name == currentVoiceName } ?: previewTts?.voice
+        if (voice != null) {
+            previewVoice(voice)
+        }
+    }
+
+    /**
+     * Dialog "Stažitelné hlasy" - offline neurální (Piper) hlasy, které appka
+     * stáhne a spustí sama, nezávisle na systémovém TTS modulu telefonu.
+     */
+    private fun showDownloadableVoicesDialog() {
+        val view = layoutInflater.inflate(R.layout.dialog_downloadable_voices, null)
+        val container = view.findViewById<LinearLayout>(R.id.containerDownloadableVoices)
+        val btnClose = view.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnCloseDownloadableVoices)
+
+        var piperPreviewPlayer: PcmAudioPlayer? = null
+
+        val dialog = AlertDialog.Builder(this)
+            .setView(view)
+            .create()
+
+        val languageCode = Locale.getDefault().language
+        val voices = DownloadableVoices.forCurrentLanguage(languageCode)
+
+        if (voices.isEmpty()) {
+            val tv = TextView(this)
+            tv.text = getString(R.string.voice_none_found)
+            tv.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
+            tv.setPadding(20.dpPx(), 8.dpPx(), 20.dpPx(), 8.dpPx())
+            container.addView(tv)
+        }
+
+        voices.forEach { voice ->
+            val row = layoutInflater.inflate(R.layout.item_downloadable_voice, container, false)
+            val tvName = row.findViewById<TextView>(R.id.tvVoiceDownloadName)
+            val tvDesc = row.findViewById<TextView>(R.id.tvVoiceDownloadDesc)
+            val btnAction = row.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnVoiceDownloadAction)
+            val btnPlay = row.findViewById<ImageButton>(R.id.btnVoiceDownloadPlay)
+            val progress = row.findViewById<ProgressBar>(R.id.progressVoiceDownload)
+
+            tvName.text = getString(voice.displayNameRes)
+            tvDesc.text = getString(voice.descriptionRes)
+
+            fun refreshRowState() {
+                val downloaded = PiperVoiceStore.isDownloaded(this, voice.id)
+                progress.visibility = View.GONE
+                btnAction.isEnabled = true
+                if (downloaded) {
+                    btnPlay.visibility = View.VISIBLE
+                    btnAction.text = getString(R.string.btn_delete)
+                    btnAction.backgroundTintList = ContextCompat.getColorStateList(this, R.color.brand_danger)
+                } else {
+                    btnPlay.visibility = View.GONE
+                    btnAction.text = getString(R.string.btn_download)
+                    btnAction.backgroundTintList = ContextCompat.getColorStateList(this, R.color.brand_accent)
+                }
+            }
+
+            btnPlay.setOnClickListener {
+                Thread {
+                    try {
+                        val dir = PiperVoiceStore.voiceDir(this, voice.id)
+                        val engine = PiperVoiceEngine(dir)
+                        val samples = engine.generate(getString(R.string.voice_preview_sentence))
+                        val sampleRate = engine.sampleRate
+                        engine.release()
+                        runOnUiThread {
+                            val player = PcmAudioPlayer()
+                            player.play(samples, sampleRate)
+                            piperPreviewPlayer = player
+                        }
+                    } catch (e: Exception) {
+                        runOnUiThread {
+                            Toast.makeText(this, e.message ?: e.javaClass.simpleName, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }.start()
+            }
+
+            btnAction.setOnClickListener {
+                val downloaded = PiperVoiceStore.isDownloaded(this, voice.id)
+                if (downloaded) {
+                    showConfirmDialog(
+                        title = getString(R.string.dialog_title_delete_downloaded_voice),
+                        message = getString(R.string.dialog_msg_delete_downloaded_voice, getString(voice.displayNameRes)),
+                        confirmText = getString(R.string.btn_delete)
+                    ) {
+                        PiperVoiceStore.deleteVoice(this, voice.id)
+                        refreshRowState()
+                    }
+                } else {
+                    progress.visibility = View.VISIBLE
+                    progress.progress = 0
+                    btnAction.isEnabled = false
+                    PiperVoiceStore.downloadVoice(
+                        context = this,
+                        voice = voice,
+                        onProgress = { percent -> progress.progress = percent },
+                        onSuccess = {
+                            Toast.makeText(this, getString(R.string.toast_voice_downloaded), Toast.LENGTH_SHORT).show()
+                            refreshRowState()
+                        },
+                        onError = { msg ->
+                            progress.visibility = View.GONE
+                            btnAction.isEnabled = true
+                            Toast.makeText(this, getString(R.string.toast_voice_download_failed, msg), Toast.LENGTH_LONG).show()
+                        }
+                    )
+                }
+            }
+
+            refreshRowState()
+            container.addView(row)
+        }
+
+        btnClose.setOnClickListener { dialog.dismiss() }
+        dialog.setOnDismissListener { piperPreviewPlayer?.stop() }
+        dialog.show()
+    }
+
+    private fun Int.dpPx(): Int = (this * resources.displayMetrics.density).toInt()
 
     private fun voiceLabel(voice: Voice, index: Int): String {
         val quality = when (voice.quality) {
