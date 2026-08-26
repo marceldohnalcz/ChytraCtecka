@@ -79,7 +79,6 @@
     <string name="voice_download_jirka_medium_desc">Český mužský hlas, cca 20 MB</string>
     <string name="voice_download_jirka_low_name">Jirka (rychlejší, nižší kvalita)</string>
     <string name="voice_download_jirka_low_desc">Český mužský hlas, menší a rychlejší, cca 20 MB</string>
-    <string name="btn_download">Stáhnout</string>
     <string name="toast_voice_download_failed">Stažení se nepovedlo: %1$s</string>
     <string name="toast_voice_downloaded">Hlas stažen</string>
     <string name="dialog_title_delete_downloaded_voice">Odebrat hlas?</string>

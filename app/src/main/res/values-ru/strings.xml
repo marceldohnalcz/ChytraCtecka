@@ -79,7 +79,6 @@
     <string name="voice_download_jirka_medium_desc">Чешский мужской голос, около 20 МБ</string>
     <string name="voice_download_jirka_low_name">Йирка (быстрее, ниже качество)</string>
     <string name="voice_download_jirka_low_desc">Чешский мужской голос, меньше и быстрее, около 20 МБ</string>
-    <string name="btn_download">Скачать</string>
     <string name="toast_voice_download_failed">Ошибка загрузки: %1$s</string>
     <string name="toast_voice_downloaded">Голос загружен</string>
     <string name="dialog_title_delete_downloaded_voice">Удалить голос?</string>

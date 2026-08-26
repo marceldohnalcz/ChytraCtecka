@@ -79,7 +79,6 @@
     <string name="voice_download_jirka_medium_desc">Czeski głos męski, ok. 20 MB</string>
     <string name="voice_download_jirka_low_name">Jirka (szybszy, niższa jakość)</string>
     <string name="voice_download_jirka_low_desc">Czeski głos męski, mniejszy i szybszy, ok. 20 MB</string>
-    <string name="btn_download">Pobierz</string>
     <string name="toast_voice_download_failed">Pobieranie nie powiodło się: %1$s</string>
     <string name="toast_voice_downloaded">Głos pobrany</string>
     <string name="dialog_title_delete_downloaded_voice">Usunąć głos?</string>

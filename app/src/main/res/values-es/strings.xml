@@ -79,7 +79,6 @@
     <string name="voice_download_jirka_medium_desc">Voz masculina checa, aprox. 20 MB</string>
     <string name="voice_download_jirka_low_name">Jirka (más rápida, menor calidad)</string>
     <string name="voice_download_jirka_low_desc">Voz masculina checa, más pequeña y rápida, aprox. 20 MB</string>
-    <string name="btn_download">Descargar</string>
     <string name="toast_voice_download_failed">Error al descargar: %1$s</string>
     <string name="toast_voice_downloaded">Voz descargada</string>
     <string name="dialog_title_delete_downloaded_voice">¿Eliminar voz?</string>
