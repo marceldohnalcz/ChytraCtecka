@@ -65,6 +65,9 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
     // nijak zasahovat do hlavního čtení (přes ReadingService), kdyby appka
     // zrovna něco četla, když si uživatel pouští ukázky jiných hlasů.
     private var previewTts: TextToSpeech? = null
+    // Instanční (ne lokální) proměnná, ať ji může zastavit i ukázka systémového
+    // hlasu a naopak - bez tohohle mohly hrát dvě ukázky najednou přes sebe.
+    private var piperPreviewPlayer: PcmAudioPlayer? = null
 
     /** Pokud je aktuální text načtený z knihovny, sledujeme jeho id kvůli ukládání pozice. */
     private var currentLibraryItemId: String? = null
@@ -990,6 +993,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
      * probíhající čtení hlavního textu.
      */
     private fun previewVoice(voice: Voice) {
+        piperPreviewPlayer?.stop()
         val sentence = getString(R.string.voice_preview_sentence)
         val existing = previewTts
         if (existing != null) {
@@ -1033,7 +1037,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         val radioGroupEngines = view.findViewById<RadioGroup>(R.id.radioGroupEngines)
         val container = view.findViewById<LinearLayout>(R.id.containerDownloadableVoices)
 
-        var piperPreviewPlayer: PcmAudioPlayer? = null
+        val piperSelectRadios = mutableListOf<RadioButton>()
 
         seekVolume.progress = (currentVolume * 100).toInt()
         seekVolume.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -1082,6 +1086,12 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                     radio.isChecked = voice.name == currentVoiceName
                     radio.setOnClickListener {
                         AppSettings.saveVoiceName(this, voice.name)
+                        // Nejdřív přepnout appku pryč od Piper hlasu (kdyby byl
+                        // vybraný) - AŽ POTOM měnit systémový hlas, jinak by
+                        // applyVoiceChange restartovalo čtení, ale to by se hned
+                        // vzápětí zastavilo uvnitř setActivePiperVoice(null).
+                        svc?.setActivePiperVoice(null)
+                        piperSelectRadios.forEach { it.isChecked = false }
                         applyVoiceChange(voice)
                         previewVoice(voice)
                     }
@@ -1133,6 +1143,8 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             tvDesc.text = getString(voice.descriptionRes)
 
             fun playPiperPreview() {
+                previewTts?.stop()
+                piperPreviewPlayer?.stop()
                 Thread {
                     try {
                         val dir = PiperVoiceStore.voiceDir(this, voice.id)
@@ -1153,6 +1165,10 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                 }.start()
             }
 
+            val radioSelect = row.findViewById<RadioButton>(R.id.radioVoiceDownloadSelect)
+            radioSelect.text = ""
+            piperSelectRadios.add(radioSelect)
+
             fun refreshRowState() {
                 // Klepnutí na jméno přehraje ukázku - jen u už stažených hlasů
                 // (dřív samostatné zelené tlačítko, teď stačí klepnout na jméno).
@@ -1163,10 +1179,19 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                     btnAction.text = getString(R.string.btn_delete)
                     btnAction.backgroundTintList = ContextCompat.getColorStateList(this, R.color.brand_danger)
                     tvName.setOnClickListener { playPiperPreview() }
+                    radioSelect.visibility = View.VISIBLE
+                    radioSelect.isChecked = svc?.getActivePiperVoiceId() == voice.id
+                    radioSelect.setOnClickListener {
+                        svc?.setActivePiperVoice(voice.id)
+                        radioGroup.clearCheck()
+                        piperSelectRadios.forEach { it.isChecked = (it === radioSelect) }
+                    }
                 } else {
                     btnAction.text = getString(R.string.btn_download)
                     btnAction.backgroundTintList = ContextCompat.getColorStateList(this, R.color.brand_accent)
                     tvName.setOnClickListener(null)
+                    radioSelect.visibility = View.GONE
+                    radioSelect.setOnClickListener(null)
                 }
             }
 
@@ -1178,6 +1203,9 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                         message = getString(R.string.dialog_msg_delete_downloaded_voice, getString(voice.displayNameRes)),
                         confirmText = getString(R.string.btn_delete)
                     ) {
+                        if (svc?.getActivePiperVoiceId() == voice.id) {
+                            svc.setActivePiperVoice(null)
+                        }
                         PiperVoiceStore.deleteVoice(this, voice.id)
                         refreshRowState()
                     }

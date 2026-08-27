@@ -12,6 +12,7 @@ object AppSettings {
     private const val KEY_AUTO_RESUME = "auto_resume_after_call"
     private const val KEY_THEME_MODE = "theme_mode"
     private const val KEY_TTS_ENGINE = "tts_engine_package"
+    private const val KEY_ACTIVE_PIPER_VOICE = "active_piper_voice_id"
     private const val KEY_HISTORY_ENABLED = "history_enabled"
 
     fun saveVoiceName(context: Context, name: String) {
@@ -71,6 +72,23 @@ object AppSettings {
 
     fun loadTtsEngine(context: Context): String? =
         prefs(context).getString(KEY_TTS_ENGINE, null)
+
+    /**
+     * ID stažitelného (Piper) hlasu, který má appka použít pro čtení - null
+     * znamená "používej systémový TTS hlas" (výchozí, jako doteď).
+     */
+    fun saveActivePiperVoice(context: Context, voiceId: String?) {
+        val editor = prefs(context).edit()
+        if (voiceId == null) {
+            editor.remove(KEY_ACTIVE_PIPER_VOICE)
+        } else {
+            editor.putString(KEY_ACTIVE_PIPER_VOICE, voiceId)
+        }
+        editor.apply()
+    }
+
+    fun loadActivePiperVoice(context: Context): String? =
+        prefs(context).getString(KEY_ACTIVE_PIPER_VOICE, null)
 
     fun saveHistoryEnabled(context: Context, enabled: Boolean) {
         prefs(context).edit().putBoolean(KEY_HISTORY_ENABLED, enabled).apply()

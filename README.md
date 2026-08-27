@@ -66,6 +66,23 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.50)
+
+- **Stažený hlas Jirka teď jde skutečně použít pro čtení**, ne jen si
+  poslechnout ukázku - v "Nastavení hlasu" u něj přibylo výběrové
+  kolečko (stejně jako u systémových hlasů). Vybere se tím jako aktivní
+  hlas pro čtení, vzájemně vylučující se s výběrem systémového hlasu.
+  Omezení oproti systémovým hlasům: zvýraznění čteného textu je na
+  úrovni věty (ne slova), pauza přehraje aktuální větu znovu od začátku
+  a výška hlasu (pitch) u něj nefunguje - Piper tenhle parametr nemá.
+- **Oprava**: ukázky hlasů se mohly přehrávat přes sebe (systémová a
+  Piper ukázka najednou) - teď se vždy nejdřív zastaví ta předchozí.
+- **Vysvětlení "duplicitních" hlasů**: když appka nabízí dva hlasy, co
+  znějí stejně (např. "Hlas 1" a "Hlas 2"), nejde o chybu - systémový
+  TTS modul telefonu má pro daný hlas dvě technické varianty (typicky
+  "lokální" a "online"), které appka správně vidí jako dvě oddělené
+  položky, i když zní stejně.
+
 ## Nové v této verzi (2.49)
 
 - **Sloučené menu "Nastavení hlasu"**: vše kolem hlasu (hlasitost, výška,

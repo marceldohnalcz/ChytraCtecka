@@ -56,6 +56,56 @@ class ReadingService : Service() {
     private var pausedDueToInterruption = false
     private var currentEnginePackage: String? = null
 
+    // Stažený (Piper) hlas jako alternativa k systémovému TTS - null znamená
+    // "čti systémovým hlasem" (výchozí chování, jako doteď).
+    private var activePiperVoiceId: String? = null
+    private var piperSession: PiperReadingSession? = null
+    private var piperSessionVoiceId: String? = null
+    private var lastSpeed = 1.0f
+    private var lastVolume = 1.0f
+
+    /** true jen pokud je vybraný Piper hlas OPRAVDU stažený - kdyby ho uživatel
+     *  mezitím smazal, appka se sama bezpečně vrátí k systémovému TTS. */
+    private fun isPiperVoiceReady(): Boolean {
+        val id = activePiperVoiceId ?: return false
+        return PiperVoiceStore.isDownloaded(this, id)
+    }
+
+    private fun ensurePiperSession(): PiperReadingSession? {
+        val id = activePiperVoiceId ?: return null
+        if (piperSession != null && piperSessionVoiceId == id) return piperSession
+        piperSession?.shutdown()
+        val session = PiperReadingSession(
+            voiceDir = PiperVoiceStore.voiceDir(this, id),
+            onSentenceStart = { s, e -> listener?.onWordRange(s, e) },
+            onDone = {
+                abandonAudioFocus()
+                updatePlaybackState(PlaybackStateCompat.STATE_STOPPED)
+                listener?.onStateChanged(false, false)
+                stopForegroundAndSelf()
+            },
+            onError = { msg -> listener?.onError(msg) }
+        )
+        session.setSpeed(lastSpeed)
+        session.setVolume(lastVolume)
+        piperSession = session
+        piperSessionVoiceId = id
+        return session
+    }
+
+    /** Vybere Piper hlas pro čtení (voiceId) nebo se vrátí k systémovému TTS (null). */
+    fun setActivePiperVoice(voiceId: String?) {
+        if (activePiperVoiceId == voiceId) return
+        stopReading()
+        activePiperVoiceId = voiceId
+        AppSettings.saveActivePiperVoice(this, voiceId)
+        piperSession?.shutdown()
+        piperSession = null
+        piperSessionVoiceId = null
+    }
+
+    fun getActivePiperVoiceId(): String? = activePiperVoiceId
+
     inner class LocalBinder : Binder() {
         fun getService(): ReadingService = this@ReadingService
     }
@@ -65,6 +115,7 @@ class ReadingService : Service() {
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
         currentEnginePackage = AppSettings.loadTtsEngine(this)
         ttsManager = createTtsManager(currentEnginePackage)
+        activePiperVoiceId = AppSettings.loadActivePiperVoice(this)
         createNotificationChannel()
         setupMediaSession()
     }
@@ -97,12 +148,21 @@ class ReadingService : Service() {
         listener = l
     }
 
-    fun isSpeaking() = ttsManager.isSpeaking
-    fun isPaused() = ttsManager.isPaused
-    fun currentAbsolutePosition() = ttsManager.currentAbsolutePosition()
-    fun setSpeed(rate: Float) = ttsManager.setSpeed(rate)
-    fun setPitch(pitch: Float) = ttsManager.setPitch(pitch)
-    fun setVolume(v: Float) = ttsManager.setVolume(v)
+    fun isSpeaking() = if (isPiperVoiceReady()) piperSession?.isSpeaking == true else ttsManager.isSpeaking
+    fun isPaused() = if (isPiperVoiceReady()) piperSession?.isPaused == true else ttsManager.isPaused
+    fun currentAbsolutePosition() =
+        if (isPiperVoiceReady()) (piperSession?.currentAbsolutePosition() ?: 0) else ttsManager.currentAbsolutePosition()
+    fun setSpeed(rate: Float) {
+        lastSpeed = rate
+        ttsManager.setSpeed(rate)
+        piperSession?.setSpeed(rate)
+    }
+    fun setPitch(pitch: Float) = ttsManager.setPitch(pitch) // Piper hlasy výšku nepodporují
+    fun setVolume(v: Float) {
+        lastVolume = v
+        ttsManager.setVolume(v)
+        piperSession?.setVolume(v)
+    }
     fun getAvailableVoicesForCurrentLanguage() = ttsManager.getAvailableVoicesForCurrentLanguage()
     fun getCurrentVoiceName(): String? = ttsManager.getCurrentVoiceName()
     fun setVoice(voice: android.speech.tts.Voice) = ttsManager.setVoice(voice)
@@ -137,12 +197,16 @@ class ReadingService : Service() {
         mediaSession.isActive = true
         updatePlaybackState(PlaybackStateCompat.STATE_PLAYING)
         startForeground(NOTIFICATION_ID, buildNotification(isPlaying = true))
-        ttsManager.speak(text, baseOffset)
+        if (isPiperVoiceReady()) {
+            ensurePiperSession()?.speak(text, baseOffset)
+        } else {
+            ttsManager.speak(text, baseOffset)
+        }
         listener?.onStateChanged(true, false)
     }
 
     fun pause() {
-        ttsManager.pause()
+        if (isPiperVoiceReady()) piperSession?.pause() else ttsManager.pause()
         pausedDueToInterruption = false
         abandonAudioFocus()
         updatePlaybackState(PlaybackStateCompat.STATE_PAUSED)
@@ -156,7 +220,7 @@ class ReadingService : Service() {
      * se (pokud je to zapnuté v nastavení) sama obnovit.
      */
     private fun pauseForInterruption() {
-        ttsManager.pause()
+        if (isPiperVoiceReady()) piperSession?.pause() else ttsManager.pause()
         pausedDueToInterruption = true
         updatePlaybackState(PlaybackStateCompat.STATE_PAUSED)
         listener?.onStateChanged(false, true)
@@ -164,7 +228,7 @@ class ReadingService : Service() {
     }
 
     fun stopReading() {
-        ttsManager.stop()
+        if (isPiperVoiceReady()) piperSession?.stop() else ttsManager.stop()
         abandonAudioFocus()
         updatePlaybackState(PlaybackStateCompat.STATE_STOPPED)
         mediaSession.isActive = false
@@ -173,16 +237,16 @@ class ReadingService : Service() {
     }
 
     private fun handleNotificationPlayPause() {
-        if (ttsManager.isSpeaking) {
+        if (isSpeaking()) {
             pause()
-        } else if (ttsManager.isPaused) {
+        } else if (isPaused()) {
             resumeFromPause()
         }
     }
 
     private fun resumeFromPause() {
         requestAudioFocus()
-        ttsManager.resume()
+        if (isPiperVoiceReady()) piperSession?.resume() else ttsManager.resume()
         updatePlaybackState(PlaybackStateCompat.STATE_PLAYING)
         startForeground(NOTIFICATION_ID, buildNotification(isPlaying = true))
         listener?.onStateChanged(true, false)
@@ -194,10 +258,10 @@ class ReadingService : Service() {
         mediaSession = MediaSessionCompat(this, "ChytraCteckaSession").apply {
             setCallback(object : MediaSessionCompat.Callback() {
                 override fun onPlay() {
-                    if (ttsManager.isPaused) resumeFromPause()
+                    if (isPaused()) resumeFromPause()
                 }
                 override fun onPause() {
-                    if (ttsManager.isSpeaking) pause()
+                    if (isSpeaking()) pause()
                 }
                 override fun onStop() {
                     stopReading()
@@ -274,7 +338,7 @@ class ReadingService : Service() {
             AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
                 // Typicky telefonát - dočasné přerušení, focus si necháme "podaný",
                 // ať víme, až se nám vrátí (AUDIOFOCUS_GAIN).
-                if (ttsManager.isSpeaking) {
+                if (isSpeaking()) {
                     pauseForInterruption()
                 }
             }
@@ -285,7 +349,7 @@ class ReadingService : Service() {
                 // tohohle callbacku dřív mohlo appku dostat do stavu, kdy si
                 // focus nešlo vzít zpátky) - jen zastavíme čtení a aktualizujeme stav.
                 pausedDueToInterruption = false
-                ttsManager.pause()
+                if (isPiperVoiceReady()) piperSession?.pause() else ttsManager.pause()
                 updatePlaybackState(PlaybackStateCompat.STATE_PAUSED)
                 listener?.onStateChanged(false, true)
                 updateNotification()
@@ -293,7 +357,7 @@ class ReadingService : Service() {
             AudioManager.AUDIOFOCUS_GAIN -> {
                 if (pausedDueToInterruption) {
                     pausedDueToInterruption = false
-                    if (autoResumeAfterInterruption && ttsManager.isPaused) {
+                    if (autoResumeAfterInterruption && isPaused()) {
                         resumeFromPause()
                     } else {
                         abandonAudioFocus()
@@ -366,7 +430,7 @@ class ReadingService : Service() {
 
     private fun updateNotification() {
         val nm = getSystemService(NotificationManager::class.java)
-        nm.notify(NOTIFICATION_ID, buildNotification(isPlaying = ttsManager.isSpeaking))
+        nm.notify(NOTIFICATION_ID, buildNotification(isPlaying = isSpeaking()))
     }
 
     private fun stopForegroundAndSelf() {
@@ -392,6 +456,7 @@ class ReadingService : Service() {
 
     override fun onDestroy() {
         ttsManager.shutdown()
+        piperSession?.shutdown()
         abandonAudioFocus()
         mediaSession.release()
         super.onDestroy()
