@@ -107,11 +107,32 @@ object TextPreprocessor {
     // u textů z OCR nebo naskenovaných dokumentů (tečkované "vodicí čáry").
     private val REPEATED_PUNCTUATION_PATTERN: Pattern = Pattern.compile("([.!?])(?:\\s*\\1){1,}")
 
+    // "(...)" - elipsa v závorce (tři tečky NEBO unicode znak elipsy "…"), v
+    // psaném textu skoro vždy editorská značka pro vynechaný text (citace,
+    // zkrácení), ne obsah k přečtení. Bez tohohle by po smazání závorek zbyla
+    // osamocená tečka, kterou TTS čte doslova jako slovo "tečka". Musí běžet
+    // úplně na začátku pipeline - PŘED sloučením opakované interpunkce (jinak
+    // by "..." uvnitř závorky stihlo zmizet na jednu tečku dřív, než by ho
+    // tohle pravidlo poznalo) i před obecným pravidlem pro závorky.
+    private val PAREN_ELLIPSIS_PATTERN: Pattern = Pattern.compile(
+        "\\([\\s.\u2026]*(?:\\.{2,}|\u2026)[\\s.\u2026]*\\)"
+    )
+
     // Závorky (kulaté, hranaté, složené) a uvozovky všech běžných typů - TTS je
     // někdy čte doslova ("uvozovky", "levá závorka"). Nahrazujeme mezerou, aby se
-    // slova kolem nespojila, ale zůstal zachovaný přirozený tok věty.
+    // slova kolem nespojily, ale zůstal zachovaný přirozený tok věty.
     private val BRACKETS_AND_QUOTES_PATTERN: Pattern = Pattern.compile(
         "[()\\[\\]{}\"„“«»‘’']"
+    )
+
+    // Textové smajlíky (:-(, :), ;-), :D, xD...) - bez tohohle appka čte
+    // jednotlivé znaky doslova ("dvojtečka spojovník"). Záměrně BEZ číslice 8
+    // v očích (i když "8)" jako smajlík s brýlemi existuje) - kolidovalo by to
+    // s běžnými číslovanými seznamy typu "1) ... 8) ...". Ohraničení
+    // (?<![\w]) / (?![\w]) hlídá, ať se nechytí uprostřed jiného slova/čísla
+    // (např. čas "8:00" nebo dvojtečka jako uvod repliky "Řekl: ...").
+    private val EMOTICON_PATTERN: Pattern = Pattern.compile(
+        "(?<![\\w])[:;=xX][-o^']?(?:\\)+|\\(+|D+|d+|P+|p+|3|o|O|s|S|/|\\\\|\\|)(?![\\w])"
     )
 
     private val MULTI_SPACE_PATTERN: Pattern = Pattern.compile("[ \\t]{2,}")
@@ -218,6 +239,8 @@ object TextPreprocessor {
         val expandAbbreviations: Boolean = true,
         val simplifyRepeatedPunctuation: Boolean = true,
         val stripBracketsAndQuotes: Boolean = true,
+        val stripParenEllipsis: Boolean = true,
+        val stripEmoticons: Boolean = true,
         val stripUnderscores: Boolean = true,
         val stripEmoji: Boolean = true,
         val stripHashSymbol: Boolean = true,
@@ -244,6 +267,10 @@ object TextPreprocessor {
             text = t
             positions = p
         }
+        // Elipsa v závorce musí být úplně první krok - jinak by ji jiná
+        // pravidla (sloučení opakované interpunkce, mazání závorek) stihla
+        // "rozebrat" na kousky dřív, než by appka poznala, že jde o jeden celek.
+        if (options.stripParenEllipsis) apply(PAREN_ELLIPSIS_PATTERN) { "" }
         if (options.skipUrls) apply(URL_PATTERN) { " " }
         if (options.skipBankAccounts) {
             apply(IBAN_PATTERN) { " " }
@@ -269,6 +296,7 @@ object TextPreprocessor {
             apply(ELLIPSIS_CHAR_PATTERN) { "." }
             apply(REPEATED_PUNCTUATION_PATTERN) { m -> m.group(1) }
         }
+        if (options.stripEmoticons) apply(EMOTICON_PATTERN) { "" }
         if (options.stripBracketsAndQuotes) apply(BRACKETS_AND_QUOTES_PATTERN) { " " }
         if (options.stripEmoji) apply(EMOJI_PATTERN) { "" }
         if (options.stripUnderscores) apply(UNDERSCORE_PATTERN) { " " }

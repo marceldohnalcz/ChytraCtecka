@@ -14,8 +14,18 @@ android {
         // Verzování: dvě desetinná místa, prosté postupné číslování
         // (2.11 -> 2.12 -> 2.13...). Celé číslo před tečkou (2.x -> 3.0) se mění
         // jen u zásadní změny, a to vždy po výslovné dohodě předem.
-        versionCode = 66
-        versionName = "2.47"
+        versionCode = 67
+        versionName = "2.48"
+
+        // Nativní knihovny (sherpa-onnx pro stažitelné hlasy) se jinak balí pro
+        // 4 architektury procesorů najednou (~125 MB) - drtivá většina telefonů
+        // posledních ~8 let (od roku 2017, stejně jako minSdk 26 výše) je
+        // arm64-v8a, takže appka jen tuhle jednu architekturu ponechá. Odpadají
+        // armeabi-v7a (staré 32bit telefony), x86 a x86_64 (jen emulátory,
+        // prakticky žádní skuteční uživatelé).
+        ndk {
+            abiFilters += "arm64-v8a"
+        }
     }
 
     signingConfigs {

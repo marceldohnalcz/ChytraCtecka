@@ -66,6 +66,25 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.48)
+
+- **Appka výrazně menší**: 126 MB → cca 32 MB. Nativní knihovny pro
+  stažitelné hlasy se dřív balily pro 4 typy procesorů najednou, appka
+  teď ponechává jen tu, kterou používá drtivá většina telefonů
+  posledních ~8 let (arm64-v8a). Skutečné stahování enginu "až na
+  vyžádání" bohužel nejde udělat spolehlivě mimo Google Play - Android
+  od verze 10 z bezpečnostních důvodů blokuje spouštění nativního kódu,
+  který nebyl součástí instalace appky.
+- **Oprava**: textové smajlíky (":-(", ":)", ";-)" apod.) se dřív četly
+  doslova po jednotlivých znacích ("dvojtečka spojovník") - teď appka
+  pozná běžné smajlíky jako celek a přeskočí je, stejně jako u
+  opravdových emoji. Číslované seznamy (např. "8) položka") zůstávají
+  beze změny, ať se s nimi smajlík nepřeplete.
+- **Oprava**: "(...)" (elipsa v závorce, typicky značí vynechaný text v
+  citaci) se dřív četlo jako osamocené slovo "tečka" - teď appka
+  rozpozná celou kombinaci a smaže ji najednou. Funguje jak pro tři
+  tečky, tak pro unicode znak elipsy "…".
+
 ## Nové v této verzi (2.47)
 
 - **Stažitelný offline hlas "Jirka"** (nová položka v menu ⋮ "Stažitelné
