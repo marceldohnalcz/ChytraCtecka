@@ -35,19 +35,6 @@
                 android:textColor="@color/text_secondary" />
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/btnVoiceDownloadPlay"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="8dp"
-            android:background="@drawable/bg_circle_button"
-            android:backgroundTint="@color/brand_play"
-            android:src="@drawable/ic_play"
-            android:contentDescription="@string/content_desc_voice_preview"
-            android:padding="10dp"
-            android:scaleType="fitCenter"
-            android:visibility="gone" />
-
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnVoiceDownloadAction"
             style="@style/Widget.MaterialComponents.Button"

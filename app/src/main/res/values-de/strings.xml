@@ -73,13 +73,11 @@
     <string name="menu_about">Über die App</string>
 
     <!-- Downloadable (Piper) voices -->
-    <string name="menu_downloadable_voices">Herunterladbare Stimmen</string>
+    <string name="menu_voice_settings">Stimmeneinstellungen</string>
+    <string name="label_downloadable_voices">Herunterladbare Stimmen</string>
     <string name="desc_downloadable_voices">Zusätzliche Offline-KI-Stimmen, die direkt in der App heruntergeladen werden - funktionieren danach komplett ohne Internet, keine weitere App nötig.</string>
-    <string name="voice_download_jirka_medium_name">Jirka (höhere Qualität)</string>
-    <string name="voice_download_jirka_medium_desc">Tschechische männliche Stimme, ca. 20 MB</string>
-    <string name="voice_download_jirka_low_name">Jirka (schneller, geringere Qualität)</string>
-    <string name="voice_download_jirka_low_desc">Tschechische männliche Stimme, kleiner und schneller, ca. 20 MB</string>
-    <string name="toast_voice_download_failed">Download fehlgeschlagen: %1$s</string>
+    <string name="voice_download_jirka_medium_name">Jirka</string>
+    <string name="voice_download_jirka_medium_desc">Tschechische männliche Stimme, ca. 20 MB</string>    <string name="toast_voice_download_failed">Download fehlgeschlagen: %1$s</string>
     <string name="toast_voice_downloaded">Stimme heruntergeladen</string>
     <string name="dialog_title_delete_downloaded_voice">Stimme entfernen?</string>
     <string name="dialog_msg_delete_downloaded_voice">„%1$s“ wird vom Gerät gelöscht.</string>

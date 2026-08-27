@@ -73,13 +73,11 @@
     <string name="menu_about">O aplikacji</string>
 
     <!-- Downloadable (Piper) voices -->
-    <string name="menu_downloadable_voices">Głosy do pobrania</string>
+    <string name="menu_voice_settings">Ustawienia głosu</string>
+    <string name="label_downloadable_voices">Głosy do pobrania</string>
     <string name="desc_downloadable_voices">Dodatkowe głosy neuronowe do pobrania bezpośrednio w aplikacji - potem działają całkowicie offline, bez potrzeby innej aplikacji.</string>
-    <string name="voice_download_jirka_medium_name">Jirka (wyższa jakość)</string>
-    <string name="voice_download_jirka_medium_desc">Czeski głos męski, ok. 20 MB</string>
-    <string name="voice_download_jirka_low_name">Jirka (szybszy, niższa jakość)</string>
-    <string name="voice_download_jirka_low_desc">Czeski głos męski, mniejszy i szybszy, ok. 20 MB</string>
-    <string name="toast_voice_download_failed">Pobieranie nie powiodło się: %1$s</string>
+    <string name="voice_download_jirka_medium_name">Jirka</string>
+    <string name="voice_download_jirka_medium_desc">Czeski głos męski, ok. 20 MB</string>    <string name="toast_voice_download_failed">Pobieranie nie powiodło się: %1$s</string>
     <string name="toast_voice_downloaded">Głos pobrany</string>
     <string name="dialog_title_delete_downloaded_voice">Usunąć głos?</string>
     <string name="dialog_msg_delete_downloaded_voice">„%1$s” zostanie usunięty z urządzenia.</string>

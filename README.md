@@ -66,6 +66,20 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.49)
+
+- **Sloučené menu "Nastavení hlasu"**: vše kolem hlasu (hlasitost, výška,
+  hlasový modul, výběr systémového hlasu i stažitelné hlasy) je teď na
+  jednom místě v menu ⋮, místo dřívějších dvou oddělených položek.
+  Obecné Nastavení (automatické pokračování, historie, vzhled) zůstává
+  samostatně.
+- **Zjednodušená ukázka stažených hlasů**: klepnutí na jméno stažitelného
+  hlasu přehraje ukázku (zelené tlačítko zrušeno), stejně jako už funguje
+  u systémových hlasů.
+- **Jen jeden hlas Jirka místo dvou** - "nižší kvalita" zabírala skoro
+  přesně stejně místa jako "vyšší kvalita" (obě cca 20 MB), takže
+  nedávalo smysl nabízet horší variantu bez žádné úspory.
+
 ## Nové v této verzi (2.48)
 
 - **Appka výrazně menší**: 126 MB → cca 32 MB. Nativní knihovny pro

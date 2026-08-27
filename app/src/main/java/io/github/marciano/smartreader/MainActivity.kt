@@ -814,8 +814,8 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                     showSettingsDialog()
                     true
                 }
-                R.id.menuDownloadableVoices -> {
-                    showDownloadableVoicesDialog()
+                R.id.menuVoiceSettings -> {
+                    showVoiceSettingsDialog()
                     true
                 }
                 R.id.menuHelp -> {
@@ -943,12 +943,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
     }
 
     private fun showSettingsDialog() {
-        val svc = service
         val view = layoutInflater.inflate(R.layout.dialog_settings, null)
-        val seekVolume = view.findViewById<SeekBar>(R.id.seekVolumeDialog)
-        val seekPitch = view.findViewById<SeekBar>(R.id.seekPitchDialog)
-        val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupVoices)
-        val radioGroupEngines = view.findViewById<RadioGroup>(R.id.radioGroupEngines)
         val switchAutoResume = view.findViewById<android.widget.Switch>(R.id.switchAutoResume)
         val switchHistoryEnabled = view.findViewById<android.widget.Switch>(R.id.switchHistoryEnabled)
 
@@ -981,6 +976,64 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             AppSettings.saveThemeMode(this, mode)
             androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(mode)
         }
+
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.dialog_title_settings))
+            .setView(view)
+            .setPositiveButton(getString(R.string.btn_done), null)
+            .show()
+    }
+
+    /**
+     * Přehraje krátkou ukázkovou větu vybraným hlasem - přes VLASTNÍ, oddělený
+     * TTS engine (ne přes ReadingService), ať to nijak nenaruší případné právě
+     * probíhající čtení hlavního textu.
+     */
+    private fun previewVoice(voice: Voice) {
+        val sentence = getString(R.string.voice_preview_sentence)
+        val existing = previewTts
+        if (existing != null) {
+            existing.voice = voice
+            existing.setPitch(currentPitch)
+            existing.speak(sentence, TextToSpeech.QUEUE_FLUSH, null, "voice_preview")
+        } else {
+            previewTts = TextToSpeech(this) { status ->
+                if (status == TextToSpeech.SUCCESS) {
+                    previewTts?.voice = voice
+                    previewTts?.setPitch(currentPitch)
+                    previewTts?.speak(sentence, TextToSpeech.QUEUE_FLUSH, null, "voice_preview")
+                }
+            }
+        }
+    }
+
+    /** Přehraje ukázku aktuálně vybraným hlasem s aktuální výškou - použije se
+     *  po změně posuvníku výšky hlasu, ať je slyšet efekt hned. */
+    private fun previewCurrentVoiceWithPitch() {
+        val voices = service?.getAvailableVoicesForCurrentLanguage().orEmpty()
+        val currentVoiceName = service?.getCurrentVoiceName()
+        val voice = voices.firstOrNull { it.name == currentVoiceName } ?: previewTts?.voice
+        if (voice != null) {
+            previewVoice(voice)
+        }
+    }
+
+    /**
+     * Dialog "Nastavení hlasu" - vše kolem hlasu na jednom místě: hlasitost,
+     * výška, hlasový modul (engine), výběr systémového hlasu A stažitelné
+     * offline (Piper) hlasy. Dřív byly rozdělené mezi Nastavení a samostatnou
+     * položku menu - sloučeno, ať appka nemá zbytečně moc položek v menu.
+     */
+    private fun showVoiceSettingsDialog() {
+        val svc = service
+        val view = layoutInflater.inflate(R.layout.dialog_voice_settings, null)
+        val seekVolume = view.findViewById<SeekBar>(R.id.seekVolumeDialog)
+        val seekPitch = view.findViewById<SeekBar>(R.id.seekPitchDialog)
+        val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupVoices)
+        val radioGroupEngines = view.findViewById<RadioGroup>(R.id.radioGroupEngines)
+        val container = view.findViewById<LinearLayout>(R.id.containerDownloadableVoices)
+
+        var piperPreviewPlayer: PcmAudioPlayer? = null
 
         seekVolume.progress = (currentVolume * 100).toInt()
         seekVolume.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -1065,102 +1118,21 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
 
         refreshVoiceList()
 
-        val settingsDialog = AlertDialog.Builder(this)
-            .setTitle(getString(R.string.dialog_title_settings))
-            .setView(view)
-            .setPositiveButton(getString(R.string.btn_done), null)
-            .create()
-        settingsDialog.setOnDismissListener { previewTts?.stop() }
-        settingsDialog.show()
-    }
-
-    /**
-     * Přehraje krátkou ukázkovou větu vybraným hlasem - přes VLASTNÍ, oddělený
-     * TTS engine (ne přes ReadingService), ať to nijak nenaruší případné právě
-     * probíhající čtení hlavního textu.
-     */
-    private fun previewVoice(voice: Voice) {
-        val sentence = getString(R.string.voice_preview_sentence)
-        val existing = previewTts
-        if (existing != null) {
-            existing.voice = voice
-            existing.setPitch(currentPitch)
-            existing.speak(sentence, TextToSpeech.QUEUE_FLUSH, null, "voice_preview")
-        } else {
-            previewTts = TextToSpeech(this) { status ->
-                if (status == TextToSpeech.SUCCESS) {
-                    previewTts?.voice = voice
-                    previewTts?.setPitch(currentPitch)
-                    previewTts?.speak(sentence, TextToSpeech.QUEUE_FLUSH, null, "voice_preview")
-                }
-            }
-        }
-    }
-
-    /** Přehraje ukázku aktuálně vybraným hlasem s aktuální výškou - použije se
-     *  po změně posuvníku výšky hlasu, ať je slyšet efekt hned. */
-    private fun previewCurrentVoiceWithPitch() {
-        val voices = service?.getAvailableVoicesForCurrentLanguage().orEmpty()
-        val currentVoiceName = service?.getCurrentVoiceName()
-        val voice = voices.firstOrNull { it.name == currentVoiceName } ?: previewTts?.voice
-        if (voice != null) {
-            previewVoice(voice)
-        }
-    }
-
-    /**
-     * Dialog "Stažitelné hlasy" - offline neurální (Piper) hlasy, které appka
-     * stáhne a spustí sama, nezávisle na systémovém TTS modulu telefonu.
-     */
-    private fun showDownloadableVoicesDialog() {
-        val view = layoutInflater.inflate(R.layout.dialog_downloadable_voices, null)
-        val container = view.findViewById<LinearLayout>(R.id.containerDownloadableVoices)
-        val btnClose = view.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnCloseDownloadableVoices)
-
-        var piperPreviewPlayer: PcmAudioPlayer? = null
-
-        val dialog = AlertDialog.Builder(this)
-            .setView(view)
-            .create()
-
+        // --- Stažitelné (Piper) offline hlasy ---
         val languageCode = Locale.getDefault().language
-        val voices = DownloadableVoices.forCurrentLanguage(languageCode)
+        val downloadableVoices = DownloadableVoices.forCurrentLanguage(languageCode)
 
-        if (voices.isEmpty()) {
-            val tv = TextView(this)
-            tv.text = getString(R.string.voice_none_found)
-            tv.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
-            tv.setPadding(20.dpPx(), 8.dpPx(), 20.dpPx(), 8.dpPx())
-            container.addView(tv)
-        }
-
-        voices.forEach { voice ->
+        downloadableVoices.forEach { voice ->
             val row = layoutInflater.inflate(R.layout.item_downloadable_voice, container, false)
             val tvName = row.findViewById<TextView>(R.id.tvVoiceDownloadName)
             val tvDesc = row.findViewById<TextView>(R.id.tvVoiceDownloadDesc)
             val btnAction = row.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnVoiceDownloadAction)
-            val btnPlay = row.findViewById<ImageButton>(R.id.btnVoiceDownloadPlay)
             val progress = row.findViewById<ProgressBar>(R.id.progressVoiceDownload)
 
             tvName.text = getString(voice.displayNameRes)
             tvDesc.text = getString(voice.descriptionRes)
 
-            fun refreshRowState() {
-                val downloaded = PiperVoiceStore.isDownloaded(this, voice.id)
-                progress.visibility = View.GONE
-                btnAction.isEnabled = true
-                if (downloaded) {
-                    btnPlay.visibility = View.VISIBLE
-                    btnAction.text = getString(R.string.btn_delete)
-                    btnAction.backgroundTintList = ContextCompat.getColorStateList(this, R.color.brand_danger)
-                } else {
-                    btnPlay.visibility = View.GONE
-                    btnAction.text = getString(R.string.btn_download)
-                    btnAction.backgroundTintList = ContextCompat.getColorStateList(this, R.color.brand_accent)
-                }
-            }
-
-            btnPlay.setOnClickListener {
+            fun playPiperPreview() {
                 Thread {
                     try {
                         val dir = PiperVoiceStore.voiceDir(this, voice.id)
@@ -1179,6 +1151,23 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                         }
                     }
                 }.start()
+            }
+
+            fun refreshRowState() {
+                // Klepnutí na jméno přehraje ukázku - jen u už stažených hlasů
+                // (dřív samostatné zelené tlačítko, teď stačí klepnout na jméno).
+                val downloaded = PiperVoiceStore.isDownloaded(this, voice.id)
+                progress.visibility = View.GONE
+                btnAction.isEnabled = true
+                if (downloaded) {
+                    btnAction.text = getString(R.string.btn_delete)
+                    btnAction.backgroundTintList = ContextCompat.getColorStateList(this, R.color.brand_danger)
+                    tvName.setOnClickListener { playPiperPreview() }
+                } else {
+                    btnAction.text = getString(R.string.btn_download)
+                    btnAction.backgroundTintList = ContextCompat.getColorStateList(this, R.color.brand_accent)
+                    tvName.setOnClickListener(null)
+                }
             }
 
             btnAction.setOnClickListener {
@@ -1217,8 +1206,15 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             container.addView(row)
         }
 
-        btnClose.setOnClickListener { dialog.dismiss() }
-        dialog.setOnDismissListener { piperPreviewPlayer?.stop() }
+        val dialog = AlertDialog.Builder(this)
+            .setTitle(getString(R.string.menu_voice_settings))
+            .setView(view)
+            .setPositiveButton(getString(R.string.btn_done), null)
+            .create()
+        dialog.setOnDismissListener {
+            previewTts?.stop()
+            piperPreviewPlayer?.stop()
+        }
         dialog.show()
     }
 

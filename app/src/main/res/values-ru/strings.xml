@@ -73,13 +73,11 @@
     <string name="menu_about">О приложении</string>
 
     <!-- Downloadable (Piper) voices -->
-    <string name="menu_downloadable_voices">Загружаемые голоса</string>
+    <string name="menu_voice_settings">Настройки голоса</string>
+    <string name="label_downloadable_voices">Загружаемые голоса</string>
     <string name="desc_downloadable_voices">Дополнительные офлайн нейронные голоса, которые можно скачать прямо в приложении - после этого работают полностью без интернета, без нужды в другом приложении.</string>
-    <string name="voice_download_jirka_medium_name">Йирка (высокое качество)</string>
-    <string name="voice_download_jirka_medium_desc">Чешский мужской голос, около 20 МБ</string>
-    <string name="voice_download_jirka_low_name">Йирка (быстрее, ниже качество)</string>
-    <string name="voice_download_jirka_low_desc">Чешский мужской голос, меньше и быстрее, около 20 МБ</string>
-    <string name="toast_voice_download_failed">Ошибка загрузки: %1$s</string>
+    <string name="voice_download_jirka_medium_name">Йирка</string>
+    <string name="voice_download_jirka_medium_desc">Чешский мужской голос, около 20 МБ</string>    <string name="toast_voice_download_failed">Ошибка загрузки: %1$s</string>
     <string name="toast_voice_downloaded">Голос загружен</string>
     <string name="dialog_title_delete_downloaded_voice">Удалить голос?</string>
     <string name="dialog_msg_delete_downloaded_voice">«%1$s» будет удалён с устройства.</string>

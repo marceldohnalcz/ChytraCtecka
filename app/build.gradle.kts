@@ -14,8 +14,8 @@ android {
         // Verzování: dvě desetinná místa, prosté postupné číslování
         // (2.11 -> 2.12 -> 2.13...). Celé číslo před tečkou (2.x -> 3.0) se mění
         // jen u zásadní změny, a to vždy po výslovné dohodě předem.
-        versionCode = 67
-        versionName = "2.48"
+        versionCode = 68
+        versionName = "2.49"
 
         // Nativní knihovny (sherpa-onnx pro stažitelné hlasy) se jinak balí pro
         // 4 architektury procesorů najednou (~125 MB) - drtivá většina telefonů

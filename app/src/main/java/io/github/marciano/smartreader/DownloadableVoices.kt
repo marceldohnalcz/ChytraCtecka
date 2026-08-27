@@ -21,6 +21,10 @@ object DownloadableVoices {
      * (ne appka sama) - žádná vlastní serverová infrastruktura zatím není
      * potřeba. Pokud by appka v budoucí verzi chtěla hosting/přístup řídit
      * sama (např. kvůli zpoplatnění), stačí tady změnit downloadUrl.
+     *
+     * Jen jedna kvalitativní varianta (medium) - "low" varianta zabírá skoro
+     * přesně stejně místa (~20 MB u obou), takže nemá smysl nabízet horší
+     * kvalitu bez žádné úspory místa navíc.
      */
     val ALL: List<DownloadableVoice> = listOf(
         DownloadableVoice(
@@ -29,14 +33,6 @@ object DownloadableVoices {
             descriptionRes = R.string.voice_download_jirka_medium_desc,
             language = "cs",
             downloadUrl = "https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/vits-piper-cs_CZ-jirka-medium-int8.tar.bz2",
-            approxSizeMb = 20
-        ),
-        DownloadableVoice(
-            id = "cs_CZ-jirka-low",
-            displayNameRes = R.string.voice_download_jirka_low_name,
-            descriptionRes = R.string.voice_download_jirka_low_desc,
-            language = "cs",
-            downloadUrl = "https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/vits-piper-cs_CZ-jirka-low-int8.tar.bz2",
             approxSizeMb = 20
         )
     )

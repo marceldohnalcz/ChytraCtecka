@@ -73,13 +73,11 @@
     <string name="menu_about">O aplikaci</string>
 
     <!-- Downloadable (Piper) voices -->
-    <string name="menu_downloadable_voices">Stažitelné hlasy</string>
+    <string name="menu_voice_settings">Nastavení hlasu</string>
+    <string name="label_downloadable_voices">Stažitelné hlasy</string>
     <string name="desc_downloadable_voices">Další offline neurální hlasy, které si stáhneš přímo v appce - po stažení fungují úplně bez internetu, žádná další appka není potřeba.</string>
-    <string name="voice_download_jirka_medium_name">Jirka (vyšší kvalita)</string>
-    <string name="voice_download_jirka_medium_desc">Český mužský hlas, cca 20 MB</string>
-    <string name="voice_download_jirka_low_name">Jirka (rychlejší, nižší kvalita)</string>
-    <string name="voice_download_jirka_low_desc">Český mužský hlas, menší a rychlejší, cca 20 MB</string>
-    <string name="toast_voice_download_failed">Stažení se nepovedlo: %1$s</string>
+    <string name="voice_download_jirka_medium_name">Jirka</string>
+    <string name="voice_download_jirka_medium_desc">Český mužský hlas, cca 20 MB</string>    <string name="toast_voice_download_failed">Stažení se nepovedlo: %1$s</string>
     <string name="toast_voice_downloaded">Hlas stažen</string>
     <string name="dialog_title_delete_downloaded_voice">Odebrat hlas?</string>
     <string name="dialog_msg_delete_downloaded_voice">„%1$s“ bude smazán z telefonu.</string>

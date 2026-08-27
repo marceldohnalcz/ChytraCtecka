@@ -4,8 +4,8 @@
         android:id="@+id/menuSettings"
         android:title="@string/menu_settings" />
     <item
-        android:id="@+id/menuDownloadableVoices"
-        android:title="@string/menu_downloadable_voices" />
+        android:id="@+id/menuVoiceSettings"
+        android:title="@string/menu_voice_settings" />
     <item
         android:id="@+id/menuHelp"
         android:title="@string/menu_help" />
