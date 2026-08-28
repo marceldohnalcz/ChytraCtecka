@@ -74,9 +74,7 @@
 
     <!-- Downloadable (Piper) voices -->
     <string name="menu_voice_settings">Impostazioni voce</string>
-    <string name="label_downloadable_voices">Voci scaricabili</string>
-    <string name="desc_downloadable_voices">Voci neurali aggiuntive da scaricare direttamente nell\'app - dopo funzionano completamente offline, senza bisogno di altre app.</string>
-    <string name="voice_download_jirka_medium_name">Jirka</string>
+    <string name="label_downloadable_voices">Voci scaricabili</string>    <string name="voice_download_jirka_medium_name">Jirka</string>
     <string name="voice_download_jirka_medium_desc">Voce maschile ceca, circa 20 MB</string>    <string name="toast_voice_download_failed">Download non riuscito: %1$s</string>
     <string name="toast_voice_downloaded">Voce scaricata</string>
     <string name="dialog_title_delete_downloaded_voice">Rimuovere la voce?</string>

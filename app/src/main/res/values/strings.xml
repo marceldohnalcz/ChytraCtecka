@@ -80,9 +80,7 @@
 
     <!-- Downloadable (Piper) voices -->
     <string name="menu_voice_settings">Voice settings</string>
-    <string name="label_downloadable_voices">Downloadable voices</string>
-    <string name="desc_downloadable_voices">Extra offline neural voices you can download right in the app - work fully offline afterwards, no other app needed. Once downloaded, tap the circle to use it for reading, tap the name to hear a sample.</string>
-    <string name="voice_download_jirka_medium_name">Jirka</string>
+    <string name="label_downloadable_voices">Downloadable voices</string>    <string name="voice_download_jirka_medium_name">Jirka</string>
     <string name="voice_download_jirka_medium_desc">Czech male voice, about 20 MB</string>    <string name="toast_voice_download_failed">Download failed: %1$s</string>
     <string name="toast_voice_downloaded">Voice downloaded</string>
     <string name="dialog_title_delete_downloaded_voice">Remove voice?</string>

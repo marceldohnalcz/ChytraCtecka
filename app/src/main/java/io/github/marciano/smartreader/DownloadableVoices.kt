@@ -9,7 +9,6 @@ package io.github.marciano.smartreader
 data class DownloadableVoice(
     val id: String,
     val displayNameRes: Int,
-    val descriptionRes: Int,
     val language: String,
     val downloadUrl: String,
     val approxSizeMb: Int
@@ -30,7 +29,6 @@ object DownloadableVoices {
         DownloadableVoice(
             id = "cs_CZ-jirka-medium",
             displayNameRes = R.string.voice_download_jirka_medium_name,
-            descriptionRes = R.string.voice_download_jirka_medium_desc,
             language = "cs",
             downloadUrl = "https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/vits-piper-cs_CZ-jirka-medium-int8.tar.bz2",
             approxSizeMb = 20

@@ -1038,6 +1038,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         val container = view.findViewById<LinearLayout>(R.id.containerDownloadableVoices)
 
         val piperSelectRadios = mutableListOf<RadioButton>()
+        val cachedPreviewEngines = mutableListOf<PiperVoiceEngine>()
 
         seekVolume.progress = (currentVolume * 100).toInt()
         seekVolume.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -1135,30 +1136,41 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         downloadableVoices.forEach { voice ->
             val row = layoutInflater.inflate(R.layout.item_downloadable_voice, container, false)
             val tvName = row.findViewById<TextView>(R.id.tvVoiceDownloadName)
-            val tvDesc = row.findViewById<TextView>(R.id.tvVoiceDownloadDesc)
             val btnAction = row.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnVoiceDownloadAction)
             val progress = row.findViewById<ProgressBar>(R.id.progressVoiceDownload)
 
             tvName.text = getString(voice.displayNameRes)
-            tvDesc.text = getString(voice.descriptionRes)
+
+            // Engine si appka podrží v paměti mezi ukázkami stejného hlasu - první
+            // ukázka chvíli trvá (načítání modelu z disku), další jsou pak rychlé.
+            var cachedPreviewEngine: PiperVoiceEngine? = null
+            var previewInProgress = false
 
             fun playPiperPreview() {
+                if (previewInProgress) return
                 previewTts?.stop()
                 piperPreviewPlayer?.stop()
+                previewInProgress = true
+                tvName.alpha = 0.5f
                 Thread {
                     try {
-                        val dir = PiperVoiceStore.voiceDir(this, voice.id)
-                        val engine = PiperVoiceEngine(dir)
+                        val engine = cachedPreviewEngine ?: PiperVoiceEngine(PiperVoiceStore.voiceDir(this, voice.id)).also {
+                            cachedPreviewEngine = it
+                            cachedPreviewEngines.add(it)
+                        }
                         val samples = engine.generate(getString(R.string.voice_preview_sentence))
                         val sampleRate = engine.sampleRate
-                        engine.release()
                         runOnUiThread {
+                            previewInProgress = false
+                            tvName.alpha = 1f
                             val player = PcmAudioPlayer()
                             player.play(samples, sampleRate)
                             piperPreviewPlayer = player
                         }
                     } catch (e: Exception) {
                         runOnUiThread {
+                            previewInProgress = false
+                            tvName.alpha = 1f
                             Toast.makeText(this, e.message ?: e.javaClass.simpleName, Toast.LENGTH_SHORT).show()
                         }
                     }
@@ -1170,15 +1182,15 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             piperSelectRadios.add(radioSelect)
 
             fun refreshRowState() {
-                // Klepnutí na jméno přehraje ukázku - jen u už stažených hlasů
-                // (dřív samostatné zelené tlačítko, teď stačí klepnout na jméno).
+                // Klepnutí kamkoli na řádek (mimo kolečko a tlačítko) přehraje
+                // ukázku - jen u už stažených hlasů.
                 val downloaded = PiperVoiceStore.isDownloaded(this, voice.id)
                 progress.visibility = View.GONE
                 btnAction.isEnabled = true
                 if (downloaded) {
                     btnAction.text = getString(R.string.btn_delete)
                     btnAction.backgroundTintList = ContextCompat.getColorStateList(this, R.color.brand_danger)
-                    tvName.setOnClickListener { playPiperPreview() }
+                    row.setOnClickListener { playPiperPreview() }
                     radioSelect.visibility = View.VISIBLE
                     radioSelect.isChecked = svc?.getActivePiperVoiceId() == voice.id
                     radioSelect.setOnClickListener {
@@ -1189,9 +1201,14 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                 } else {
                     btnAction.text = getString(R.string.btn_download)
                     btnAction.backgroundTintList = ContextCompat.getColorStateList(this, R.color.brand_accent)
-                    tvName.setOnClickListener(null)
+                    row.setOnClickListener(null)
                     radioSelect.visibility = View.GONE
                     radioSelect.setOnClickListener(null)
+                    cachedPreviewEngine?.let {
+                        it.release()
+                        cachedPreviewEngines.remove(it)
+                    }
+                    cachedPreviewEngine = null
                 }
             }
 
@@ -1242,6 +1259,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         dialog.setOnDismissListener {
             previewTts?.stop()
             piperPreviewPlayer?.stop()
+            cachedPreviewEngines.forEach { it.release() }
         }
         dialog.show()
     }

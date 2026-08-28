@@ -66,6 +66,17 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.51)
+
+- **Oprava**: ukázka staženého hlasu Jirka mohla působit, že vůbec
+  nefunguje - ve skutečnosti appka jen bez jakéhokoli náznaku načítala
+  model z disku (chvíli to trvá) a nedávala žádnou zpětnou vazbu, že se
+  něco děje. Appka si teď hlas mezi ukázkami podrží v paměti (další
+  ukázky jsou pak rychlé) a při načítání ztlumí název, ať je vidět, že
+  appka reaguje. Klepnutí funguje na celém řádku, ne jen přesně na jméně.
+- **Zjednodušený vzhled**: odstraněny popisky pod nadpisem "Stažitelné
+  hlasy" a pod jménem každého hlasu - řádek je teď stručnější.
+
 ## Nové v této verzi (2.50)
 
 - **Stažený hlas Jirka teď jde skutečně použít pro čtení**, ne jen si
