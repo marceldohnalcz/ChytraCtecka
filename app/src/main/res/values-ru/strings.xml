@@ -56,9 +56,7 @@
     <string name="voice_quality_low">низкое качество</string>
     <string name="voice_quality_unknown">качество неизвестно</string>
     <string name="voice_needs_internet"> • требуется интернет</string>
-    <string name="desc_voice_preview_hint">Нажмите на голос, чтобы выбрать его и прослушать образец</string>
-    <string name="content_desc_voice_preview">Воспроизвести образец голоса</string>
-    <string name="voice_preview_sentence">Это образец моего голоса при чтении обычного текста.</string>
+    <string name="desc_voice_preview_hint">Нажмите на голос, чтобы выбрать его и прослушать образец</string>    <string name="voice_preview_sentence">Это образец моего голоса при чтении обычного текста.</string>
     <string name="dialog_title_settings">Настройки</string>
     <string name="label_tts_engine">Голосовой движок</string>
     <string name="desc_tts_engine">Какое приложение генерирует речь - позволяет использовать голоса и из других установленных приложений</string>
@@ -73,17 +71,7 @@
     <string name="menu_about">О приложении</string>
 
     <!-- Downloadable (Piper) voices -->
-    <string name="menu_voice_settings">Настройки голоса</string>
-    <string name="label_downloadable_voices">Загружаемые голоса</string>    <string name="voice_download_jirka_medium_name">Йирка</string>
-    <string name="voice_download_jirka_medium_desc">Чешский мужской голос, около 20 МБ</string>    <string name="toast_voice_download_failed">Ошибка загрузки: %1$s</string>
-    <string name="toast_voice_downloaded">Голос загружен</string>
-    <string name="dialog_title_delete_downloaded_voice">Удалить голос?</string>
-    <string name="dialog_msg_delete_downloaded_voice">«%1$s» будет удалён с устройства.</string>
-
-    <!-- Отслеживаемые профили -->
-    <string name="content_desc_tracked_profiles">Отслеживаемые профили</string>
-    <string name="title_tracked_profiles">Отслеживаемые профили</string>
-    <string name="msg_tracked_profiles_empty">Пока нет отслеживаемых профилей. Добавьте первый ниже.</string>
+    <string name="menu_voice_settings">Настройки голоса</string>    <string name="msg_tracked_profiles_empty">Пока нет отслеживаемых профилей. Добавьте первый ниже.</string>
     <string name="btn_add_profile">Добавить профиль</string>
     <string name="hint_profile_name">Имя (напр. Иван Иванов)</string>
     <string name="hint_profile_url">Ссылка на профиль</string>
@@ -143,4 +131,7 @@
     <string name="error_playback">Ошибка воспроизведения</string>
     <string name="error_voice_not_available">Этот язык недоступен на устройстве. Установите голос в Настройки &gt; Голосовой ввод &gt; Синтез речи.</string>
     <string name="error_tts_failed_start">Не удалось запустить голосовой модуль (TTS).</string>
+
+    <string name="content_desc_tracked_profiles">Отслеживаемые профили</string>
+    <string name="title_tracked_profiles">Отслеживаемые профили</string>
 </resources>

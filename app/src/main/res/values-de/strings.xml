@@ -56,9 +56,7 @@
     <string name="voice_quality_low">niedrige Qualität</string>
     <string name="voice_quality_unknown">Qualität unbekannt</string>
     <string name="voice_needs_internet"> • benötigt Internet</string>
-    <string name="desc_voice_preview_hint">Tippen wählt die Stimme aus und spielt eine Hörprobe ab</string>
-    <string name="content_desc_voice_preview">Sprachprobe abspielen</string>
-    <string name="voice_preview_sentence">Dies ist ein Beispiel meiner Stimme beim Vorlesen von normalem Text.</string>
+    <string name="desc_voice_preview_hint">Tippen wählt die Stimme aus und spielt eine Hörprobe ab</string>    <string name="voice_preview_sentence">Dies ist ein Beispiel meiner Stimme beim Vorlesen von normalem Text.</string>
     <string name="dialog_title_settings">Einstellungen</string>
     <string name="label_tts_engine">Sprachmodul</string>
     <string name="desc_tts_engine">Welche App die Sprache erzeugt - damit können auch Stimmen aus anderen installierten Apps genutzt werden</string>
@@ -73,17 +71,7 @@
     <string name="menu_about">Über die App</string>
 
     <!-- Downloadable (Piper) voices -->
-    <string name="menu_voice_settings">Stimmeneinstellungen</string>
-    <string name="label_downloadable_voices">Herunterladbare Stimmen</string>    <string name="voice_download_jirka_medium_name">Jirka</string>
-    <string name="voice_download_jirka_medium_desc">Tschechische männliche Stimme, ca. 20 MB</string>    <string name="toast_voice_download_failed">Download fehlgeschlagen: %1$s</string>
-    <string name="toast_voice_downloaded">Stimme heruntergeladen</string>
-    <string name="dialog_title_delete_downloaded_voice">Stimme entfernen?</string>
-    <string name="dialog_msg_delete_downloaded_voice">„%1$s“ wird vom Gerät gelöscht.</string>
-
-    <!-- Verfolgte Profile -->
-    <string name="content_desc_tracked_profiles">Verfolgte Profile</string>
-    <string name="title_tracked_profiles">Verfolgte Profile</string>
-    <string name="msg_tracked_profiles_empty">Noch keine verfolgten Profile. Füge unten das erste hinzu.</string>
+    <string name="menu_voice_settings">Stimmeneinstellungen</string>    <string name="msg_tracked_profiles_empty">Noch keine verfolgten Profile. Füge unten das erste hinzu.</string>
     <string name="btn_add_profile">Profil hinzufügen</string>
     <string name="hint_profile_name">Name (z. B. Jane Doe)</string>
     <string name="hint_profile_url">Profillink</string>
@@ -143,4 +131,7 @@
     <string name="error_playback">Wiedergabefehler</string>
     <string name="error_voice_not_available">Diese Sprache ist auf diesem Gerät nicht verfügbar. Installiere eine Stimme unter Einstellungen &gt; Sprache &gt; Text-zu-Sprache.</string>
     <string name="error_tts_failed_start">Die Sprachausgabe (TTS) konnte nicht gestartet werden.</string>
+
+    <string name="content_desc_tracked_profiles">Verfolgte Profile</string>
+    <string name="title_tracked_profiles">Verfolgte Profile</string>
 </resources>

@@ -56,9 +56,7 @@
     <string name="voice_quality_low">qualité basse</string>
     <string name="voice_quality_unknown">qualité inconnue</string>
     <string name="voice_needs_internet"> • nécessite internet</string>
-    <string name="desc_voice_preview_hint">Touchez une voix pour la sélectionner et entendre un exemple</string>
-    <string name="content_desc_voice_preview">Écouter un exemple de voix</string>
-    <string name="voice_preview_sentence">Voici un exemple de ma voix lisant un texte normal.</string>
+    <string name="desc_voice_preview_hint">Touchez une voix pour la sélectionner et entendre un exemple</string>    <string name="voice_preview_sentence">Voici un exemple de ma voix lisant un texte normal.</string>
     <string name="dialog_title_settings">Paramètres</string>
     <string name="label_tts_engine">Moteur vocal</string>
     <string name="desc_tts_engine">Quelle application génère la voix - permet aussi d\'utiliser des voix d\'autres applications installées</string>
@@ -73,17 +71,7 @@
     <string name="menu_about">À propos</string>
 
     <!-- Downloadable (Piper) voices -->
-    <string name="menu_voice_settings">Paramètres de voix</string>
-    <string name="label_downloadable_voices">Voix téléchargeables</string>    <string name="voice_download_jirka_medium_name">Jirka</string>
-    <string name="voice_download_jirka_medium_desc">Voix masculine tchèque, environ 20 Mo</string>    <string name="toast_voice_download_failed">Échec du téléchargement : %1$s</string>
-    <string name="toast_voice_downloaded">Voix téléchargée</string>
-    <string name="dialog_title_delete_downloaded_voice">Supprimer la voix ?</string>
-    <string name="dialog_msg_delete_downloaded_voice">« %1$s » sera supprimée de l\'appareil.</string>
-
-    <!-- Profils suivis -->
-    <string name="content_desc_tracked_profiles">Profils suivis</string>
-    <string name="title_tracked_profiles">Profils suivis</string>
-    <string name="msg_tracked_profiles_empty">Aucun profil suivi pour le moment. Ajoutez le premier ci-dessous.</string>
+    <string name="menu_voice_settings">Paramètres de voix</string>    <string name="msg_tracked_profiles_empty">Aucun profil suivi pour le moment. Ajoutez le premier ci-dessous.</string>
     <string name="btn_add_profile">Ajouter un profil</string>
     <string name="hint_profile_name">Nom (ex. Jean Dupont)</string>
     <string name="hint_profile_url">Lien du profil</string>
@@ -143,4 +131,7 @@
     <string name="error_playback">Erreur de lecture</string>
     <string name="error_voice_not_available">Cette langue n\'est pas disponible sur cet appareil. Installez une voix dans Paramètres &gt; Voix &gt; Synthèse vocale.</string>
     <string name="error_tts_failed_start">Impossible de démarrer le moteur vocal (TTS).</string>
+
+    <string name="content_desc_tracked_profiles">Profils suivis</string>
+    <string name="title_tracked_profiles">Profils suivis</string>
 </resources>

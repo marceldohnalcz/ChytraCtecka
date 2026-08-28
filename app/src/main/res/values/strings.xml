@@ -61,9 +61,7 @@
     <string name="voice_quality_low">low quality</string>
     <string name="voice_quality_unknown">unknown quality</string>
     <string name="voice_needs_internet"> • needs internet</string>
-    <string name="desc_voice_preview_hint">Tap a voice to select it and hear a sample</string>
-    <string name="content_desc_voice_preview">Play voice sample</string>
-    <string name="voice_preview_sentence">This is a sample of my voice reading regular text.</string>
+    <string name="desc_voice_preview_hint">Tap a voice to select it and hear a sample</string>    <string name="voice_preview_sentence">This is a sample of my voice reading regular text.</string>
     <string name="dialog_title_settings">Settings</string>
     <string name="label_tts_engine">Voice engine</string>
     <string name="desc_tts_engine">Which app generates the speech - lets you use voices from other installed apps too</string>
@@ -79,17 +77,7 @@
     <string name="menu_about">About</string>
 
     <!-- Downloadable (Piper) voices -->
-    <string name="menu_voice_settings">Voice settings</string>
-    <string name="label_downloadable_voices">Downloadable voices</string>    <string name="voice_download_jirka_medium_name">Jirka</string>
-    <string name="voice_download_jirka_medium_desc">Czech male voice, about 20 MB</string>    <string name="toast_voice_download_failed">Download failed: %1$s</string>
-    <string name="toast_voice_downloaded">Voice downloaded</string>
-    <string name="dialog_title_delete_downloaded_voice">Remove voice?</string>
-    <string name="dialog_msg_delete_downloaded_voice">\"%1$s\" will be deleted from the device.</string>
-
-    <!-- Tracked profiles -->
-    <string name="content_desc_tracked_profiles">Tracked profiles</string>
-    <string name="title_tracked_profiles">Tracked Profiles</string>
-    <string name="msg_tracked_profiles_empty">No tracked profiles yet. Add the first one below.</string>
+    <string name="menu_voice_settings">Voice settings</string>    <string name="msg_tracked_profiles_empty">No tracked profiles yet. Add the first one below.</string>
     <string name="btn_add_profile">Add Profile</string>
     <string name="hint_profile_name">Name (e.g. Jane Doe)</string>
     <string name="hint_profile_url">Profile link</string>
@@ -153,4 +141,7 @@
     <string name="error_playback">Playback error</string>
     <string name="error_voice_not_available">This language isn\'t available on this device. Install a voice in Settings > Speech > Text-to-speech.</string>
     <string name="error_tts_failed_start">Couldn\'t start the voice engine (TTS).</string>
+
+    <string name="content_desc_tracked_profiles">Tracked profiles</string>
+    <string name="title_tracked_profiles">Tracked Profiles</string>
 </resources>

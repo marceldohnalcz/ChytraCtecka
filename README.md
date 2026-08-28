@@ -66,6 +66,16 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.52)
+
+- **Stažitelný hlas Jirka (Piper) odstraněn** - kvalita hlasu nakonec
+  neuspokojila. Appka se vrací k čistě systémovým TTS hlasům (Nastavení
+  hlasu teď obsahuje jen hlasitost, výšku, hlasový modul a výběr
+  systémového hlasu). Appka je zase o dost menší (zpátky pod 10 MB).
+  Kompletní funkční implementace zůstává zachovaná v Gitu pod značkou
+  `piper-voice-feature-2026-08`, kdyby se k tomu appka v budoucnu chtěla
+  vrátit (např. s kvalitnějším hlasem).
+
 ## Nové v této verzi (2.51)
 
 - **Oprava**: ukázka staženého hlasu Jirka mohla působit, že vůbec

@@ -56,9 +56,7 @@
     <string name="voice_quality_low">nízká kvalita</string>
     <string name="voice_quality_unknown">kvalita neznámá</string>
     <string name="voice_needs_internet"> • potřebuje internet</string>
-    <string name="desc_voice_preview_hint">Klepnutím hlas vybereš a přehraješ ukázku</string>
-    <string name="content_desc_voice_preview">Přehrát ukázku hlasu</string>
-    <string name="voice_preview_sentence">Toto je ukázka mého hlasu při čtení běžného textu.</string>
+    <string name="desc_voice_preview_hint">Klepnutím hlas vybereš a přehraješ ukázku</string>    <string name="voice_preview_sentence">Toto je ukázka mého hlasu při čtení běžného textu.</string>
     <string name="dialog_title_settings">Nastavení</string>
     <string name="label_tts_engine">Hlasový modul</string>
     <string name="desc_tts_engine">Která appka generuje řeč - jde díky tomu použít hlasy i z jiných nainstalovaných appek</string>
@@ -73,17 +71,7 @@
     <string name="menu_about">O aplikaci</string>
 
     <!-- Downloadable (Piper) voices -->
-    <string name="menu_voice_settings">Nastavení hlasu</string>
-    <string name="label_downloadable_voices">Stažitelné hlasy</string>    <string name="voice_download_jirka_medium_name">Jirka</string>
-    <string name="voice_download_jirka_medium_desc">Český mužský hlas, cca 20 MB</string>    <string name="toast_voice_download_failed">Stažení se nepovedlo: %1$s</string>
-    <string name="toast_voice_downloaded">Hlas stažen</string>
-    <string name="dialog_title_delete_downloaded_voice">Odebrat hlas?</string>
-    <string name="dialog_msg_delete_downloaded_voice">„%1$s“ bude smazán z telefonu.</string>
-
-    <!-- Sledovane profily -->
-    <string name="content_desc_tracked_profiles">Sledované profily</string>
-    <string name="title_tracked_profiles">Sledované profily</string>
-    <string name="msg_tracked_profiles_empty">Zatím žádné sledované profily. Přidej první níže.</string>
+    <string name="menu_voice_settings">Nastavení hlasu</string>    <string name="msg_tracked_profiles_empty">Zatím žádné sledované profily. Přidej první níže.</string>
     <string name="btn_add_profile">Přidat profil</string>
     <string name="hint_profile_name">Jméno (např. Jan Novák)</string>
     <string name="hint_profile_url">Odkaz na profil</string>
@@ -143,4 +131,7 @@
     <string name="error_playback">Chyba při přehrávání</string>
     <string name="error_voice_not_available">Tenhle jazyk není na tomto zařízení dostupný. Nainstaluj hlas v Nastavení &gt; Řeč &gt; Převod textu na řeč.</string>
     <string name="error_tts_failed_start">Nepodařilo se spustit hlasový modul (TTS).</string>
+
+    <string name="content_desc_tracked_profiles">Sledované profily</string>
+    <string name="title_tracked_profiles">Sledované profily</string>
 </resources>

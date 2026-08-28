@@ -56,9 +56,7 @@
     <string name="voice_quality_low">niska jakość</string>
     <string name="voice_quality_unknown">nieznana jakość</string>
     <string name="voice_needs_internet"> • wymaga internetu</string>
-    <string name="desc_voice_preview_hint">Dotknij głosu, aby go wybrać i odsłuchać próbkę</string>
-    <string name="content_desc_voice_preview">Odtwórz próbkę głosu</string>
-    <string name="voice_preview_sentence">To jest próbka mojego głosu podczas czytania zwykłego tekstu.</string>
+    <string name="desc_voice_preview_hint">Dotknij głosu, aby go wybrać i odsłuchać próbkę</string>    <string name="voice_preview_sentence">To jest próbka mojego głosu podczas czytania zwykłego tekstu.</string>
     <string name="dialog_title_settings">Ustawienia</string>
     <string name="label_tts_engine">Silnik głosowy</string>
     <string name="desc_tts_engine">Która aplikacja generuje mowę - pozwala używać głosów też z innych zainstalowanych aplikacji</string>
@@ -73,17 +71,7 @@
     <string name="menu_about">O aplikacji</string>
 
     <!-- Downloadable (Piper) voices -->
-    <string name="menu_voice_settings">Ustawienia głosu</string>
-    <string name="label_downloadable_voices">Głosy do pobrania</string>    <string name="voice_download_jirka_medium_name">Jirka</string>
-    <string name="voice_download_jirka_medium_desc">Czeski głos męski, ok. 20 MB</string>    <string name="toast_voice_download_failed">Pobieranie nie powiodło się: %1$s</string>
-    <string name="toast_voice_downloaded">Głos pobrany</string>
-    <string name="dialog_title_delete_downloaded_voice">Usunąć głos?</string>
-    <string name="dialog_msg_delete_downloaded_voice">„%1$s” zostanie usunięty z urządzenia.</string>
-
-    <!-- Obserwowane profile -->
-    <string name="content_desc_tracked_profiles">Obserwowane profile</string>
-    <string name="title_tracked_profiles">Obserwowane profile</string>
-    <string name="msg_tracked_profiles_empty">Nie masz jeszcze obserwowanych profili. Dodaj pierwszy poniżej.</string>
+    <string name="menu_voice_settings">Ustawienia głosu</string>    <string name="msg_tracked_profiles_empty">Nie masz jeszcze obserwowanych profili. Dodaj pierwszy poniżej.</string>
     <string name="btn_add_profile">Dodaj profil</string>
     <string name="hint_profile_name">Imię (np. Jan Kowalski)</string>
     <string name="hint_profile_url">Link do profilu</string>
@@ -143,4 +131,7 @@
     <string name="error_playback">Błąd odtwarzania</string>
     <string name="error_voice_not_available">Ten język nie jest dostępny na tym urządzeniu. Zainstaluj głos w Ustawienia &gt; Mowa &gt; Zamiana tekstu na mowę.</string>
     <string name="error_tts_failed_start">Nie udało się uruchomić silnika mowy (TTS).</string>
+
+    <string name="content_desc_tracked_profiles">Obserwowane profile</string>
+    <string name="title_tracked_profiles">Obserwowane profile</string>
 </resources>

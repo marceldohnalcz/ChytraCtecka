@@ -65,9 +65,6 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
     // nijak zasahovat do hlavního čtení (přes ReadingService), kdyby appka
     // zrovna něco četla, když si uživatel pouští ukázky jiných hlasů.
     private var previewTts: TextToSpeech? = null
-    // Instanční (ne lokální) proměnná, ať ji může zastavit i ukázka systémového
-    // hlasu a naopak - bez tohohle mohly hrát dvě ukázky najednou přes sebe.
-    private var piperPreviewPlayer: PcmAudioPlayer? = null
 
     /** Pokud je aktuální text načtený z knihovny, sledujeme jeho id kvůli ukládání pozice. */
     private var currentLibraryItemId: String? = null
@@ -993,7 +990,6 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
      * probíhající čtení hlavního textu.
      */
     private fun previewVoice(voice: Voice) {
-        piperPreviewPlayer?.stop()
         val sentence = getString(R.string.voice_preview_sentence)
         val existing = previewTts
         if (existing != null) {
@@ -1024,9 +1020,9 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
 
     /**
      * Dialog "Nastavení hlasu" - vše kolem hlasu na jednom místě: hlasitost,
-     * výška, hlasový modul (engine), výběr systémového hlasu A stažitelné
-     * offline (Piper) hlasy. Dřív byly rozdělené mezi Nastavení a samostatnou
-     * položku menu - sloučeno, ať appka nemá zbytečně moc položek v menu.
+     * výška, hlasový modul (engine) a výběr systémového hlasu. Dřív bylo
+     * rozdělené mezi Nastavení a samostatnou položku menu - sloučeno, ať appka
+     * nemá zbytečně moc položek v menu.
      */
     private fun showVoiceSettingsDialog() {
         val svc = service
@@ -1035,10 +1031,6 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         val seekPitch = view.findViewById<SeekBar>(R.id.seekPitchDialog)
         val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupVoices)
         val radioGroupEngines = view.findViewById<RadioGroup>(R.id.radioGroupEngines)
-        val container = view.findViewById<LinearLayout>(R.id.containerDownloadableVoices)
-
-        val piperSelectRadios = mutableListOf<RadioButton>()
-        val cachedPreviewEngines = mutableListOf<PiperVoiceEngine>()
 
         seekVolume.progress = (currentVolume * 100).toInt()
         seekVolume.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -1087,12 +1079,6 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                     radio.isChecked = voice.name == currentVoiceName
                     radio.setOnClickListener {
                         AppSettings.saveVoiceName(this, voice.name)
-                        // Nejdřív přepnout appku pryč od Piper hlasu (kdyby byl
-                        // vybraný) - AŽ POTOM měnit systémový hlas, jinak by
-                        // applyVoiceChange restartovalo čtení, ale to by se hned
-                        // vzápětí zastavilo uvnitř setActivePiperVoice(null).
-                        svc?.setActivePiperVoice(null)
-                        piperSelectRadios.forEach { it.isChecked = false }
                         applyVoiceChange(voice)
                         previewVoice(voice)
                     }
@@ -1129,142 +1115,14 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
 
         refreshVoiceList()
 
-        // --- Stažitelné (Piper) offline hlasy ---
-        val languageCode = Locale.getDefault().language
-        val downloadableVoices = DownloadableVoices.forCurrentLanguage(languageCode)
-
-        downloadableVoices.forEach { voice ->
-            val row = layoutInflater.inflate(R.layout.item_downloadable_voice, container, false)
-            val tvName = row.findViewById<TextView>(R.id.tvVoiceDownloadName)
-            val btnAction = row.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnVoiceDownloadAction)
-            val progress = row.findViewById<ProgressBar>(R.id.progressVoiceDownload)
-
-            tvName.text = getString(voice.displayNameRes)
-
-            // Engine si appka podrží v paměti mezi ukázkami stejného hlasu - první
-            // ukázka chvíli trvá (načítání modelu z disku), další jsou pak rychlé.
-            var cachedPreviewEngine: PiperVoiceEngine? = null
-            var previewInProgress = false
-
-            fun playPiperPreview() {
-                if (previewInProgress) return
-                previewTts?.stop()
-                piperPreviewPlayer?.stop()
-                previewInProgress = true
-                tvName.alpha = 0.5f
-                Thread {
-                    try {
-                        val engine = cachedPreviewEngine ?: PiperVoiceEngine(PiperVoiceStore.voiceDir(this, voice.id)).also {
-                            cachedPreviewEngine = it
-                            cachedPreviewEngines.add(it)
-                        }
-                        val samples = engine.generate(getString(R.string.voice_preview_sentence))
-                        val sampleRate = engine.sampleRate
-                        runOnUiThread {
-                            previewInProgress = false
-                            tvName.alpha = 1f
-                            val player = PcmAudioPlayer()
-                            player.play(samples, sampleRate)
-                            piperPreviewPlayer = player
-                        }
-                    } catch (e: Exception) {
-                        runOnUiThread {
-                            previewInProgress = false
-                            tvName.alpha = 1f
-                            Toast.makeText(this, e.message ?: e.javaClass.simpleName, Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }.start()
-            }
-
-            val radioSelect = row.findViewById<RadioButton>(R.id.radioVoiceDownloadSelect)
-            radioSelect.text = ""
-            piperSelectRadios.add(radioSelect)
-
-            fun refreshRowState() {
-                // Klepnutí kamkoli na řádek (mimo kolečko a tlačítko) přehraje
-                // ukázku - jen u už stažených hlasů.
-                val downloaded = PiperVoiceStore.isDownloaded(this, voice.id)
-                progress.visibility = View.GONE
-                btnAction.isEnabled = true
-                if (downloaded) {
-                    btnAction.text = getString(R.string.btn_delete)
-                    btnAction.backgroundTintList = ContextCompat.getColorStateList(this, R.color.brand_danger)
-                    row.setOnClickListener { playPiperPreview() }
-                    radioSelect.visibility = View.VISIBLE
-                    radioSelect.isChecked = svc?.getActivePiperVoiceId() == voice.id
-                    radioSelect.setOnClickListener {
-                        svc?.setActivePiperVoice(voice.id)
-                        radioGroup.clearCheck()
-                        piperSelectRadios.forEach { it.isChecked = (it === radioSelect) }
-                    }
-                } else {
-                    btnAction.text = getString(R.string.btn_download)
-                    btnAction.backgroundTintList = ContextCompat.getColorStateList(this, R.color.brand_accent)
-                    row.setOnClickListener(null)
-                    radioSelect.visibility = View.GONE
-                    radioSelect.setOnClickListener(null)
-                    cachedPreviewEngine?.let {
-                        it.release()
-                        cachedPreviewEngines.remove(it)
-                    }
-                    cachedPreviewEngine = null
-                }
-            }
-
-            btnAction.setOnClickListener {
-                val downloaded = PiperVoiceStore.isDownloaded(this, voice.id)
-                if (downloaded) {
-                    showConfirmDialog(
-                        title = getString(R.string.dialog_title_delete_downloaded_voice),
-                        message = getString(R.string.dialog_msg_delete_downloaded_voice, getString(voice.displayNameRes)),
-                        confirmText = getString(R.string.btn_delete)
-                    ) {
-                        if (svc?.getActivePiperVoiceId() == voice.id) {
-                            svc.setActivePiperVoice(null)
-                        }
-                        PiperVoiceStore.deleteVoice(this, voice.id)
-                        refreshRowState()
-                    }
-                } else {
-                    progress.visibility = View.VISIBLE
-                    progress.progress = 0
-                    btnAction.isEnabled = false
-                    PiperVoiceStore.downloadVoice(
-                        context = this,
-                        voice = voice,
-                        onProgress = { percent -> progress.progress = percent },
-                        onSuccess = {
-                            Toast.makeText(this, getString(R.string.toast_voice_downloaded), Toast.LENGTH_SHORT).show()
-                            refreshRowState()
-                        },
-                        onError = { msg ->
-                            progress.visibility = View.GONE
-                            btnAction.isEnabled = true
-                            Toast.makeText(this, getString(R.string.toast_voice_download_failed, msg), Toast.LENGTH_LONG).show()
-                        }
-                    )
-                }
-            }
-
-            refreshRowState()
-            container.addView(row)
-        }
-
         val dialog = AlertDialog.Builder(this)
             .setTitle(getString(R.string.menu_voice_settings))
             .setView(view)
             .setPositiveButton(getString(R.string.btn_done), null)
             .create()
-        dialog.setOnDismissListener {
-            previewTts?.stop()
-            piperPreviewPlayer?.stop()
-            cachedPreviewEngines.forEach { it.release() }
-        }
+        dialog.setOnDismissListener { previewTts?.stop() }
         dialog.show()
     }
-
-    private fun Int.dpPx(): Int = (this * resources.displayMetrics.density).toInt()
 
     private fun voiceLabel(voice: Voice, index: Int): String {
         val quality = when (voice.quality) {
