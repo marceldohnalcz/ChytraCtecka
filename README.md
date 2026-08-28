@@ -66,6 +66,15 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.53)
+
+- **Další pokus o opravu falešné nabídky "Uložit heslo"** – tentokrát u
+  dialogu Přidat/Upravit sledovaný profil. Pole "Jméno" mělo nastavení
+  `textPersonName` ("tohle je jméno osoby"), což v kombinaci s dalším
+  polem hned pod ním mohlo Samsung Pass svést k domněnce, že jde o
+  přihlašovací formulář. Odstraněno, navíc nastaveno i přímo v kódu (ne
+  jen v XML), pro jistotu.
+
 ## Nové v této verzi (2.52)
 
 - **Stažitelný hlas Jirka (Piper) odstraněn** - kvalita hlasu nakonec

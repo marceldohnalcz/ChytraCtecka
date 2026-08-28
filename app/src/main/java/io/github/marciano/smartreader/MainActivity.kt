@@ -767,6 +767,11 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         val view = layoutInflater.inflate(R.layout.dialog_add_tracked_profile, null)
         val nameInput = view.findViewById<android.widget.EditText>(R.id.etProfileName)
         val urlInput = view.findViewById<android.widget.EditText>(R.id.etProfileUrl)
+        // Nastavit i přímo v kódu, ne jen v XML - Samsung Pass na některých
+        // telefonech ignoruje deklarativní XML atribut, ale programové
+        // nastavení při vytvoření pole bývá spolehlivější.
+        nameInput.importantForAutofill = View.IMPORTANT_FOR_AUTOFILL_NO
+        urlInput.importantForAutofill = View.IMPORTANT_FOR_AUTOFILL_NO
 
         if (existingProfile != null) {
             nameInput.setText(existingProfile.name)
