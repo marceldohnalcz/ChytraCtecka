@@ -65,6 +65,14 @@ class TtsManager(
     private var lastKnownOffsetInChunk = 0
     private var volume = 1.0f
 
+    // Při KAŽDÉM čerstvém spuštění čtení (speak()) se zvýší - díky tomu appka
+    // pozná, jestli hlášení od systémového TTS (onStart/onDone/onRangeStart)
+    // patří k AKTUÁLNÍMU čtení, nebo je to opožděné hlášení ze STARÉHO čtení,
+    // které appka mezitím zrušila (typicky při změně rychlosti - appka
+    // restartuje čtení novou rychlostí, a bez tohohle rozlišení mohlo
+    // opožděné hlášení ze zrušeného čtení "poplést" zvýrazňování).
+    private var generation = 0
+
     var isSpeaking = false
         private set
     var isPaused = false
@@ -83,27 +91,38 @@ class TtsManager(
                     override fun onStart(utteranceId: String?) {
                         // Garantovaně voláno pro každou promluvu na VŠECH enginech -
                         // díky tomu máme jistou pozici na úrovni věty i bez onRangeStart.
-                        val idx = utteranceId?.removePrefix("chunk_")?.toIntOrNull() ?: return
+                        val (gen, idx) = parseUtteranceId(utteranceId) ?: return
+                        if (gen != generation) return
                         currentChunkIndex = idx
                         lastKnownOffsetInChunk = 0
                     }
 
                     override fun onDone(utteranceId: String?) {
-                        val idx = utteranceId?.removePrefix("chunk_")?.toIntOrNull() ?: return
+                        val (gen, idx) = parseUtteranceId(utteranceId) ?: return
+                        if (gen != generation) return
                         if (idx == chunks.lastIndex) {
                             isSpeaking = false
                             onDone()
+                        } else if (isSpeaking) {
+                            // Další věta se naplánuje AŽ TEĎ, kdy tahle doopravdy
+                            // dohrála - appka věty neplánuje dopředu, ať nemůže dojít
+                            // k závodu mezi tím, co engine hlásí, a tím, co se doopravdy
+                            // právě přehrává (hlavně při vyšší rychlosti čtení).
+                            speakFromChunk(idx + 1, 0)
                         }
                     }
 
                     @Deprecated("Deprecated in Java")
                     override fun onError(utteranceId: String?) {
+                        val (gen, _) = parseUtteranceId(utteranceId) ?: return
+                        if (gen != generation) return
                         onError(appContext.getString(R.string.error_playback))
                     }
 
                     override fun onRangeStart(utteranceId: String?, start: Int, end: Int, frame: Int) {
                         // Volitelné zpřesnění na úroveň slova - pokud to engine podporuje.
-                        val chunkIndex = utteranceId?.removePrefix("chunk_")?.toIntOrNull() ?: return
+                        val (gen, chunkIndex) = parseUtteranceId(utteranceId) ?: return
+                        if (gen != generation) return
                         val chunk = chunks.getOrNull(chunkIndex) ?: return
                         currentChunkIndex = chunkIndex
                         lastKnownOffsetInChunk = start
@@ -161,6 +180,7 @@ class TtsManager(
         this.baseOffset = baseOffset
         this.chunks = splitIntoChunks(text)
         tts?.stop()
+        generation++
         currentChunkIndex = 0
         lastKnownOffsetInChunk = 0
         isSpeaking = true
@@ -174,13 +194,11 @@ class TtsManager(
             onDone()
             return
         }
+        currentChunkIndex = index
         val params = Bundle()
         params.putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, volume)
         val textToSpeak = chunk.text.substring(offsetWithinChunk.coerceIn(0, chunk.text.length))
-        tts?.speak(textToSpeak, TextToSpeech.QUEUE_FLUSH, params, "chunk_$index")
-        for (next in (index + 1) until chunks.size) {
-            tts?.speak(chunks[next].text, TextToSpeech.QUEUE_ADD, params, "chunk_$next")
-        }
+        tts?.speak(textToSpeak, TextToSpeech.QUEUE_FLUSH, params, "gen${generation}_chunk_$index")
     }
 
     /** Android TTS nemá nativní pauzu - zastavíme a zapamatujeme si přesně, kde jsme skončili. */
@@ -207,6 +225,7 @@ class TtsManager(
 
     fun stop() {
         tts?.stop()
+        generation++
         isSpeaking = false
         isPaused = false
         currentChunkIndex = 0
@@ -218,6 +237,15 @@ class TtsManager(
     fun shutdown() {
         tts?.stop()
         tts?.shutdown()
+    }
+
+    /** Rozebere "gen{N}_chunk_{index}" zpátky na dvojici (generace, index), nebo null při neplatném formátu. */
+    private fun parseUtteranceId(utteranceId: String?): Pair<Int, Int>? {
+        val id = utteranceId ?: return null
+        val match = Regex("^gen(\\d+)_chunk_(\\d+)$").find(id) ?: return null
+        val gen = match.groupValues[1].toIntOrNull() ?: return null
+        val idx = match.groupValues[2].toIntOrNull() ?: return null
+        return gen to idx
     }
 
     /**

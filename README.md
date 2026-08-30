@@ -66,6 +66,18 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.54)
+
+- **Oprava**: po změně rychlosti čtení za chodu se zvýrazňování čteného
+  textu mohlo "zbláznit" a ukazovat rychleji, než se doopravdy četlo.
+  Příčina: appka si dopředu naplánovala všechny zbylé věty najednou (ne
+  jednu po druhé), a při restartu čtení (to appka dělá při každé změně
+  rychlosti) mohlo dorazit opožděné hlášení ze STARÉHO, už zrušeného
+  čtení a poplést pozici. Appka teď každému čtení přiřadí "generaci" a
+  opožděná hlášení ze starších generací ignoruje, navíc věty plánuje až
+  jednu po druhé (ne všechny najednou), ať k podobnému závodu nemůže
+  dojít vůbec.
+
 ## Nové v této verzi (2.53)
 
 - **Další pokus o opravu falešné nabídky "Uložit heslo"** – tentokrát u
