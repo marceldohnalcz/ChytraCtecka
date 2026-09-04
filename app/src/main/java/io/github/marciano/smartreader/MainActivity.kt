@@ -182,7 +182,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         binding.btnSkipNext.setOnClickListener { skipToParagraph(1) }
         binding.btnSpeedMinus.setOnClickListener { changeSpeedStep(-1) }
         binding.btnSpeedPlus.setOnClickListener { changeSpeedStep(1) }
-        binding.tvSpeedLabel.setOnClickListener { resetSpeedToDefault() }
+        binding.tvSpeedLabel?.setOnClickListener { resetSpeedToDefault() }
         binding.btnMoreMenu.setOnClickListener { showMoreMenu(it) }
         binding.btnSave.setOnClickListener { saveCurrentTextToLibrary() }
         binding.btnLibrary.setOnClickListener { showLibraryDialog() }
