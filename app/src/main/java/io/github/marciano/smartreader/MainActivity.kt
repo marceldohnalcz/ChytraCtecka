@@ -182,6 +182,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         binding.btnSkipNext.setOnClickListener { skipToParagraph(1) }
         binding.btnSpeedMinus.setOnClickListener { changeSpeedStep(-1) }
         binding.btnSpeedPlus.setOnClickListener { changeSpeedStep(1) }
+        binding.tvSpeedLabel.setOnClickListener { resetSpeedToDefault() }
         binding.btnMoreMenu.setOnClickListener { showMoreMenu(it) }
         binding.btnSave.setOnClickListener { saveCurrentTextToLibrary() }
         binding.btnLibrary.setOnClickListener { showLibraryDialog() }
@@ -300,6 +301,12 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             placeCursorAt(pos)
             startReadingFromCursor()
         }
+    }
+
+    /** Klepnutí na popisek "Rychlost" resetuje rychlost čtení zpátky na normální 1,00x. */
+    private fun resetSpeedToDefault() {
+        binding.seekSpeed.progress = ((1.0f - 0.5f) / 0.05f).toInt()
+        applySpeedChange(1.0f)
     }
 
     private fun updateSpeedLabel(rate: Float) {

@@ -66,6 +66,11 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.55)
+
+- **Klepnutí na popisek "Rychlost"** teď rovnou resetuje rychlost čtení
+  zpátky na normální 1,00x - rychlejší než přesouvat posuvník ručně.
+
 ## Nové v této verzi (2.54)
 
 - **Oprava**: po změně rychlosti čtení za chodu se zvýrazňování čteného
