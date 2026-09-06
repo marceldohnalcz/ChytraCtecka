@@ -89,12 +89,18 @@ class TtsManager(
 
                 tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
                     override fun onStart(utteranceId: String?) {
-                        // Garantovaně voláno pro každou promluvu na VŠECH enginech -
-                        // díky tomu máme jistou pozici na úrovni věty i bez onRangeStart.
+                        // Garantovaně voláno pro každou promluvu na VŠECH enginech,
+                        // přesně v okamžiku, kdy engine doopravdy začne přehrávat -
+                        // proto se na tohle zvýraznění spoléhá, ne na onRangeStart níž.
                         val (gen, idx) = parseUtteranceId(utteranceId) ?: return
                         if (gen != generation) return
                         currentChunkIndex = idx
                         lastKnownOffsetInChunk = 0
+                        val chunk = chunks.getOrNull(idx) ?: return
+                        onWordRange(
+                            baseOffset + chunk.localOffset,
+                            baseOffset + chunk.localOffset + chunk.text.length
+                        )
                     }
 
                     override fun onDone(utteranceId: String?) {
@@ -120,16 +126,21 @@ class TtsManager(
                     }
 
                     override fun onRangeStart(utteranceId: String?, start: Int, end: Int, frame: Int) {
-                        // Volitelné zpřesnění na úroveň slova - pokud to engine podporuje.
+                        // Na rozdíl od dřívějška se tohle hlášení už NEPOUŽÍVÁ pro
+                        // zvýraznění (viz onStart výš) - na některých telefonech/
+                        // enginech totiž běží podle vlastního nepřesného časového
+                        // odhadu, který se hlavně při vyšší rychlosti čtení
+                        // rozchází se skutečným přehráváním (zvýraznění "utíkalo"
+                        // dopředu, pak čekalo, až ho zvuk dožene). Appka ho dál
+                        // využívá jen pro co nejpřesnější zapamatování pozice pro
+                        // případ pauzy/pokračování (currentAbsolutePosition) - tam
+                        // drobná nepřesnost nevadí, protože se stejně čte znovu
+                        // od začátku aktuální věty.
                         val (gen, chunkIndex) = parseUtteranceId(utteranceId) ?: return
                         if (gen != generation) return
-                        val chunk = chunks.getOrNull(chunkIndex) ?: return
+                        if (chunks.getOrNull(chunkIndex) == null) return
                         currentChunkIndex = chunkIndex
                         lastKnownOffsetInChunk = start
-                        onWordRange(
-                            baseOffset + chunk.localOffset + start,
-                            baseOffset + chunk.localOffset + end
-                        )
                     }
                 })
 

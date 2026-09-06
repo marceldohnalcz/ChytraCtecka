@@ -66,6 +66,18 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.56)
+
+- **Oprava**: zvýraznění čteného textu při vyšší rychlosti čtení
+  "utíkalo" napřed a pak čekalo, až ho čtení dožene, v kolečku pořád
+  dokola. Příčina: appka se pro zvýraznění po slovech spoléhala na
+  hlášení, které na některých telefonech/enginech běží podle vlastního
+  nepřesného časového odhadu neshodujícího se se skutečným přehráváním
+  (zvlášť patrné při vyšší rychlosti). Appka teď zvýrazňuje po celých
+  větách, na základě jiného, spolehlivého hlášení ("věta právě začala"),
+  které je garantované přesné na všech enginech. O trochu méně
+  podrobné, zato spolehlivé za všech rychlostí.
+
 ## Nové v této verzi (2.55)
 
 - **Klepnutí na popisek "Rychlost"** teď rovnou resetuje rychlost čtení
