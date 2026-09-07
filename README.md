@@ -66,6 +66,16 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.58)
+
+- **Oprava**: delší slova napsaná CELÁ VELKÝMI PÍSMENY (typicky
+  zdůraznění v citátu, ne zkratka) se hláskovala písmeno po písmenu
+  místo přečtení jako celé slovo. Appka teď slova o 5 a víc znacích
+  psaná celá velkými písmeny automaticky převede na normální tvar
+  (první písmeno velké, zbytek malá) předtím, než je pošle do
+  hlasového enginu. Krátké skutečné zkratky (NATO, USA, OSN, ČSSD...)
+  zůstávají beze změny - u těch hláskování dává smysl.
+
 ## Nové v této verzi (2.57)
 
 - **Oprava**: zvýraznění po celých větách (viz 2.56) označovalo klidně i

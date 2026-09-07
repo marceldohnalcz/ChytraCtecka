@@ -114,6 +114,16 @@ object TextPreprocessor {
     // úplně na začátku pipeline - PŘED sloučením opakované interpunkce (jinak
     // by "..." uvnitř závorky stihlo zmizet na jednu tečku dřív, než by ho
     // tohle pravidlo poznalo) i před obecným pravidlem pro závorky.
+    // Slovo napsané CELÉ VELKÝMI PÍSMENY (typicky zdůraznění v citátu/nadpisu,
+    // ne zkratka) - hlasové enginy takové slovo často mylně vyhodnotí jako
+    // zkratku a přehláskují ho písmeno po písmenu ("D-E-Z-I-N-F-O-R-M-Á-T-O-R"
+    // místo "dezinformátor"). Práh 5+ znaků úmyslně vynechává krátké SKUTEČNÉ
+    // zkratky (NATO, USA, OSN, ČSSD...), u kterých hláskování dává smysl a
+    // které chceme nechat na úsudku enginu samotného.
+    private val ALL_CAPS_WORD_PATTERN: Pattern = Pattern.compile(
+        "(?<![\\p{L}\\p{Nd}_])[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ]{5,}(?![\\p{L}\\p{Nd}_])"
+    )
+
     private val PAREN_ELLIPSIS_PATTERN: Pattern = Pattern.compile(
         "\\([\\s.\u2026]*(?:\\.{2,}|\u2026)[\\s.\u2026]*\\)"
     )
@@ -241,6 +251,7 @@ object TextPreprocessor {
         val stripBracketsAndQuotes: Boolean = true,
         val stripParenEllipsis: Boolean = true,
         val stripEmoticons: Boolean = true,
+        val fixAllCapsWords: Boolean = true,
         val stripUnderscores: Boolean = true,
         val stripEmoji: Boolean = true,
         val stripHashSymbol: Boolean = true,
@@ -266,6 +277,12 @@ object TextPreprocessor {
             val (t, p) = expandAbbreviationsTracked(text, positions)
             text = t
             positions = p
+        }
+        if (options.fixAllCapsWords) {
+            apply(ALL_CAPS_WORD_PATTERN) { m ->
+                val w = m.group()
+                w[0] + w.substring(1).lowercase()
+            }
         }
         // Elipsa v závorce musí být úplně první krok - jinak by ji jiná
         // pravidla (sloučení opakované interpunkce, mazání závorek) stihla
