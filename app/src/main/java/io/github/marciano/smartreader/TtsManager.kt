@@ -260,11 +260,36 @@ class TtsManager(
     }
 
     /**
-     * Rozseká text na kousky po cca [targetLen] znacích, ale vždy na hranici věty
-     * (tečka/vykřičník/otazník/nový řádek). [hardMax] je pojistka pro text bez
-     * jakékoli interpunkce, ať jeden "chunk" nenaroste do nekonečna.
+     * Rozhodne, jestli znak na pozici [pos] (tečka/vykřičník/otazník/nový
+     * řádek) je SKUTEČNÝ konec věty, nebo jen tečka uprostřed data/čísla
+     * (např. "6. září", "3.14") - u těch appka nechce sekat, jinak by se
+     * datum/číslo roztrhlo na dva kousky a zvýraznění by dělalo divný skok.
+     * Pravidlo: nový řádek je vždy hranice; tečka/vykřičník/otazník jen
+     * pokud po (mezerách za) něm následuje velké písmeno nebo konec textu.
      */
-    private fun splitIntoChunks(text: String, targetLen: Int = 220, hardMax: Int = 450): List<Chunk> {
+    private fun isRealSentenceEnd(text: String, pos: Int): Boolean {
+        if (text[pos] == '\n') return true
+        var i = pos + 1
+        while (i < text.length && (text[i] == ' ' || text[i] == '\t')) i++
+        if (i >= text.length) return true
+        val nextChar = text[i]
+        // Číslice hned po tečce (bez mezery) NENÍ konec věty - typicky
+        // desetinné číslo nebo číslo verze ("2.5", "3.14"), ne konec věty.
+        if (nextChar.isDigit()) return false
+        return nextChar.isUpperCase() || !nextChar.isLetter()
+    }
+
+    /**
+     * Rozseká text na kousky VŽDY na hranici věty (tečka/vykřičník/otazník/
+     * nový řádek) - jeden kousek = jedna věta, bez ohledu na její délku.
+     *
+     * Dřív appka slučovala víc kratších vět dohromady do jednoho kousku (kvůli
+     * efektivitě), ale od verze 2.56 kousek = zvýrazněná jednotka při čtení -
+     * sloučení vět by pak znamenalo zvýraznění víc vět najednou naráz, což
+     * uživatel nechce. [hardMax] zůstává jako pojistka pro extrémně dlouhou
+     * "větu" bez interpunkce (např. výčet bez teček).
+     */
+    private fun splitIntoChunks(text: String, hardMax: Int = 450): List<Chunk> {
         if (text.isEmpty()) return emptyList()
         val result = mutableListOf<Chunk>()
         var start = 0
@@ -274,12 +299,12 @@ class TtsManager(
             var end = -1
             while (scan < n) {
                 val c = text[scan]
-                val isBoundary = c == '.' || c == '!' || c == '?' || c == '\n'
-                val lenSoFar = scan - start + 1
-                if (isBoundary && lenSoFar >= targetLen) {
+                val isBoundaryChar = c == '.' || c == '!' || c == '?' || c == '\n'
+                if (isBoundaryChar && isRealSentenceEnd(text, scan)) {
                     end = scan + 1
                     break
                 }
+                val lenSoFar = scan - start + 1
                 if (lenSoFar >= hardMax) {
                     val lastSpace = text.lastIndexOf(' ', scan)
                     end = if (lastSpace > start) lastSpace + 1 else scan + 1

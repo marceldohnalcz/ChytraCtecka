@@ -66,6 +66,17 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.57)
+
+- **Oprava**: zvýraznění po celých větách (viz 2.56) označovalo klidně i
+  několik vět najednou - appka totiž kvůli efektivitě slučovala víc
+  kratších vět do jednoho kousku. Teď appka sekne vždy přesně na
+  hranici jedné věty, bez ohledu na délku.
+- Zároveň přidána ochrana, ať se nerozseká datum ("6. září") nebo
+  desetinné číslo/verze ("2.5", "3.14") na dvě části - appka pozná
+  skutečný konec věty podle toho, jestli po tečce následuje mezera a
+  velké písmeno (nebo konec textu), ne jen podle tečky samotné.
+
 ## Nové v této verzi (2.56)
 
 - **Oprava**: zvýraznění čteného textu při vyšší rychlosti čtení
