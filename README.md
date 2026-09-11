@@ -66,6 +66,19 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.59)
+
+- **Oprava**: zvýraznění čteného textu občas neočekávaně skočilo zpátky
+  o několik vět/odstavců, i když appka plynule četla dál bez přerušení.
+  Prošel jsem důkladně celý kód (sekání vět, mapování pozic, tlačítka
+  pro přeskočení odstavce) a nenašel jednoznačnou chybu v appce samotné
+  - nejspíš jde o zvláštnost konkrétního hlasového enginu/telefonu mimo
+  přímou kontrolu appky. Přidal jsem ale pojistku: appka si teď
+  pamatuje nejdál dosaženou větu a jakékoli hlášení "vrať se zpátky" v
+  rámci jednoho plynulého čtení jednoduše ignoruje. Záměrné skoky
+  zpátky (kliknutí jinam do textu, tlačítko předchozí odstavec) touhle
+  pojistkou nejsou nijak omezené - fungují jako dřív.
+
 ## Nové v této verzi (2.58)
 
 - **Oprava**: delší slova napsaná CELÁ VELKÝMI PÍSMENY (typicky

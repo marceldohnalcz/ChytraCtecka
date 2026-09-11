@@ -73,6 +73,17 @@ class TtsManager(
     // opožděné hlášení ze zrušeného čtení "poplést" zvýrazňování).
     private var generation = 0
 
+    // Nejvyšší index věty, kterou appka v RÁMCI AKTUÁLNÍHO čtení (generace) už
+    // zvýraznila - slouží jako ochrana proti skoku zvýraznění ZPÁTKY. I po
+    // opravě generací (viz výš) a přechodu na onStart (viz níž) appka u
+    // některých telefonů/enginů zaznamenala hlášení, které náhle ukázalo na
+    // dřívější větu, než appka už doopravdy přečetla - nejspíš zvláštnost
+    // konkrétního hlasového enginu mimo kontrolu appky. Řešení: zvýraznění se
+    // posune dopředu jen tehdy, pokud hlášená věta je NOVĚJŠÍ (nebo stejná)
+    // než ta nejnovější, kterou appka už zvýraznila - starší hlášení se v
+    // rámci stejného čtení jednoduše ignoruje.
+    private var highestChunkIndexReached = -1
+
     var isSpeaking = false
         private set
     var isPaused = false
@@ -94,6 +105,8 @@ class TtsManager(
                         // proto se na tohle zvýraznění spoléhá, ne na onRangeStart níž.
                         val (gen, idx) = parseUtteranceId(utteranceId) ?: return
                         if (gen != generation) return
+                        if (idx < highestChunkIndexReached) return
+                        highestChunkIndexReached = idx
                         currentChunkIndex = idx
                         lastKnownOffsetInChunk = 0
                         val chunk = chunks.getOrNull(idx) ?: return
@@ -106,6 +119,10 @@ class TtsManager(
                     override fun onDone(utteranceId: String?) {
                         val (gen, idx) = parseUtteranceId(utteranceId) ?: return
                         if (gen != generation) return
+                        // Opožděné "dokončeno" ze STARŠÍ věty, než appka už doopravdy
+                        // čte (viz highestChunkIndexReached výš) - ignorovat, jinak by
+                        // appka mohla nechtěně znovu přečíst větu, kterou už přeskočila.
+                        if (idx < highestChunkIndexReached) return
                         if (idx == chunks.lastIndex) {
                             isSpeaking = false
                             onDone()
@@ -138,6 +155,7 @@ class TtsManager(
                         // od začátku aktuální věty.
                         val (gen, chunkIndex) = parseUtteranceId(utteranceId) ?: return
                         if (gen != generation) return
+                        if (chunkIndex < highestChunkIndexReached) return
                         if (chunks.getOrNull(chunkIndex) == null) return
                         currentChunkIndex = chunkIndex
                         lastKnownOffsetInChunk = start
@@ -192,6 +210,7 @@ class TtsManager(
         this.chunks = splitIntoChunks(text)
         tts?.stop()
         generation++
+        highestChunkIndexReached = -1
         currentChunkIndex = 0
         lastKnownOffsetInChunk = 0
         isSpeaking = true
@@ -237,6 +256,7 @@ class TtsManager(
     fun stop() {
         tts?.stop()
         generation++
+        highestChunkIndexReached = -1
         isSpeaking = false
         isPaused = false
         currentChunkIndex = 0
