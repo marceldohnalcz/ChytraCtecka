@@ -19,6 +19,7 @@ import android.text.Spannable
 import android.text.TextWatcher
 import android.text.style.BackgroundColorSpan
 import android.view.View
+import android.view.WindowManager
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -1173,6 +1174,14 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
 
     override fun onStateChanged(isSpeaking: Boolean, isPaused: Boolean) {
         runOnUiThread {
+            // Obrazovka nezhasíná/nezasíná, dokud appka aktivně čte - jakmile se
+            // přestane číst (pauza, stop, nebo dočtení do konce), vrátí se
+            // normální chování telefonu (zhasíná podle vlastního nastavení).
+            if (isSpeaking) {
+                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            } else {
+                window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            }
             if (isSpeaking) {
                 binding.btnPlayPause.text = getString(R.string.btn_pause)
                 binding.btnPlayPause.setIconResource(R.drawable.ic_pause)

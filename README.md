@@ -66,6 +66,13 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.60)
+
+- **Obrazovka nezhasíná během čtení** - appka teď drží obrazovku
+  rozsvícenou, dokud aktivně čte. Jakmile se čtení zastaví (pauza,
+  stop, nebo dočtení do konce), obrazovka se zase chová normálně a
+  zhasne podle nastavení telefonu.
+
 ## Nové v této verzi (2.59)
 
 - **Oprava**: zvýraznění čteného textu občas neočekávaně skočilo zpátky
