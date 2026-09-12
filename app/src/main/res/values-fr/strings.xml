@@ -70,6 +70,25 @@
     <string name="menu_check_updates">Vérifier les mises à jour</string>
     <string name="menu_about">À propos</string>
 
+    <!-- Backup and restore -->
+    <string name="menu_backup">Sauvegarde des données</string>
+    <string name="dialog_title_backup">Sauvegarde des données</string>
+    <string name="desc_backup">Enregistre dans un seul fichier tout ce que l\'appli retient : réglages, historique de lecture, textes enregistrés et profils suivis. Utile avant une réinstallation ou lors d\'un changement de téléphone.</string>
+    <string name="btn_backup_export">Sauvegarder</string>
+    <string name="btn_backup_import">Restaurer</string>
+    <string name="backup_summary">Actuellement enregistré : %1$d dans l\'historique, %2$d textes, %3$d profils suivis.</string>
+    <string name="toast_backup_saved">Sauvegarde enregistrée</string>
+    <string name="toast_backup_failed">Échec de la sauvegarde : %1$s</string>
+    <string name="toast_restore_done">Restauré : %1$d dans l\'historique, %2$d textes, %3$d profils</string>
+    <string name="toast_restore_failed">Échec de la restauration : %1$s</string>
+    <string name="error_backup_not_json">le fichier n\'est pas une sauvegarde valide</string>
+    <string name="error_backup_not_backup">le fichier n\'est pas une sauvegarde de cette appli</string>
+    <string name="error_backup_newer_version">la sauvegarde provient d\'une version plus récente</string>
+    <string name="dialog_title_restore_mode">Comment restaurer les données ?</string>
+    <string name="dialog_msg_restore_mode">« Fusionner » conserve les données actuelles et ajoute ce qui manque. « Remplacer » supprime les données actuelles et ne restaure que la sauvegarde.</string>
+    <string name="btn_restore_merge">Fusionner</string>
+    <string name="btn_restore_replace">Remplacer</string>
+
     <!-- Downloadable (Piper) voices -->
     <string name="menu_voice_settings">Paramètres de voix</string>    <string name="msg_tracked_profiles_empty">Aucun profil suivi pour le moment. Ajoutez le premier ci-dessous.</string>
     <string name="btn_add_profile">Ajouter un profil</string>

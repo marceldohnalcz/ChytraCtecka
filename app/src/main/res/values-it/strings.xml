@@ -70,6 +70,25 @@
     <string name="menu_check_updates">Controlla aggiornamenti</string>
     <string name="menu_about">Informazioni</string>
 
+    <!-- Backup and restore -->
+    <string name="menu_backup">Backup dei dati</string>
+    <string name="dialog_title_backup">Backup dei dati</string>
+    <string name="desc_backup">Salva in un unico file tutto ciò che l\'app ricorda: impostazioni, cronologia di lettura, testi salvati e profili seguiti. Utile prima di reinstallare o quando si cambia telefono.</string>
+    <string name="btn_backup_export">Esegui backup</string>
+    <string name="btn_backup_import">Ripristina</string>
+    <string name="backup_summary">Attualmente salvati: %1$d nella cronologia, %2$d testi salvati, %3$d profili seguiti.</string>
+    <string name="toast_backup_saved">Backup salvato</string>
+    <string name="toast_backup_failed">Backup non riuscito: %1$s</string>
+    <string name="toast_restore_done">Ripristinati: %1$d nella cronologia, %2$d testi, %3$d profili</string>
+    <string name="toast_restore_failed">Ripristino non riuscito: %1$s</string>
+    <string name="error_backup_not_json">il file non è un backup valido</string>
+    <string name="error_backup_not_backup">il file non è un backup di questa app</string>
+    <string name="error_backup_newer_version">il backup proviene da una versione più recente</string>
+    <string name="dialog_title_restore_mode">Come ripristinare i dati?</string>
+    <string name="dialog_msg_restore_mode">«Unisci» mantiene i dati attuali e aggiunge ciò che manca. «Sostituisci» elimina i dati attuali e ripristina solo il backup.</string>
+    <string name="btn_restore_merge">Unisci</string>
+    <string name="btn_restore_replace">Sostituisci</string>
+
     <!-- Downloadable (Piper) voices -->
     <string name="menu_voice_settings">Impostazioni voce</string>    <string name="msg_tracked_profiles_empty">Nessun profilo seguito ancora. Aggiungi il primo qui sotto.</string>
     <string name="btn_add_profile">Aggiungi profilo</string>

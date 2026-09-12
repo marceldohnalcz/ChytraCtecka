@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/desc_backup"
+        android:textSize="13sp"
+        android:textColor="@color/text_secondary"
+        android:layout_marginBottom="14dp" />
+
+    <TextView
+        android:id="@+id/tvBackupSummary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_primary"
+        android:layout_marginBottom="18dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnBackupExport"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_backup_export"
+        android:textAllCaps="false"
+        android:layout_marginBottom="10dp"
+        app:cornerRadius="14dp"
+        app:backgroundTint="@color/brand_primary" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnBackupImport"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_backup_import"
+        android:textAllCaps="false"
+        android:textColor="@color/on_icon_secondary"
+        app:cornerRadius="14dp"
+        app:backgroundTint="@color/icon_secondary" />
+</LinearLayout>

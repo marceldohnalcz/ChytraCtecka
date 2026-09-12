@@ -76,6 +76,25 @@
     <string name="menu_check_updates">Check for updates</string>
     <string name="menu_about">About</string>
 
+    <!-- Backup and restore -->
+    <string name="menu_backup">Data backup</string>
+    <string name="dialog_title_backup">Data backup</string>
+    <string name="desc_backup">Saves everything the app remembers into a single file: settings, reading history, saved texts and tracked profiles. Useful before reinstalling or when switching phones.</string>
+    <string name="btn_backup_export">Back up</string>
+    <string name="btn_backup_import">Restore</string>
+    <string name="backup_summary">Currently stored: %1$d in history, %2$d saved texts, %3$d tracked profiles.</string>
+    <string name="toast_backup_saved">Backup saved</string>
+    <string name="toast_backup_failed">Backup failed: %1$s</string>
+    <string name="toast_restore_done">Restored: %1$d in history, %2$d texts, %3$d profiles</string>
+    <string name="toast_restore_failed">Restore failed: %1$s</string>
+    <string name="error_backup_not_json">the file is not a valid backup</string>
+    <string name="error_backup_not_backup">the file is not a backup of this app</string>
+    <string name="error_backup_newer_version">the backup comes from a newer version of the app</string>
+    <string name="dialog_title_restore_mode">How should the data be restored?</string>
+    <string name="dialog_msg_restore_mode">"Merge" keeps your current data and adds what is missing. "Replace" discards current data and restores only what is in the backup.</string>
+    <string name="btn_restore_merge">Merge</string>
+    <string name="btn_restore_replace">Replace</string>
+
     <!-- Downloadable (Piper) voices -->
     <string name="menu_voice_settings">Voice settings</string>    <string name="msg_tracked_profiles_empty">No tracked profiles yet. Add the first one below.</string>
     <string name="btn_add_profile">Add Profile</string>

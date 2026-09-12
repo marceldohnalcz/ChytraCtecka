@@ -70,6 +70,25 @@
     <string name="menu_check_updates">Проверить обновления</string>
     <string name="menu_about">О приложении</string>
 
+    <!-- Backup and restore -->
+    <string name="menu_backup">Резервная копия</string>
+    <string name="dialog_title_backup">Резервная копия</string>
+    <string name="desc_backup">Сохраняет в один файл всё, что помнит приложение: настройки, историю чтения, сохранённые тексты и отслеживаемые профили. Пригодится перед переустановкой или при смене телефона.</string>
+    <string name="btn_backup_export">Создать копию</string>
+    <string name="btn_backup_import">Восстановить</string>
+    <string name="backup_summary">Сейчас сохранено: %1$d в истории, %2$d сохранённых текстов, %3$d отслеживаемых профилей.</string>
+    <string name="toast_backup_saved">Копия сохранена</string>
+    <string name="toast_backup_failed">Не удалось создать копию: %1$s</string>
+    <string name="toast_restore_done">Восстановлено: %1$d в истории, %2$d текстов, %3$d профилей</string>
+    <string name="toast_restore_failed">Не удалось восстановить: %1$s</string>
+    <string name="error_backup_not_json">файл не является корректной копией</string>
+    <string name="error_backup_not_backup">файл не является копией этого приложения</string>
+    <string name="error_backup_newer_version">копия создана в более новой версии приложения</string>
+    <string name="dialog_title_restore_mode">Как восстановить данные?</string>
+    <string name="dialog_msg_restore_mode">«Объединить» сохранит текущие данные и добавит недостающие. «Заменить» удалит текущие данные и восстановит только копию.</string>
+    <string name="btn_restore_merge">Объединить</string>
+    <string name="btn_restore_replace">Заменить</string>
+
     <!-- Downloadable (Piper) voices -->
     <string name="menu_voice_settings">Настройки голоса</string>    <string name="msg_tracked_profiles_empty">Пока нет отслеживаемых профилей. Добавьте первый ниже.</string>
     <string name="btn_add_profile">Добавить профиль</string>

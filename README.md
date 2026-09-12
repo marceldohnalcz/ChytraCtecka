@@ -66,6 +66,20 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.61)
+
+- **Záloha dat** (nová položka v menu ⋮): uloží všechno, co si appka
+  pamatuje, do jednoho souboru .json - nastavení, historii čtení,
+  uložené texty i sledované profily. Soubor se ukládá přes systémový
+  dialog, takže si sám vybereš kam (do telefonu, na Disk Google apod.)
+  a appka k tomu nepotřebuje žádné oprávnění k úložišti.
+- **Obnova ze zálohy** tamtéž, se dvěma možnostmi: *Sloučit* (ponechá
+  stávající data a doplní, co chybí) nebo *Nahradit* (zahodí stávající a
+  obnoví jen zálohu).
+- Záloha nese číslo verze formátu, takže obnova ze starší zálohy v
+  budoucnu pozná, s čím má co do činění. Vadný nebo cizí soubor appku
+  neshodí - jen se slušně oznámí, co je špatně.
+
 ## Nové v této verzi (2.60)
 
 - **Obrazovka nezhasíná během čtení** - appka teď drží obrazovku

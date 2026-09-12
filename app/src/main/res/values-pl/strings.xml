@@ -70,6 +70,25 @@
     <string name="menu_check_updates">Sprawdź aktualizacje</string>
     <string name="menu_about">O aplikacji</string>
 
+    <!-- Backup and restore -->
+    <string name="menu_backup">Kopia zapasowa</string>
+    <string name="dialog_title_backup">Kopia zapasowa</string>
+    <string name="desc_backup">Zapisuje w jednym pliku wszystko, co aplikacja pamięta: ustawienia, historię czytania, zapisane teksty i obserwowane profile. Przydatne przed ponowną instalacją lub przy zmianie telefonu.</string>
+    <string name="btn_backup_export">Utwórz kopię</string>
+    <string name="btn_backup_import">Przywróć</string>
+    <string name="backup_summary">Obecnie zapisane: %1$d w historii, %2$d zapisanych tekstów, %3$d obserwowanych profili.</string>
+    <string name="toast_backup_saved">Kopia zapisana</string>
+    <string name="toast_backup_failed">Nie udało się utworzyć kopii: %1$s</string>
+    <string name="toast_restore_done">Przywrócono: %1$d w historii, %2$d tekstów, %3$d profili</string>
+    <string name="toast_restore_failed">Nie udało się przywrócić: %1$s</string>
+    <string name="error_backup_not_json">plik nie jest prawidłową kopią zapasową</string>
+    <string name="error_backup_not_backup">plik nie jest kopią zapasową tej aplikacji</string>
+    <string name="error_backup_newer_version">kopia pochodzi z nowszej wersji aplikacji</string>
+    <string name="dialog_title_restore_mode">Jak przywrócić dane?</string>
+    <string name="dialog_msg_restore_mode">„Scal” zachowuje obecne dane i dodaje brakujące. „Zastąp” usuwa obecne dane i przywraca tylko kopię zapasową.</string>
+    <string name="btn_restore_merge">Scal</string>
+    <string name="btn_restore_replace">Zastąp</string>
+
     <!-- Downloadable (Piper) voices -->
     <string name="menu_voice_settings">Ustawienia głosu</string>    <string name="msg_tracked_profiles_empty">Nie masz jeszcze obserwowanych profili. Dodaj pierwszy poniżej.</string>
     <string name="btn_add_profile">Dodaj profil</string>

@@ -70,6 +70,25 @@
     <string name="menu_check_updates">Zkontrolovat aktualizace</string>
     <string name="menu_about">O aplikaci</string>
 
+    <!-- Backup and restore -->
+    <string name="menu_backup">Záloha dat</string>
+    <string name="dialog_title_backup">Záloha dat</string>
+    <string name="desc_backup">Uloží všechno, co si appka pamatuje, do jednoho souboru: nastavení, historii čtení, uložené texty a sledované profily. Hodí se před přeinstalováním appky nebo při přechodu na nový telefon.</string>
+    <string name="btn_backup_export">Zálohovat</string>
+    <string name="btn_backup_import">Obnovit</string>
+    <string name="backup_summary">Teď uloženo: %1$d v historii, %2$d uložených textů, %3$d sledovaných profilů.</string>
+    <string name="toast_backup_saved">Záloha uložena</string>
+    <string name="toast_backup_failed">Zálohování se nepovedlo: %1$s</string>
+    <string name="toast_restore_done">Obnoveno: %1$d v historii, %2$d textů, %3$d profilů</string>
+    <string name="toast_restore_failed">Obnova se nepovedla: %1$s</string>
+    <string name="error_backup_not_json">soubor není platná záloha</string>
+    <string name="error_backup_not_backup">soubor není záloha této appky</string>
+    <string name="error_backup_newer_version">záloha je z novější verze appky</string>
+    <string name="dialog_title_restore_mode">Jak data obnovit?</string>
+    <string name="dialog_msg_restore_mode">„Sloučit“ ponechá stávající data a doplní, co chybí. „Nahradit“ stávající data zahodí a obnoví jen to, co je v záloze.</string>
+    <string name="btn_restore_merge">Sloučit</string>
+    <string name="btn_restore_replace">Nahradit</string>
+
     <!-- Downloadable (Piper) voices -->
     <string name="menu_voice_settings">Nastavení hlasu</string>    <string name="msg_tracked_profiles_empty">Zatím žádné sledované profily. Přidej první níže.</string>
     <string name="btn_add_profile">Přidat profil</string>

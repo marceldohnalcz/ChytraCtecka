@@ -82,6 +82,11 @@ object TrackedProfilesStore {
         persist(context, list)
     }
 
+    /** Nahradí celý seznam profilů - používá se při obnově ze zálohy. */
+    fun replaceAll(context: Context, list: List<TrackedProfile>) {
+        persist(context, list)
+    }
+
     private fun persist(context: Context, list: List<TrackedProfile>) {
         val arr = JSONArray()
         for (item in list) {

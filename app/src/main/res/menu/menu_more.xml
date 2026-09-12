@@ -7,6 +7,9 @@
         android:id="@+id/menuVoiceSettings"
         android:title="@string/menu_voice_settings" />
     <item
+        android:id="@+id/menuBackup"
+        android:title="@string/menu_backup" />
+    <item
         android:id="@+id/menuHelp"
         android:title="@string/menu_help" />
     <item

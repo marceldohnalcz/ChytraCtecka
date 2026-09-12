@@ -70,6 +70,25 @@
     <string name="menu_check_updates">Nach Updates suchen</string>
     <string name="menu_about">Über die App</string>
 
+    <!-- Backup and restore -->
+    <string name="menu_backup">Datensicherung</string>
+    <string name="dialog_title_backup">Datensicherung</string>
+    <string name="desc_backup">Speichert alles, was die App sich merkt, in einer einzigen Datei: Einstellungen, Leseverlauf, gespeicherte Texte und verfolgte Profile. Nützlich vor einer Neuinstallation oder beim Wechsel des Telefons.</string>
+    <string name="btn_backup_export">Sichern</string>
+    <string name="btn_backup_import">Wiederherstellen</string>
+    <string name="backup_summary">Aktuell gespeichert: %1$d im Verlauf, %2$d gespeicherte Texte, %3$d verfolgte Profile.</string>
+    <string name="toast_backup_saved">Sicherung gespeichert</string>
+    <string name="toast_backup_failed">Sicherung fehlgeschlagen: %1$s</string>
+    <string name="toast_restore_done">Wiederhergestellt: %1$d im Verlauf, %2$d Texte, %3$d Profile</string>
+    <string name="toast_restore_failed">Wiederherstellung fehlgeschlagen: %1$s</string>
+    <string name="error_backup_not_json">die Datei ist keine gültige Sicherung</string>
+    <string name="error_backup_not_backup">die Datei ist keine Sicherung dieser App</string>
+    <string name="error_backup_newer_version">die Sicherung stammt aus einer neueren App-Version</string>
+    <string name="dialog_title_restore_mode">Wie sollen die Daten wiederhergestellt werden?</string>
+    <string name="dialog_msg_restore_mode">„Zusammenführen“ behält vorhandene Daten und ergänzt Fehlendes. „Ersetzen“ verwirft vorhandene Daten und stellt nur die Sicherung wieder her.</string>
+    <string name="btn_restore_merge">Zusammenführen</string>
+    <string name="btn_restore_replace">Ersetzen</string>
+
     <!-- Downloadable (Piper) voices -->
     <string name="menu_voice_settings">Stimmeneinstellungen</string>    <string name="msg_tracked_profiles_empty">Noch keine verfolgten Profile. Füge unten das erste hinzu.</string>
     <string name="btn_add_profile">Profil hinzufügen</string>

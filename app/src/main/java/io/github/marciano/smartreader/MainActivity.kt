@@ -96,6 +96,19 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             }
         }
 
+    // Zálohování: systémový dialog "Uložit soubor" - uživatel si sám vybere,
+    // kam zálohu uloží (do telefonu, na Disk Google apod.). Appka nepotřebuje
+    // žádné oprávnění k úložišti, protože přístup dává výhradně tenhle dialog.
+    private val createBackupLauncher =
+        registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
+            uri?.let { writeBackupTo(it) }
+        }
+
+    private val openBackupLauncher =
+        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+            uri?.let { askRestoreModeAndRestore(it) }
+        }
+
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, binder: IBinder?) {
             val localBinder = binder as ReadingService.LocalBinder
@@ -831,6 +844,10 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                     showVoiceSettingsDialog()
                     true
                 }
+                R.id.menuBackup -> {
+                    showBackupDialog()
+                    true
+                }
                 R.id.menuHelp -> {
                     showHelpDialog()
                     true
@@ -936,6 +953,131 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
         } catch (e: Exception) {
             Toast.makeText(this, getString(R.string.toast_failed_open_browser), Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    /**
+     * Dialog "Záloha dat" - export všeho, co si appka pamatuje, do jednoho
+     * souboru .json a obnova zpátky. Soubor si uživatel ukládá a vybírá přes
+     * systémový dialog, takže appka nepotřebuje žádné oprávnění k úložišti.
+     */
+    private fun showBackupDialog() {
+        val view = layoutInflater.inflate(R.layout.dialog_backup, null)
+        val summary = view.findViewById<TextView>(R.id.tvBackupSummary)
+        summary.text = getString(
+            R.string.backup_summary,
+            ReadingHistoryStore.getHistory(this).size,
+            TextLibraryStore.getLibrary(this).size,
+            TrackedProfilesStore.getProfiles(this).size
+        )
+
+        val dialog = AlertDialog.Builder(this)
+            .setTitle(getString(R.string.dialog_title_backup))
+            .setView(view)
+            .setNegativeButton(getString(R.string.btn_close), null)
+            .create()
+
+        view.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnBackupExport)
+            .setOnClickListener {
+                dialog.dismiss()
+                val stamp = java.text.SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                    .format(java.util.Date())
+                createBackupLauncher.launch("${BackupManager.FILE_NAME_PREFIX}-$stamp.json")
+            }
+
+        view.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnBackupImport)
+            .setOnClickListener {
+                dialog.dismiss()
+                // Kromě application/json i text/* a */* - některé soubory z cloudu
+                // přijdou s jiným (nebo žádným) typem a jinak by nešly vybrat.
+                openBackupLauncher.launch(arrayOf("application/json", "text/*", "*/*"))
+            }
+
+        dialog.show()
+    }
+
+    private fun writeBackupTo(uri: Uri) {
+        try {
+            val json = BackupManager.createBackupJson(this)
+            contentResolver.openOutputStream(uri)?.use { out ->
+                out.write(json.toByteArray(Charsets.UTF_8))
+            } ?: throw java.io.IOException("stream")
+            Toast.makeText(this, getString(R.string.toast_backup_saved), Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            Toast.makeText(
+                this,
+                getString(R.string.toast_backup_failed, e.message ?: e.javaClass.simpleName),
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
+    private fun askRestoreModeAndRestore(uri: Uri) {
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.dialog_title_restore_mode))
+            .setMessage(getString(R.string.dialog_msg_restore_mode))
+            .setPositiveButton(getString(R.string.btn_restore_merge)) { _, _ ->
+                performRestore(uri, BackupManager.RestoreMode.MERGE)
+            }
+            .setNegativeButton(getString(R.string.btn_restore_replace)) { _, _ ->
+                performRestore(uri, BackupManager.RestoreMode.REPLACE)
+            }
+            .setNeutralButton(getString(R.string.btn_cancel), null)
+            .show()
+    }
+
+    private fun performRestore(uri: Uri, mode: BackupManager.RestoreMode) {
+        try {
+            val text = contentResolver.openInputStream(uri)?.use { input ->
+                input.readBytes().toString(Charsets.UTF_8)
+            } ?: throw java.io.IOException("stream")
+
+            val result = BackupManager.restoreFromJson(this, text, mode)
+
+            Toast.makeText(
+                this,
+                getString(
+                    R.string.toast_restore_done,
+                    result.historyCount,
+                    result.libraryCount,
+                    result.profilesCount
+                ),
+                Toast.LENGTH_LONG
+            ).show()
+
+            // Obnovené nastavení se musí hned promítnout do běžící appky.
+            applyRestoredSettings()
+        } catch (e: IllegalArgumentException) {
+            val reason = when (e.message) {
+                "not_json" -> getString(R.string.error_backup_not_json)
+                "not_backup" -> getString(R.string.error_backup_not_backup)
+                "newer_version" -> getString(R.string.error_backup_newer_version)
+                else -> e.message ?: e.javaClass.simpleName
+            }
+            Toast.makeText(this, getString(R.string.toast_restore_failed, reason), Toast.LENGTH_LONG).show()
+        } catch (e: Exception) {
+            Toast.makeText(
+                this,
+                getString(R.string.toast_restore_failed, e.message ?: e.javaClass.simpleName),
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
+    /** Po obnově ze zálohy převezme nové hodnoty nastavení do běžící appky. */
+    private fun applyRestoredSettings() {
+        currentSpeedRate = AppSettings.loadSpeed(this)
+        currentVolume = AppSettings.loadVolume(this)
+        currentPitch = AppSettings.loadPitch(this)
+        service?.setSpeed(currentSpeedRate)
+        service?.setVolume(currentVolume)
+        service?.setPitch(currentPitch)
+        service?.setAutoResumeAfterInterruption(AppSettings.loadAutoResumeAfterCall(this))
+        binding.seekSpeed.progress = ((currentSpeedRate - 0.5f) / 0.05f).toInt().coerceIn(0, 50)
+        updateSpeedLabel(currentSpeedRate)
+        val mode = AppSettings.loadThemeMode(this)
+        if (androidx.appcompat.app.AppCompatDelegate.getDefaultNightMode() != mode) {
+            androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(mode)
         }
     }
 

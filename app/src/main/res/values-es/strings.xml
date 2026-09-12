@@ -70,6 +70,25 @@
     <string name="menu_check_updates">Buscar actualizaciones</string>
     <string name="menu_about">Acerca de</string>
 
+    <!-- Backup and restore -->
+    <string name="menu_backup">Copia de seguridad</string>
+    <string name="dialog_title_backup">Copia de seguridad</string>
+    <string name="desc_backup">Guarda en un solo archivo todo lo que la app recuerda: ajustes, historial de lectura, textos guardados y perfiles seguidos. Útil antes de reinstalar o al cambiar de teléfono.</string>
+    <string name="btn_backup_export">Crear copia</string>
+    <string name="btn_backup_import">Restaurar</string>
+    <string name="backup_summary">Guardado ahora: %1$d en el historial, %2$d textos guardados, %3$d perfiles seguidos.</string>
+    <string name="toast_backup_saved">Copia guardada</string>
+    <string name="toast_backup_failed">Error al crear la copia: %1$s</string>
+    <string name="toast_restore_done">Restaurado: %1$d en historial, %2$d textos, %3$d perfiles</string>
+    <string name="toast_restore_failed">Error al restaurar: %1$s</string>
+    <string name="error_backup_not_json">el archivo no es una copia válida</string>
+    <string name="error_backup_not_backup">el archivo no es una copia de esta app</string>
+    <string name="error_backup_newer_version">la copia es de una versión más reciente de la app</string>
+    <string name="dialog_title_restore_mode">¿Cómo restaurar los datos?</string>
+    <string name="dialog_msg_restore_mode">«Combinar» conserva los datos actuales y añade lo que falta. «Reemplazar» descarta los datos actuales y restaura solo la copia.</string>
+    <string name="btn_restore_merge">Combinar</string>
+    <string name="btn_restore_replace">Reemplazar</string>
+
     <!-- Downloadable (Piper) voices -->
     <string name="menu_voice_settings">Ajustes de voz</string>    <string name="msg_tracked_profiles_empty">Todavía no hay perfiles seguidos. Añade el primero abajo.</string>
     <string name="btn_add_profile">Añadir perfil</string>

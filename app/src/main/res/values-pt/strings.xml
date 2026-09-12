@@ -70,6 +70,25 @@
     <string name="menu_check_updates">Verificar atualizações</string>
     <string name="menu_about">Sobre</string>
 
+    <!-- Backup and restore -->
+    <string name="menu_backup">Backup de dados</string>
+    <string name="dialog_title_backup">Backup de dados</string>
+    <string name="desc_backup">Salva em um único arquivo tudo o que o app lembra: configurações, histórico de leitura, textos salvos e perfis acompanhados. Útil antes de reinstalar ou ao trocar de telefone.</string>
+    <string name="btn_backup_export">Fazer backup</string>
+    <string name="btn_backup_import">Restaurar</string>
+    <string name="backup_summary">Salvos agora: %1$d no histórico, %2$d textos salvos, %3$d perfis acompanhados.</string>
+    <string name="toast_backup_saved">Backup salvo</string>
+    <string name="toast_backup_failed">Falha no backup: %1$s</string>
+    <string name="toast_restore_done">Restaurado: %1$d no histórico, %2$d textos, %3$d perfis</string>
+    <string name="toast_restore_failed">Falha ao restaurar: %1$s</string>
+    <string name="error_backup_not_json">o arquivo não é um backup válido</string>
+    <string name="error_backup_not_backup">o arquivo não é um backup deste app</string>
+    <string name="error_backup_newer_version">o backup é de uma versão mais recente do app</string>
+    <string name="dialog_title_restore_mode">Como restaurar os dados?</string>
+    <string name="dialog_msg_restore_mode">"Mesclar" mantém os dados atuais e adiciona o que falta. "Substituir" descarta os dados atuais e restaura apenas o backup.</string>
+    <string name="btn_restore_merge">Mesclar</string>
+    <string name="btn_restore_replace">Substituir</string>
+
     <!-- Downloadable (Piper) voices -->
     <string name="menu_voice_settings">Configurações de voz</string>    <string name="msg_tracked_profiles_empty">Ainda não há perfis acompanhados. Adicione o primeiro abaixo.</string>
     <string name="btn_add_profile">Adicionar perfil</string>

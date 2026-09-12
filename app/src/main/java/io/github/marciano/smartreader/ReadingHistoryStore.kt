@@ -91,6 +91,14 @@ object ReadingHistoryStore {
         persist(context, emptyList())
     }
 
+    /**
+     * Nahradí celou historii daným seznamem - používá se při obnově ze zálohy.
+     * Respektuje limit [MAX_ENTRIES] a řadí od nejnovějšího.
+     */
+    fun replaceAll(context: Context, list: List<HistoryEntry>) {
+        persist(context, list.sortedByDescending { it.timestamp }.take(MAX_ENTRIES))
+    }
+
     private fun persist(context: Context, list: List<HistoryEntry>) {
         val arr = JSONArray()
         for (item in list) {

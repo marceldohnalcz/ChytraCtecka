@@ -88,6 +88,11 @@ object TextLibraryStore {
         persist(context, emptyList())
     }
 
+    /** Nahradí celou knihovnu daným seznamem - používá se při obnově ze zálohy. */
+    fun replaceAll(context: Context, list: List<SavedText>) {
+        persist(context, list)
+    }
+
     private fun persist(context: Context, list: List<SavedText>) {
         val arr = JSONArray()
         for (item in list) {
