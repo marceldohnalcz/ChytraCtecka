@@ -100,6 +100,7 @@ class ReadingService : Service() {
     fun isSpeaking() = ttsManager.isSpeaking
     fun isPaused() = ttsManager.isPaused
     fun currentAbsolutePosition() = ttsManager.currentAbsolutePosition()
+    fun currentBaseOffset() = ttsManager.currentBaseOffset()
     fun setSpeed(rate: Float) = ttsManager.setSpeed(rate)
     fun setPitch(pitch: Float) = ttsManager.setPitch(pitch)
     fun setVolume(v: Float) = ttsManager.setVolume(v)

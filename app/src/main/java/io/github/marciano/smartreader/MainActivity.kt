@@ -122,6 +122,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                 service?.getAvailableVoicesForCurrentLanguage()?.find { it.name == name }?.let { service?.setVoice(it) }
             }
             syncButtonWithServiceState()
+            restorePositionMapIfReadingContinues()
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
@@ -415,6 +416,34 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         service?.setSpeed(currentSpeedRate)
         service?.setVolume(currentVolume)
         service?.speak(cleanResult.text, cursor)
+    }
+
+    /**
+     * Obnoví mapování pozic pro zvýrazňování, pokud čtení běží dál, ale
+     * appka se mezitím znovu vytvořila (otočení obrazovky, návrat po
+     * přerušení hovorem, nebo když si systém okno appky mezitím uklidil).
+     *
+     * Bez tohohle zůstalo mapování prázdné a appka pak brala pozici ze
+     * ČTENÉHO (vyčištěného) textu jako by platila pro VIDITELNÝ text - ten
+     * je ale delší (appka z čtení vypouští odkazy, emoji apod.), takže
+     * zvýraznění se čím dál víc rozcházelo se skutečně čteným místem.
+     */
+    private fun restorePositionMapIfReadingContinues() {
+        val svc = service ?: return
+        if (!svc.isSpeaking() && !svc.isPaused()) return
+        if (currentReadingPositionMap.isNotEmpty()) return
+
+        val baseOffset = svc.currentBaseOffset()
+        if (baseOffset < 0) return
+
+        val liveText = binding.etContent.text?.toString() ?: return
+        if (baseOffset > liveText.length) return
+
+        // Stejný výpočet jako při spuštění čtení - text od dané pozice projde
+        // stejným čištěním, takže vznikne přesně stejné mapování jako tehdy.
+        val cleanResult = TextPreprocessor.clean(liveText.substring(baseOffset))
+        currentReadingCursor = baseOffset
+        currentReadingPositionMap = cleanResult.originalPositions
     }
 
     /**
@@ -1311,7 +1340,12 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
     // --- ReadingService.Listener ---
 
     override fun onWordRange(start: Int, end: Int) {
-        runOnUiThread { highlightRange(start, end) }
+        runOnUiThread {
+            // Pojistka: kdyby mapování chybělo (appka se znovu vytvořila,
+            // zatímco čtení běželo dál), obnovit ho ještě před zvýrazněním.
+            restorePositionMapIfReadingContinues()
+            highlightRange(start, end)
+        }
     }
 
     override fun onStateChanged(isSpeaking: Boolean, isPaused: Boolean) {

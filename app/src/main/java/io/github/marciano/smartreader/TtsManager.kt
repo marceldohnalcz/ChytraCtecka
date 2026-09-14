@@ -60,6 +60,14 @@ class TtsManager(
 
     private var fullText: String = ""
     private var baseOffset: Int = 0
+
+    /**
+     * Pozice v původním textu, od které aktuální čtení začalo. Appka to
+     * potřebuje, aby si po vlastním znovuvytvoření (otočení obrazovky) uměla
+     * obnovit mapování pozic pro zvýrazňování, zatímco čtení běží dál.
+     * -1 = právě se nic nečte.
+     */
+    fun currentBaseOffset(): Int = if (chunks.isEmpty()) -1 else baseOffset
     private var chunks: List<Chunk> = emptyList()
     private var currentChunkIndex = 0
     private var lastKnownOffsetInChunk = 0
@@ -234,6 +242,12 @@ class TtsManager(
     /** Android TTS nemá nativní pauzu - zastavíme a zapamatujeme si přesně, kde jsme skončili. */
     fun pause() {
         tts?.stop()
+        // Zvýšením generace se zneplatní všechna hlášení z právě zrušené
+        // promluvy. Bez tohohle mohlo opožděné "dokončeno" dorazit až PO
+        // obnovení čtení (typicky po přerušení hovorem), appka by ho vzala
+        // jako platné a přeskočila rovnou na další větu - zvýraznění i čtení
+        // by se tím rozešly s tím, co uživatel doopravdy slyší.
+        generation++
         isPaused = true
         isSpeaking = false
     }

@@ -66,6 +66,21 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.62)
+
+- **Konečně nalezena skutečná příčina rozjetého zvýrazňování.** Když se
+  appka znovu vytvořila, zatímco čtení běželo dál - typicky **otočením
+  telefonu** nebo **návratem po přerušení hovorem** - ztratila mapování
+  mezi čteným a zobrazeným textem. Bez něj brala pozici hlášenou z
+  čteného textu, jako by platila pro text na obrazovce. Ten je ale
+  delší (appka z čtení vypouští odkazy, emoji apod.), takže se
+  zvýraznění posouvalo čím dál víc - to byl ten "posun o odstavce".
+  Appka si teď mapování v takové chvíli sama přepočítá.
+- **Druhá oprava, stejné příznaky**: při pauze se nezneplatnila hlášení
+  z právě zrušené promluvy. Po obnovení čtení (např. po hovoru) mohlo
+  takové opožděné hlášení dorazit, appka ho vzala jako platné a
+  přeskočila rovnou na další větu.
+
 ## Nové v této verzi (2.61)
 
 - **Záloha dat** (nová položka v menu ⋮): uloží všechno, co si appka
