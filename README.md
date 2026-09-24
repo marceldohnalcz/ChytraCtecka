@@ -66,6 +66,20 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.63)
+
+- **Oprava**: závorka obsahující jen interpunkci - "(!!!)", "(?)", "(!)",
+  "(?!)" - nechala po sobě osamocený vykřičník a tečku, které appka
+  přečetla doslova jako slova. Dřív se takhle řešily jen tři tečky
+  "(...)"; teď se maže jakákoli závorka, ve které není nic než
+  interpunkce (v psaném textu jde vždy o zdůraznění pisatele, ne o
+  obsah k přečtení).
+- **Pojistka proti stejnému příznaku obecně**: mezera před tečkou,
+  čárkou nebo jinou interpunkcí (vzniká, když appka mezi slovo a tečku
+  něco vypustí - odkaz, emoji, závorku) se teď odstraní, takže
+  interpunkce zase přilne ke slovu a čte se jako přirozená pauza místo
+  jako samostatné slovo.
+
 ## Nové v této verzi (2.62)
 
 - **Konečně nalezena skutečná příčina rozjetého zvýrazňování.** Když se
