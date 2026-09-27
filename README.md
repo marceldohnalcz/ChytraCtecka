@@ -66,6 +66,25 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.67)
+
+- **Změna nastavení hlasu se během čtení projeví hned na vlastním textu.**
+  Dosud appka po posunutí výšky hlasu přerušila čtení, přehrála ukázkovou
+  větu "Toto je ukázka hlasu" a teprve pak pokračovala. Teď se při běžícím
+  čtení ukázka nepřehrává vůbec - čtečka jen okamžitě naváže od stejné
+  pozice novým nastavením, takže je změna slyšet do zlomku vteřiny a nic se
+  nepřečte dvakrát. Ukázka se pustí jen tehdy, když se zrovna nečte.
+  Platí pro výšku hlasu, hlasitost i výběr hlasu.
+- **Posuvníky jdou konečně normálně táhnout.** Posuvníky výšky a hlasitosti
+  jsou uvnitř rolovacího dialogu, který po pár pixelech tažení gesto
+  převzal na rolování - posuvník se nehnul a vypadalo to, že reaguje jen na
+  přesné klepnutí na puntík. Posuvník si teď při doteku řekne, že mu
+  rolování nemá gesto brát. Stejná pojistka je i u posuvníku rychlosti,
+  který má tenhle problém na šířku obrazovky.
+- Pod kapotou: rychlost, výška, hlasitost i hlas teď používají jeden společný
+  postup pro navázání čtení. Dřív to uměla jen rychlost, každé ostatní
+  nastavení se chovalo jinak.
+
 ## Nové v této verzi (2.66)
 
 - **Nové zásuvné menu**: tlačítko se třemi tečkami vpravo nahradil hamburger

@@ -1,6 +1,7 @@
 package io.github.marciano.smartreader
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.ClipboardManager
 import android.content.ComponentName
@@ -18,6 +19,7 @@ import android.text.Editable
 import android.text.Spannable
 import android.text.TextWatcher
 import android.text.style.BackgroundColorSpan
+import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 import android.widget.ImageButton
@@ -282,6 +284,11 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         binding.seekSpeed.progress = initialProgress
         updateSpeedLabel(currentSpeedRate)
 
+        // Na šířku je tenhle posuvník uvnitř vodorovného rolování, které by mu
+        // jinak sebralo tažení. Na výšku je volání neškodné - nadřazený prvek
+        // tam nic neodchytává.
+        binding.seekSpeed.keepDragAwayFromScrollView()
+
         binding.seekSpeed.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 updateSpeedLabel(0.5f + progress * 0.05f)
@@ -312,12 +319,30 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         AppSettings.saveSpeed(this, rate)
         val svc = service ?: return
         svc.setSpeed(rate)
-        if (svc.isSpeaking()) {
-            val pos = currentReadingPositionInOriginalText()
-            svc.pause()
-            placeCursorAt(pos)
-            startReadingFromCursor()
-        }
+        restartAtCurrentPositionIfReading()
+    }
+
+    /**
+     * Projeví změnu nastavení hlasu okamžitě na právě čteném textu.
+     *
+     * Android TTS bere rychlost, výšku, hlasitost i hlas až při zadání další
+     * promluvy - na rozečtenou větu se nová hodnota nepoužije. Bez tohohle by
+     * uživatel posunul posuvníkem a nic by neslyšel, dokud čtečka nedojde na
+     * konec věty. Proto se čtení zastaví a hned naváže od stejné pozice, takže
+     * změna je slyšet do zlomku vteřiny a nic se nepřečte dvakrát.
+     *
+     * Pokud appka nečte, nedělá nic - volající pak může přehrát ukázku.
+     *
+     * @return true, pokud čtení běželo a bylo navázáno novým nastavením
+     */
+    private fun restartAtCurrentPositionIfReading(): Boolean {
+        val svc = service ?: return false
+        if (!svc.isSpeaking()) return false
+        val pos = currentReadingPositionInOriginalText()
+        svc.pause()
+        placeCursorAt(pos)
+        startReadingFromCursor()
+        return true
     }
 
     /** Klepnutí na popisek "Rychlost" resetuje rychlost čtení zpátky na normální 1,00x. */
@@ -1234,6 +1259,13 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         val radioGroup = view.findViewById<RadioGroup>(R.id.radioGroupVoices)
         val radioGroupEngines = view.findViewById<RadioGroup>(R.id.radioGroupEngines)
 
+        // Posuvníky: během tažení se hodnota jen ukládá a předává do TTS, a až
+        // při puštění prstu se změna projeví - buď okamžitě na právě čteném
+        // textu, nebo (když se nečte) krátkou ukázkou. Kdyby se to dělalo při
+        // každém posunutí o pixel, čtení by se restartovalo desetkrát za vteřinu.
+        seekVolume.keepDragAwayFromScrollView()
+        seekPitch.keepDragAwayFromScrollView()
+
         seekVolume.progress = (currentVolume * 100).toInt()
         seekVolume.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(sb: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -1244,7 +1276,9 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                 }
             }
             override fun onStartTrackingTouch(sb: SeekBar?) {}
-            override fun onStopTrackingTouch(sb: SeekBar?) {}
+            override fun onStopTrackingTouch(sb: SeekBar?) {
+                if (!restartAtCurrentPositionIfReading()) previewCurrentVoiceWithPitch()
+            }
         })
 
         // Rozsah 0,5 (hlubší) až 1,5 (vyšší) - uprostřed posuvníku (50) je 1.0,
@@ -1260,7 +1294,9 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
             }
             override fun onStartTrackingTouch(sb: SeekBar?) {}
             override fun onStopTrackingTouch(sb: SeekBar?) {
-                previewCurrentVoiceWithPitch()
+                // Při běžícím čtení se nová výška projeví rovnou na textu -
+                // ukázka "Toto je ukázka hlasu" by uživateli skákala do čtení.
+                if (!restartAtCurrentPositionIfReading()) previewCurrentVoiceWithPitch()
             }
         })
 
@@ -1281,8 +1317,11 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
                     radio.isChecked = voice.name == currentVoiceName
                     radio.setOnClickListener {
                         AppSettings.saveVoiceName(this, voice.name)
-                        applyVoiceChange(voice)
-                        previewVoice(voice)
+                        // applyVoiceChange při běžícím čtení naváže novým hlasem
+                        // od stejné pozice - ukázku pak hrát nemá, uživatel už
+                        // nový hlas slyší na vlastním textu.
+                        val wasReading = applyVoiceChange(voice)
+                        if (!wasReading) previewVoice(voice)
                     }
                     radioGroup.addView(radio)
                 }
@@ -1339,20 +1378,35 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
     }
 
     /**
+     * Posuvník uvnitř rolovacího dialogu si při doteku vyžádá, aby mu rolování
+     * nebralo gesto. Bez tohohle ScrollView tažení po pár pixelech převezme na
+     * svislé rolování a posuvník se nehne - uživateli to připadá, že jde
+     * posunout jen přesným klepnutím na puntík. Vrací false, takže událost
+     * normálně dostane i samotný posuvník.
+     */
+    @SuppressLint("ClickableViewAccessibility")
+    private fun SeekBar.keepDragAwayFromScrollView() {
+        setOnTouchListener { v, event ->
+            when (event.actionMasked) {
+                MotionEvent.ACTION_DOWN ->
+                    v.parent?.requestDisallowInterceptTouchEvent(true)
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL ->
+                    v.parent?.requestDisallowInterceptTouchEvent(false)
+            }
+            false
+        }
+    }
+
+    /**
      * Aplikuje nový hlas. Pokud appka právě čte, pokračuje přesně od aktuální
      * pozice novým hlasem (nerestartuje celý text od začátku).
+     *
+     * @return true, pokud čtení běželo a bylo navázáno novým hlasem.
      */
-    private fun applyVoiceChange(voice: Voice) {
-        val svc = service ?: return
-        if (svc.isSpeaking()) {
-            val pos = currentReadingPositionInOriginalText()
-            svc.pause()
-            svc.setVoice(voice)
-            placeCursorAt(pos)
-            startReadingFromCursor()
-        } else {
-            svc.setVoice(voice)
-        }
+    private fun applyVoiceChange(voice: Voice): Boolean {
+        val svc = service ?: return false
+        svc.setVoice(voice)
+        return restartAtCurrentPositionIfReading()
     }
 
     // --- ReadingService.Listener ---
