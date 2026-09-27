@@ -66,6 +66,21 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.65)
+
+- **Zkratky z právních a úředních textů se rozepisují**: dosud appka uměla
+  jen běžné zkratky ("např.", "atd.", "str."). Přibyly "odst." →
+  odstavec, "písm." → písmeno, "čl." → článek, "č." → číslo, "Sb." →
+  Sbírky, "zák." → zákon, "ust." → ustanovení, "násl." → následující,
+  "sp. zn." → spisová značka, "č. j." → číslo jednací, a názvy předpisů
+  "obč. zák.", "tr. zák.", "tr. ř.", "o. s. ř.". Bez toho čtečka udělala
+  uprostřed věty pauzu a zkratku buď spolkla, nebo přečetla po písmenech.
+- Víceslovné zkratky se zpracovávají dřív než jednoslovné, které jsou
+  jejich začátkem - jinak by se z "č. j. 12/2024" stalo "číslo j.
+  12/2024".
+- Poznámka: zkratka se vždy rozepíše v 1. pádu, stejně jako to dosud
+  dělala "str." → strana. Tedy "v odst. 2" přečte jako "v odstavec 2".
+
 ## Nové v této verzi (2.64)
 
 - **Oprava**: otazník nebo vykřičník hned za zkratkou - "firmu Sevitech

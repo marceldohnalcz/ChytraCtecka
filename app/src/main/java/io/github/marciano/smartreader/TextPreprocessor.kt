@@ -190,7 +190,26 @@ object TextPreprocessor {
             "popř." to "popřípadě",
             "mj." to "mimo jiné",
             "tzv." to "takzvaný",
-            "str." to "strana"
+            "str." to "strana",
+            // Zkratky z právních a úředních textů. Bez nich TTS udělá pauzu
+            // uprostřed věty a zkratku přečte po písmenech nebo ji spolkne.
+            // POZOR na pořadí: víceslovné zkratky musí být PŘED jednoslovnými,
+            // které jsou jejich začátkem. Kdyby "č." přišlo dřív, rozepsalo by
+            // se samo a z "č. j. 12/2024" by zbylo "číslo j. 12/2024".
+            "obč. zák." to "občanský zákoník",
+            "tr. zák." to "trestní zákoník",
+            "tr. ř." to "trestní řád",
+            "o. s. ř." to "občanský soudní řád",
+            "sp. zn." to "spisová značka",
+            "č. j." to "číslo jednací",
+            "odst." to "odstavec",
+            "písm." to "písmeno",
+            "čl." to "článek",
+            "č." to "číslo",
+            "Sb." to "Sbírky",
+            "zák." to "zákon",
+            "ust." to "ustanovení",
+            "násl." to "následující"
         ),
         "en" to mapOf(
             "e.g." to "for example",
