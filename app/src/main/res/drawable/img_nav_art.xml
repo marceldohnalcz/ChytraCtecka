@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ozdobný motiv v hlavičce zásuvného menu: otevřená kniha, ze které jdou
+     zvukové vlny - přesně to, co appka dělá. Kreslené jako vektor, ne obrázek,
+     takže je ostré na jakémkoli displeji a neváží nic navíc.
+
+     Všechno je bílé s různou průhledností, aby to fungovalo na barevném
+     přechodu hlavičky a nepřebíjelo to název appky. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="132dp"
+    android:height="88dp"
+    android:viewportWidth="132"
+    android:viewportHeight="88">
+
+    <!-- Stránky knihy -->
+    <path
+        android:pathData="M14,60 C14,60 28,50 46,55 L46,26 C28,21 14,31 14,31 Z"
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.22"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.2"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M46,55 C64,50 78,60 78,60 L78,31 C78,31 64,21 46,26 Z"
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.22"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.2"
+        android:strokeLineJoin="round" />
+    <!-- Hřbet -->
+    <path
+        android:pathData="M46,26 L46,55"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.2"
+        android:strokeLineCap="round" />
+
+    <!-- Naznačené řádky textu na stránkách -->
+    <path
+        android:pathData="M21,34 L38,36"
+        android:strokeColor="#FFFFFF"
+        android:strokeAlpha="0.55"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M21,41 L34,42.5"
+        android:strokeColor="#FFFFFF"
+        android:strokeAlpha="0.55"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M54,36 L71,34"
+        android:strokeColor="#FFFFFF"
+        android:strokeAlpha="0.55"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M58,42.5 L71,41"
+        android:strokeColor="#FFFFFF"
+        android:strokeAlpha="0.55"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round" />
+
+    <!-- Zvukové vlny vycházející z knihy -->
+    <path
+        android:pathData="M89,32 A13,13 0 0 1 89,56"
+        android:strokeColor="#FFFFFF"
+        android:strokeAlpha="0.9"
+        android:strokeWidth="2.4"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M98,24 A22,22 0 0 1 98,64"
+        android:strokeColor="#FFFFFF"
+        android:strokeAlpha="0.6"
+        android:strokeWidth="2.4"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M107,16 A31,31 0 0 1 107,72"
+        android:strokeColor="#FFFFFF"
+        android:strokeAlpha="0.32"
+        android:strokeWidth="2.4"
+        android:strokeLineCap="round" />
+
+</vector>

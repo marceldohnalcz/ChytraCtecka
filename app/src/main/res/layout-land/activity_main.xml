@@ -412,8 +412,12 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         android:background="@color/surface_card"
+        android:theme="@style/Theme.SmartReader.NavDrawer"
         app:itemIconTint="@color/text_secondary"
         app:itemTextColor="@color/text_primary"
+        app:itemVerticalPadding="1dp"
+        app:itemShapeInsetTop="1dp"
+        app:itemShapeInsetBottom="1dp"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/menu_drawer" />
 

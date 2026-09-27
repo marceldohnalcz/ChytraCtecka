@@ -7,4 +7,16 @@
         <item name="android:windowBackground">@color/surface</item>
         <item name="android:statusBarColor">@color/brand_primary_dark</item>
     </style>
+
+    <!--
+        Motiv jen pro zásuvné menu - stahuje výšku řádku položky. Material ji
+        bere z listPreferredItemHeightSmall (běžně 48dp), a samotné atributy
+        NavigationView (itemVerticalPadding) ji nezmenší pod tuhle hodnotu.
+        Je to překryvný motiv nasazený přímo na NavigationView, takže se
+        nedotkne seznamů jinde v appce.
+    -->
+    <style name="Theme.SmartReader.NavDrawer" parent="">
+        <item name="listPreferredItemHeightSmall">42dp</item>
+        <item name="android:listPreferredItemHeightSmall">42dp</item>
+    </style>
 </resources>

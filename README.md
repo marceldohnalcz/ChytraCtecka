@@ -66,6 +66,18 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.68)
+
+- **Obrázek v hlavičce menu**: otevřená kniha, ze které jdou zvukové vlny -
+  tedy přesně to, co appka dělá. Je to kreslený vektor, ne fotka, takže je
+  ostrý na jakémkoli displeji a k velikosti appky nepřidá prakticky nic.
+  Poloprůhledný a vpravo nahoře, aby nepřebíjel název.
+- **Menší rozestupy mezi položkami menu** - výška řádku z 48 na 42 bodů a
+  odsazení kolem položek stažené na minimum. Do panelu se toho tak vejde
+  víc, aniž by se do položek hůř trefovalo.
+- Na šířku obrazovky má hlavička menu nižší variantu, aby nesežrala půlku
+  panelu.
+
 ## Nové v této verzi (2.67)
 
 - **Změna nastavení hlasu se během čtení projeví hned na vlastním textu.**
