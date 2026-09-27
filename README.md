@@ -66,6 +66,23 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.66)
+
+- **Nové zásuvné menu**: tlačítko se třemi tečkami vpravo nahradil hamburger
+  vlevo a místo malého vyskakovacího seznamu se zleva vysune panel přes
+  půlku obrazovky. Položky mají ikonu, jsou rozdělené do skupin a je mezi
+  nimi vidět.
+- Rozdělení: nahoře **Historie, Knihovna, Sledované profily**, pak skupina
+  **Nastavení** (nastavení, nastavení hlasu, záloha a obnova), pak skupina
+  **Aplikace** (nápověda, sdílení, kontrola aktualizací, o aplikaci).
+  **Vymazat knihovnu** je schválně samostatně úplně dole a oddělené - je to
+  nevratná akce, nemá být hned vedle běžných položek.
+- V hlavičce panelu je logo, název a číslo nainstalované verze, takže se dá
+  rychle ověřit, jestli běží ta nejnovější.
+- Ikony v liště nad textem zůstávají beze změny - jsou na rychlý přístup,
+  menu je pro přehled.
+- Tlačítkem zpět se otevřený panel zavře, místo aby appka spadla ven.
+
 ## Nové v této verzi (2.65)
 
 - **Zkratky z právních a úředních textů se rozepisují**: dosud appka uměla

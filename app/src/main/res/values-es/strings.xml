@@ -153,4 +153,10 @@
 
     <string name="content_desc_tracked_profiles">Perfiles seguidos</string>
     <string name="title_tracked_profiles">Perfiles seguidos</string>
+
+    <!-- Zásuvné menu -->
+    <string name="nav_version_label">Versión %1$s</string>
+    <string name="content_desc_menu">Menú</string>
+    <string name="nav_group_settings">Ajustes</string>
+    <string name="nav_group_app">Aplicación</string>
 </resources>

@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -17,6 +24,16 @@
         android:paddingTop="6dp"
         android:paddingBottom="6dp">
 
+        <ImageButton
+            android:id="@+id/btnMenu"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="6dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_menu"
+            android:contentDescription="@string/content_desc_menu"
+            android:padding="5dp"
+            android:scaleType="fitCenter" />
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
@@ -34,15 +51,6 @@
             android:textColor="#FFFFFF"
             android:letterSpacing="0.01" />
 
-        <ImageButton
-            android:id="@+id/btnMoreMenu"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_more"
-            android:contentDescription="@string/content_desc_more_options"
-            android:padding="5dp"
-            android:scaleType="fitCenter" />
     </LinearLayout>
 
     <LinearLayout
@@ -394,3 +402,19 @@
     </LinearLayout>
 
 </LinearLayout>
+
+    <!-- Zásuvné menu. Musí být AŽ ZA obsahem - DrawerLayout bere první dítě
+         jako obsah obrazovky a další jako panely. -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        android:background="@color/surface_card"
+        app:itemIconTint="@color/text_secondary"
+        app:itemTextColor="@color/text_primary"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/menu_drawer" />
+
+</androidx.drawerlayout.widget.DrawerLayout>

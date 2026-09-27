@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Zásuvné menu (NavigationView). Skupiny mají android:checkableBehavior="none",
+     protože žádná položka není trvale "vybraná" - každá jen něco otevře a panel
+     se zavře. Bez toho by položka po kliknutí zůstala zvýrazněná.
+
+     Vymazání knihovny je schválně ve vlastní skupině úplně dole, oddělené
+     čarou - je to nevratná akce a nemá být hned vedle běžných položek. -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/navHistory"
+            android:icon="@drawable/ic_history"
+            android:title="@string/title_history" />
+        <item
+            android:id="@+id/navLibrary"
+            android:icon="@drawable/ic_library"
+            android:title="@string/title_library" />
+        <item
+            android:id="@+id/navTrackedProfiles"
+            android:icon="@drawable/ic_tracked_profiles"
+            android:title="@string/title_tracked_profiles" />
+    </group>
+
+    <item android:title="@string/nav_group_settings">
+        <menu>
+            <group android:checkableBehavior="none">
+                <item
+                    android:id="@+id/navSettings"
+                    android:icon="@drawable/ic_settings"
+                    android:title="@string/menu_settings" />
+                <item
+                    android:id="@+id/navVoiceSettings"
+                    android:icon="@drawable/ic_voice"
+                    android:title="@string/menu_voice_settings" />
+                <item
+                    android:id="@+id/navBackup"
+                    android:icon="@drawable/ic_backup"
+                    android:title="@string/menu_backup" />
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="@string/nav_group_app">
+        <menu>
+            <group android:checkableBehavior="none">
+                <item
+                    android:id="@+id/navHelp"
+                    android:icon="@drawable/ic_help"
+                    android:title="@string/menu_help" />
+                <item
+                    android:id="@+id/navShareApp"
+                    android:icon="@drawable/ic_share"
+                    android:title="@string/menu_share_app" />
+                <item
+                    android:id="@+id/navCheckUpdates"
+                    android:icon="@drawable/ic_update"
+                    android:title="@string/menu_check_updates" />
+                <item
+                    android:id="@+id/navAbout"
+                    android:icon="@drawable/ic_about"
+                    android:title="@string/menu_about" />
+            </group>
+        </menu>
+    </item>
+
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/navClearLibrary"
+            android:icon="@drawable/ic_clear"
+            android:title="@string/menu_clear_library" />
+    </group>
+
+</menu>

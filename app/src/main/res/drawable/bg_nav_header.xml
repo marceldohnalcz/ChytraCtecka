@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pozadí hlavičky zásuvného menu. Stejný přechod jako hlavička appky
+     (@drawable/bg_header), ale bez zaoblených rohů - hlavička panelu
+     navazuje na jeho okraj, takže by zaoblení vypadalo useknutě. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:startColor="@color/brand_primary"
+        android:endColor="@color/brand_primary_dark"
+        android:angle="45"/>
+</shape>

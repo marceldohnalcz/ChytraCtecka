@@ -28,11 +28,13 @@ import android.widget.RadioGroup
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.view.GravityCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -198,7 +200,7 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
         binding.btnSpeedMinus.setOnClickListener { changeSpeedStep(-1) }
         binding.btnSpeedPlus.setOnClickListener { changeSpeedStep(1) }
         binding.tvSpeedLabel?.setOnClickListener { resetSpeedToDefault() }
-        binding.btnMoreMenu.setOnClickListener { showMoreMenu(it) }
+        setupNavigationDrawer()
         binding.btnSave.setOnClickListener { saveCurrentTextToLibrary() }
         binding.btnLibrary.setOnClickListener { showLibraryDialog() }
         binding.btnHistory.setOnClickListener { showHistoryDialog() }
@@ -859,48 +861,64 @@ class MainActivity : AppCompatActivity(), ReadingService.Listener {
 
     // --- Nastavení: hlasitost a výběr hlasu ---
 
-    /** Menu se třemi tečkami v hlavičce. */
-    private fun showMoreMenu(anchor: View) {
-        val popup = android.widget.PopupMenu(this, anchor)
-        popup.menuInflater.inflate(R.menu.menu_more, popup.menu)
-        popup.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.menuSettings -> {
-                    showSettingsDialog()
-                    true
-                }
-                R.id.menuVoiceSettings -> {
-                    showVoiceSettingsDialog()
-                    true
-                }
-                R.id.menuBackup -> {
-                    showBackupDialog()
-                    true
-                }
-                R.id.menuHelp -> {
-                    showHelpDialog()
-                    true
-                }
-                R.id.menuClearLibrary -> {
-                    confirmClearLibrary()
-                    true
-                }
-                R.id.menuShareApp -> {
-                    shareAppLink()
-                    true
-                }
-                R.id.menuCheckUpdates -> {
-                    openUrlInBrowser("https://github.com/marceldohnalcz/ChytraCtecka/releases/tag/latest-build")
-                    true
-                }
-                R.id.menuAbout -> {
-                    showAboutDialog()
-                    true
-                }
-                else -> false
-            }
+    /**
+     * Zásuvné menu vysunuté zleva (nahradilo vyskakovací menu se třemi tečkami).
+     * Položky jen něco otevřou - panel se proto po každém kliknutí zavře.
+     *
+     * Dialog se otevírá AŽ po zavření panelu (postDelayed), jinak by se obojí
+     * animovalo přes sebe a zasouvání by viditelně cuklo.
+     */
+    private fun setupNavigationDrawer() {
+        // Verze se čte přes packageManager stejně jako v dialogu "O aplikaci",
+        // ať je v celé appce jen jeden způsob, jak se k číslu verze dostat.
+        val versionName = try {
+            packageManager.getPackageInfo(packageName, 0).versionName
+        } catch (e: Exception) {
+            "?"
         }
-        popup.show()
+        binding.navView.getHeaderView(0)
+            ?.findViewById<TextView>(R.id.tvNavVersion)?.text =
+            getString(R.string.nav_version_label, versionName)
+
+        binding.btnMenu.setOnClickListener {
+            binding.drawerLayout.openDrawer(GravityCompat.START)
+        }
+
+        binding.navView.setNavigationItemSelectedListener { item ->
+            val action: (() -> Unit)? = when (item.itemId) {
+                R.id.navHistory -> ::showHistoryDialog
+                R.id.navLibrary -> ::showLibraryDialog
+                R.id.navTrackedProfiles -> ::showTrackedProfilesDialog
+                R.id.navSettings -> ::showSettingsDialog
+                R.id.navVoiceSettings -> ::showVoiceSettingsDialog
+                R.id.navBackup -> ::showBackupDialog
+                R.id.navHelp -> ::showHelpDialog
+                R.id.navShareApp -> ::shareAppLink
+                R.id.navCheckUpdates -> {
+                    { openUrlInBrowser("https://github.com/marceldohnalcz/ChytraCtecka/releases/tag/latest-build") }
+                }
+                R.id.navAbout -> ::showAboutDialog
+                R.id.navClearLibrary -> ::confirmClearLibrary
+                else -> null
+            }
+            if (action == null) return@setNavigationItemSelectedListener false
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
+            binding.drawerLayout.postDelayed({ action() }, 250)
+            true
+        }
+
+        // Tlačítko zpět má nejdřív zavřít otevřený panel, teprve pak ukončit
+        // obrazovku - jinak by appka spadla ven i při jen otevřeném menu.
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    binding.drawerLayout.closeDrawer(GravityCompat.START)
+                } else {
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                }
+            }
+        })
     }
 
     private fun showHelpDialog() {
