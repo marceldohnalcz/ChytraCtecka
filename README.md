@@ -66,6 +66,20 @@ podtržítka a emoji.
   přijde: díky sekání po větách je to v nejhorším případě jedna věta, ne celý
   článek.
 
+## Nové v této verzi (2.64)
+
+- **Oprava**: otazník nebo vykřičník hned za zkratkou - "firmu Sevitech
+  s.r.o.?", "je to a.s.!", "Opravdu?!" - se přečetl doslova jako slovo
+  "otazník". Appka totiž brala tečku ve zkratce za konec věty (protože
+  za ní nenásledovalo velké písmeno) a rozsekla text přesně mezi
+  zkratkou a otazníkem; ten pak šel do hlasového enginu úplně sám a
+  engine ho vyslovil jako název znaku. Teď se věta nikdy nerozdělí mezi
+  dvěma interpunkčními znaky, které stojí za sebou.
+- **Pojistka proti stejnému příznaku obecně**: pokud by přesto vznikl
+  úsek, ve kterém není ani jedno písmeno nebo číslice (tedy jen
+  interpunkce a mezery), připojí se k předchozímu úseku a nikdy nejde do
+  čtení samostatně. Tím padá celá třída těchto chyb, ne jen zkratky.
+
 ## Nové v této verzi (2.63)
 
 - **Oprava**: závorka obsahující jen interpunkci - "(!!!)", "(?)", "(!)",

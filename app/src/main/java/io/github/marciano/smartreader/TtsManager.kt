@@ -310,6 +310,11 @@ class TtsManager(
         // Číslice hned po tečce (bez mezery) NENÍ konec věty - typicky
         // desetinné číslo nebo číslo verze ("2.5", "3.14"), ne konec věty.
         if (nextChar.isDigit()) return false
+        // Další interpunkce hned za touhle - konec věty je až ZA ní, ne tady.
+        // Bez tohohle se "firma s.r.o.?" rozseklo za tečkou zkratky a otazník
+        // zbyl jako samostatný kousek, který TTS přečte jako slovo "otazník".
+        // Stejně tak "a.s.!" nebo "Opravdu?!".
+        if (nextChar == '.' || nextChar == '!' || nextChar == '?') return false
         return nextChar.isUpperCase() || !nextChar.isLetter()
     }
 
@@ -350,6 +355,28 @@ class TtsManager(
             result.add(Chunk(text.substring(start, end), start))
             start = end
         }
-        return result
+        return mergePunctuationOnlyChunks(result)
+    }
+
+    /**
+     * Pojistka: kousek, ve kterém není nic než interpunkce a mezery, připojí
+     * k předchozímu kousku. Takový kousek by šel do TTS jako samostatná
+     * promluva a engine by ho přečetl doslova jako slovo ("otazník", "tečka")
+     * místo aby ho vzal jako interpunkci na konci věty. Chytá i případy, které
+     * pravidlo pro hranici věty samo nepokryje.
+     */
+    private fun mergePunctuationOnlyChunks(chunks: List<Chunk>): List<Chunk> {
+        if (chunks.size < 2) return chunks
+        val merged = mutableListOf<Chunk>()
+        for (chunk in chunks) {
+            val hasContent = chunk.text.any { it.isLetterOrDigit() }
+            if (!hasContent && merged.isNotEmpty()) {
+                val prev = merged.removeAt(merged.lastIndex)
+                merged.add(Chunk(prev.text + chunk.text, prev.localOffset))
+            } else {
+                merged.add(chunk)
+            }
+        }
+        return merged
     }
 }
